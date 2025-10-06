@@ -1,0 +1,188 @@
+<div class="navbar">
+  <div class="navbar-menu">
+
+    <div class="navbar-section">
+      <div class="section-items">
+        <a routerLink="/home" routerLinkActive="active" class="item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Inicio</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="navbar-section dropdown"
+         (mouseenter)="toggleDropdown('ventas')"
+         (mouseleave)="closeDropdowns()">
+      <div class="section-items">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'ventas'">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Ventas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'ventas'">
+        <a routerLink="/quotation" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Cotizaciones</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/ventas/ordenes" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Órdenes de venta</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/ventas/reservas" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Reservas</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/ventas/clientes" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Clientes</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="navbar-section dropdown"
+         (mouseenter)="toggleDropdown('inventario')"
+         (mouseleave)="closeDropdowns()">
+      <div class="section-items">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'inventario'">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Inventario</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'inventario'">
+        <a routerLink="/inventario/existencias" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Existencias</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/inventario/movimientos" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Movimientos</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/inventario/almacenes" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Almacenes</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="navbar-section dropdown"
+         (mouseenter)="toggleDropdown('compras')"
+         (mouseleave)="closeDropdowns()">
+      <div class="section-items">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'compras'">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Compras</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'compras'">
+        <a routerLink="/compras/proveedores" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Proveedores</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/compras/ordenes" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Órdenes de compra</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="navbar-section dropdown"
+         (mouseenter)="toggleDropdown('catalogo')"
+         (mouseleave)="closeDropdowns()">
+      <div class="section-items">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'catalogo'">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Catálogo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'catalogo'">
+        <a routerLink="/products" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Productos</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/catalogo/categorias" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Categorías</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="navbar-section dropdown"
+         (mouseenter)="toggleDropdown('config')"
+         (mouseleave)="closeDropdowns()">
+      <div class="section-items">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'config'">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Configuración</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'config'">
+        <a routerLink="/config/usuarios" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Usuarios</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/config/roles" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Roles</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>

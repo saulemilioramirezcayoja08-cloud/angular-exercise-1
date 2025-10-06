@@ -1,0 +1,52 @@
+.quotations {
+  width: 100%;
+  height: calc(100vh - 6vh);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.quotations .panel {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.quotations .panel.top {
+  height: 20%;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.quotations .panel.top .top-col {
+  height: 100%;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+}
+
+.quotations .panel.top .top-col.left {
+  width: 60%;
+  overflow: hidden;
+}
+
+.quotations .panel.top .top-col.right {
+  width: 40%;
+  overflow: hidden;
+}
+
+.quotations .panel.middle {
+  height: 60%;
+  display: block;
+  overflow: hidden;
+}
+
+.quotations .panel.bottom {
+  height: 20%;
+  display: block;
+  overflow: hidden;
+}

@@ -1,0 +1,27 @@
+<div class="quotations">
+  <div class="panel top">
+    <div class="top-col left">
+      <app-top-left></app-top-left>
+    </div>
+    <div class="top-col right">
+      <app-top-right></app-top-right>
+    </div>
+  </div>
+
+  <div class="panel middle">
+    <app-middle
+      [products]="products()"
+      (productsChanged)="onProductsChanged($event)">
+    </app-middle>
+  </div>
+
+  <div class="panel bottom">
+    <app-bottom
+      [totals]="totals()"
+      [notes]="quotationNotes()"
+      [isGenerating]="isGenerating()"
+      (notesChanged)="onNotesChanged($event)"
+      (generateQuotation)="onGenerateQuotation()">
+    </app-bottom>
+  </div>
+</div>

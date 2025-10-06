@@ -1,0 +1,85 @@
+.product {
+  width: 100%;
+  height: calc(100vh - 6vh);
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  gap: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.product .panel {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.product .panel.left {
+  width: 70%;
+}
+
+.product .panel.right {
+  width: 30%;
+}
+
+.product .panel.left .left-row {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.product .panel.left .left-row.top {
+  height: 15%;
+}
+
+.product .panel.left .left-row.middle {
+  height: 45%;
+}
+
+.product .panel.left .left-row.bottom {
+  height: 40%;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.product .panel.left .left-row.bottom .bottom-col {
+  height: 100%;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+}
+
+.product .panel.left .left-row.bottom .bottom-col.left-col {
+  width: 50%;
+  background-color: white;
+}
+
+.product .panel.left .left-row.bottom .bottom-col.right-col {
+  width: 50%;
+  background-color: white;
+}
+
+.product .panel.right .right-row {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.product .panel.right .right-row.top {
+  height: 50%;
+  background-color: white;
+}
+
+.product .panel.right .right-row.bottom {
+  height: 50%;
+  background-color: white;
+}

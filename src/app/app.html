@@ -1,0 +1,12 @@
+<div class="app-container">
+  @if (isReady()) {
+    @if (isLoginPage()) {
+      <router-outlet></router-outlet>
+    } @else {
+      <app-navbar></app-navbar>
+      <main class="layout-main">
+        <router-outlet></router-outlet>
+      </main>
+    }
+  }
+</div>
