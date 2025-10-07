@@ -5,6 +5,7 @@ import {Quotations} from './pages/quotations/quotations';
 import {Product} from './pages/product/product';
 import {Login} from './pages/login/login';
 import {authGuard} from './guards/auth-guard';
+import { Orders } from './pages/orders/orders';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
   { path: 'product', component: Product, canActivate: [authGuard] },
   { path: 'quotation', component: Quotations, canActivate: [authGuard] },
+  { path: 'order', component: Orders, canActivate: [authGuard] },
 
   { path: '**', redirectTo: '/login' }
 ];

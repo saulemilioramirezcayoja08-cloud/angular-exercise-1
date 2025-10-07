@@ -16,6 +16,7 @@ import { Bottom } from './pages/quotations/components/bottom/bottom';
 import { TopLeft } from './pages/quotations/components/top-left/top-left';
 import { Middle } from './pages/quotations/components/middle/middle';
 import { Login } from './pages/login/login';
+import { Orders } from './pages/orders/orders';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { Login } from './pages/login/login';
     Bottom,
     TopLeft,
     Middle,
-    Login
+    Login,
+    Orders
   ],
   imports: [
     BrowserModule,

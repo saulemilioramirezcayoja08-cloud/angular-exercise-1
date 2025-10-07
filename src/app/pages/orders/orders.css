@@ -1,0 +1,87 @@
+.orders {
+    width: 100%;
+    height: calc(100vh - 6vh);
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    gap: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.orders .panel {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.orders .panel.top {
+    height: 20%;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.orders .panel.top .top-col {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    overflow: hidden;
+}
+
+.orders .panel.top .top-col.left {
+    width: 60%;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.orders .panel.top .top-col.left .left-col {
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    display: block;
+    overflow: hidden;
+}
+
+.orders .panel.top .top-col.left .left-col.left {
+    background-color: white;
+}
+
+.orders .panel.top .top-col.left .left-col.right {
+    background-color: white;
+}
+
+.orders .panel.top .top-col.right {
+    width: 40%;
+    background-color: white;
+}
+
+.orders .panel.middle {
+    height: 60%;
+    display: block;
+    overflow: hidden;
+    background-color: white;
+}
+
+.orders .panel.bottom {
+    height: 20%;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.orders .panel.bottom .bottom-col {
+    height: 100%;
+    box-sizing: border-box;
+    display: block;
+    overflow: hidden;
+}
+
+.orders .panel.bottom .bottom-col.left {
+    width: 70%;
+    background-color: white;
+}
+
+.orders .panel.bottom .bottom-col.right {
+    width: 30%;
+    background-color: white;
+}
