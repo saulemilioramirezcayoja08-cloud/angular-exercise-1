@@ -61,7 +61,6 @@ export class Bottom implements OnDestroy {
     return {
       subtotal: 0,
       totalDiscount: 0,
-      totalIVA: 0,
       grandTotal: 0
     };
   }

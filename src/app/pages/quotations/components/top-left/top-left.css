@@ -5,48 +5,86 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: 12px;
   box-sizing: border-box;
+  gap: 10px;
   font-family: inherit;
   color: grey;
   font-size: 16px;
 }
 
-.content-section {
+.header-section {
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
+  border-bottom: 2px solid rgb(249, 248, 247);
+  padding-bottom: 10px;
+  gap: 16px;
 }
 
-.column {
+.left-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
   flex: 1;
-  min-width: 0;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
 }
 
 .row {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
-  overflow: hidden;
+  align-items: center;
 }
 
-.row-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(55, 53, 47, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-
-.row-value {
+.label {
   font-size: 13px;
-  font-weight: 400;
   color: grey;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.value {
+  font-size: 15px;
+  color: grey;
+  font-weight: 500;
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+}
+
+.footer-section {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.badge-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.badge.primary {
+  padding: 6px 14px;
+  background: rgba(55, 53, 47, 0.8);
+  color: white;
+  font-size: 14px;
+}
+
+.badge.secondary {
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.04);
+  color: grey;
+  font-size: 12px;
 }

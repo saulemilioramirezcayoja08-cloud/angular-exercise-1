@@ -84,15 +84,10 @@
 }
 
 .table thead th.header:nth-child(8) {
-  width: 120px;
-  text-align: right;
-}
-
-.table thead th.header:nth-child(9) {
   width: 180px;
 }
 
-.table thead th.header:nth-child(10) {
+.table thead th.header:nth-child(9) {
   width: 80px;
   text-align: center;
 }

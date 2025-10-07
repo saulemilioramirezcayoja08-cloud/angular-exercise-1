@@ -12,7 +12,6 @@ export interface EditableProduct {
 export interface QuotationTotals {
   subtotal: number;
   totalDiscount: number;
-  totalIVA: number;
   grandTotal: number;
 }
 

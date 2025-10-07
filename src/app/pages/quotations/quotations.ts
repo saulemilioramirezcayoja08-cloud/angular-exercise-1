@@ -29,7 +29,6 @@ export class Quotations implements OnInit, OnDestroy {
     return this.calculateTotals(this.products());
   });
 
-  private readonly IVA_RATE = 0.15;
   private readonly metadata: QuotationMetadata = {
     customerId: 1,
     warehouseId: 1,
@@ -171,24 +170,20 @@ export class Quotations implements OnInit, OnDestroy {
   private calculateTotals(products: EditableProduct[]): QuotationTotals {
     let subtotal = 0;
     let totalDiscount = 0;
-    let totalIVA = 0;
 
     for (const product of products) {
       const productTotal = product.quantity * product.price;
       const productDiscount = (productTotal * product.discount) / 100;
       const productSubtotal = productTotal - productDiscount;
-      const productIVA = productSubtotal * this.IVA_RATE;
 
       subtotal += productSubtotal;
       totalDiscount += productDiscount;
-      totalIVA += productIVA;
     }
 
     return {
       subtotal: subtotal,
       totalDiscount: totalDiscount,
-      totalIVA: totalIVA,
-      grandTotal: subtotal + totalIVA
+      grandTotal: subtotal
     };
   }
 

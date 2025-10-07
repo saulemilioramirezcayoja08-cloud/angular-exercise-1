@@ -15,7 +15,6 @@
       <th class="header">Precio</th>
       <th class="header">Desc</th>
       <th class="header">Subtotal</th>
-      <th class="header">IVA</th>
       <th class="header">Notas</th>
       <th class="header">Acción</th>
     </tr>
@@ -60,9 +59,6 @@
       </td>
       <td class="cell">
         <span class="value amount">{{ formatCurrency(calculateSubtotal(product)) }}</span>
-      </td>
-      <td class="cell">
-        <span class="value amount">{{ formatCurrency(calculateIVA(product)) }}</span>
       </td>
       <td class="cell">
         <input

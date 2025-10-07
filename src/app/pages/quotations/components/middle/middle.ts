@@ -17,9 +17,7 @@ export class Middle {
   @Input() products: EditableProduct[] = [];
   @Output() productsChanged = new EventEmitter<ProductUpdateEvent>();
 
-  private readonly IVA_RATE = 0.15;
-
-  private calculationCache = new Map<number, ProductCalculation>();
+  private calculationCache = new Map<number, number>();
 
   private notesSubject = new Subject<{ index: number; notes: string }>();
 
@@ -40,32 +38,17 @@ export class Middle {
   calculateSubtotal(product: EditableProduct): number {
     const cached = this.calculationCache.get(product.id);
 
-    if (cached) {
-      return cached.subtotal;
+    if (cached !== undefined) {
+      return cached;
     }
 
     const total = product.quantity * product.price;
     const discount = (total * product.discount) / 100;
     const subtotal = total - discount;
 
-    const calculation: ProductCalculation = {
-      subtotal: subtotal,
-      iva: subtotal * this.IVA_RATE
-    };
-    this.calculationCache.set(product.id, calculation);
+    this.calculationCache.set(product.id, subtotal);
 
     return subtotal;
-  }
-
-  calculateIVA(product: EditableProduct): number {
-    const cached = this.calculationCache.get(product.id);
-
-    if (cached) {
-      return cached.iva;
-    }
-
-    const subtotal = this.calculateSubtotal(product);
-    return subtotal * this.IVA_RATE;
   }
 
   formatCurrency(amount: number): string {

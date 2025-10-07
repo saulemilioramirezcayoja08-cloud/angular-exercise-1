@@ -38,6 +38,14 @@ export class AuthService {
       );
   }
 
+  logout(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('currentUser');
+    }
+
+    this.currentUserSubject.next(null);
+  }
+
   isLoggedIn(): boolean {
     return this.currentUserSubject.value !== null;
   }

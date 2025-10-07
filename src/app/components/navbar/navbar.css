@@ -2,20 +2,21 @@
   width: 100%;
   height: 6vh;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
 .navbar .navbar-menu {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
   padding: 0 8px;
   gap: 8px;
+  flex: 1;
 }
 
 .navbar .navbar-menu .navbar-section {
@@ -154,5 +155,70 @@
 }
 
 .navbar .navbar-menu .navbar-section.dropdown .dropdown-menu .dropdown-item:hover .content .label-container .label {
+  color: rgba(55, 53, 47, 0.9);
+}
+
+.navbar .navbar-actions {
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+}
+
+.navbar .navbar-actions .navbar-section {
+  position: relative;
+}
+
+.navbar .navbar-actions .navbar-section .section-items {
+  display: flex;
+  flex-direction: row;
+}
+
+.navbar .navbar-actions .navbar-section .section-items .item {
+  display: flex;
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+  border-radius: 14px;
+  margin: 0;
+  position: relative;
+}
+
+.navbar .navbar-actions .navbar-section .section-items .item:hover {
+  background-color: rgba(241, 240, 239);
+}
+
+.navbar .navbar-actions .navbar-section .section-items .item .content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 14px;
+  min-height: 27px;
+  height: 30px;
+  padding: 5px 12px;
+  border-radius: 6px;
+}
+
+.navbar .navbar-actions .navbar-section .section-items .item .content .label-container {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.navbar .navbar-actions .navbar-section .section-items .item .content .label-container .label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  color: rgba(55, 53, 47, 0.8);
+  font-size: 14px;
+}
+
+.navbar .navbar-actions .navbar-section .section-items .item:hover .content .label-container .label {
   color: rgba(55, 53, 47, 0.9);
 }

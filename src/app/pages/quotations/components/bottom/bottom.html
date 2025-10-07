@@ -6,7 +6,7 @@
       class="textarea"
       [value]="notes"
       (input)="onNotesInput($event)"
-      placeholder="Observaciones adicionales, condiciones especiales, instrucciones de entrega..."
+      placeholder="Observaciones..."
       maxlength="1000"
       rows="3"
       [disabled]="isGenerating"></textarea>
@@ -16,10 +16,6 @@
     <div class="summary-row">
       <span class="summary-label">DESC:</span>
       <span class="summary-value">{{ formatCurrency(totals.totalDiscount) }}</span>
-    </div>
-    <div class="summary-row">
-      <span class="summary-label">IVA (15%):</span>
-      <span class="summary-value">{{ formatCurrency(totals.totalIVA) }}</span>
     </div>
     <div class="summary-row total">
       <span class="summary-label">TOTAL:</span>
