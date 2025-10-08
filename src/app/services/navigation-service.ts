@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,10 @@ export class NavigationService {
 
   setReturnUrl(url: string): void {
     this.returnUrl = url;
+  }
+
+  getReturnUrl(): string {
+    return this.returnUrl;
   }
 
   navigateBack(router: Router): void {

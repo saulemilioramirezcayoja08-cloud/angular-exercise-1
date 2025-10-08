@@ -5,17 +5,21 @@
                 <app-top-col-left></app-top-col-left>
             </div>
             <div class="left-col right">
-
             </div>
         </div>
         <div class="top-col right">
             <app-top-right></app-top-right>
         </div>
     </div>
+
     <div class="panel middle">
-        <app-middle-order></app-middle-order>
+        <app-middle-order [products]="products()" (productsChanged)="onProductsChanged($event)">
+        </app-middle-order>
     </div>
+
     <div class="panel bottom">
-        <app-bottom-order></app-bottom-order>
+        <app-bottom-order [totals]="totals()" [notes]="orderNotes()" [isGenerating]="isGenerating()"
+            (notesChanged)="onNotesChanged($event)" (generateOrder)="onGenerateOrder()">
+        </app-bottom-order>
     </div>
 </div>

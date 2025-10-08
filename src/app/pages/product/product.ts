@@ -1,11 +1,12 @@
-import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
-import {Router} from '@angular/router';
-import {ProductData} from '../../services/product/models/product-search-response.model';
-import {ProductService} from '../../services/product/product-service';
-import {ProductSearchEvent} from '../../models/product.models';
-import {catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
-import {NavigationService} from '../../services/navigation-service';
-import {QuotationState} from '../../services/quotation/quotation-state';
+import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProductData } from '../../services/product/models/product-search-response.model';
+import { ProductService } from '../../services/product/product-service';
+import { ProductSearchEvent } from '../../models/product.models';
+import { catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { NavigationService } from '../../services/navigation-service';
+import { QuotationState } from '../../services/quotation/quotation-state';
+import { OrderState } from '../../services/order/order-state';
 
 @Component({
   selector: 'app-product',
@@ -25,8 +26,9 @@ export class Product implements OnInit, OnDestroy {
     private router: Router,
     private productService: ProductService,
     private navigationService: NavigationService,
-    private quotationState: QuotationState
-  ) {}
+    private quotationState: QuotationState,
+    private orderState: OrderState
+  ) { }
 
   ngOnInit(): void {
     this.setupSearchPipeline();
@@ -105,10 +107,20 @@ export class Product implements OnInit, OnDestroy {
       price: product.price
     };
 
-    const added = this.quotationState.addProduct(selectedProduct);
+    const returnUrl = this.navigationService.getReturnUrl();
+    let added = false;
+    let context = '';
+
+    if (returnUrl === '/order') {
+      added = this.orderState.addProduct(selectedProduct);
+      context = 'orden';
+    } else {
+      added = this.quotationState.addProduct(selectedProduct);
+      context = 'cotización';
+    }
 
     if (!added) {
-      alert(`El producto "${product.name}" ya está en la cotización`);
+      alert(`El producto "${product.name}" ya está en la ${context}`);
     }
 
     this.goBack();

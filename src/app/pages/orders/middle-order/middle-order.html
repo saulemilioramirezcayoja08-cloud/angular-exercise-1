@@ -1,5 +1,11 @@
 <div class="middle-order">
-    <table class="table">
+
+    <div *ngIf="products.length === 0" class="empty-state">
+        <p class="empty-title">No hay productos en la orden</p>
+        <p class="empty-subtitle">Presiona Ctrl + P para buscar y agregar productos</p>
+    </div>
+
+    <table class="table" *ngIf="products.length > 0">
         <thead>
             <tr>
                 <th class="header">Item</th>
@@ -14,33 +20,37 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="row">
+            <tr class="row" *ngFor="let product of products; let i = index; trackBy: trackByProductId">
                 <td class="cell">
-                    <span class="number"></span>
+                    <span class="number">{{ formatItemNumber(i) }}</span>
                 </td>
                 <td class="cell">
-                    <span class="code"></span>
+                    <span class="code">{{ product.sku }}</span>
                 </td>
                 <td class="cell">
-                    <span class="label"></span>
+                    <span class="label">{{ product.name }}</span>
                 </td>
                 <td class="cell">
-                    <input type="number" class="input quantity">
+                    <input type="number" class="input quantity" [value]="product.quantity" min="1"
+                        (change)="onQuantityChange(i, $event)">
                 </td>
                 <td class="cell">
-                    <input type="number" class="input price">
+                    <input type="number" class="input price" [value]="product.price" min="0" step="0.01"
+                        (change)="onPriceChange(i, $event)">
                 </td>
                 <td class="cell">
-                    <input type="number" class="input discount">
+                    <input type="number" class="input discount" [value]="product.discount" min="0" max="100" step="0.1"
+                        (change)="onDiscountChange(i, $event)">
                 </td>
                 <td class="cell">
-                    <span class="value amount"></span>
+                    <span class="value amount">{{ formatCurrency(calculateSubtotal(product)) }}</span>
                 </td>
                 <td class="cell">
-                    <input type="text" class="input notes" placeholder="Observaciones...">
+                    <input type="text" class="input notes" [value]="product.notes" placeholder="Observaciones..."
+                        (input)="onNotesInput(i, $event)">
                 </td>
                 <td class="cell">
-                    <button type="button" class="button danger" title="Eliminar producto">
+                    <button type="button" class="button danger" (click)="deleteProduct(i)" title="Eliminar producto">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
