@@ -53,7 +53,8 @@
 
 .orders .panel.top .top-col.right {
     width: 40%;
-    background-color: white;
+    display: block;
+    overflow: hidden;
 }
 
 .orders .panel.middle {
@@ -65,23 +66,6 @@
 
 .orders .panel.bottom {
     height: 20%;
-    flex-direction: row;
-    gap: 4px;
-}
-
-.orders .panel.bottom .bottom-col {
-    height: 100%;
-    box-sizing: border-box;
     display: block;
     overflow: hidden;
-}
-
-.orders .panel.bottom .bottom-col.left {
-    width: 70%;
-    background-color: white;
-}
-
-.orders .panel.bottom .bottom-col.right {
-    width: 30%;
-    background-color: white;
 }

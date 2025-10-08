@@ -17,6 +17,9 @@ import { TopLeft } from './pages/quotations/components/top-left/top-left';
 import { Middle } from './pages/quotations/components/middle/middle';
 import { Login } from './pages/login/login';
 import { Orders } from './pages/orders/orders';
+import { TopColLeft } from './pages/orders/top-col-left/top-col-left';
+import { BottomOrder } from './pages/orders/bottom-order/bottom-order';
+import { MiddleOrder } from './pages/orders/middle-order/middle-order';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,10 @@ import { Orders } from './pages/orders/orders';
     TopLeft,
     Middle,
     Login,
-    Orders
+    Orders,
+    TopColLeft,
+    BottomOrder,
+    MiddleOrder
   ],
   imports: [
     BrowserModule,
