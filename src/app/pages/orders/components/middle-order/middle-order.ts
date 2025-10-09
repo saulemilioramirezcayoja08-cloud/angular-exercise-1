@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { EditableProduct, ProductUpdateEvent } from '../../../models/quotation.models';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {EditableProduct, ProductUpdateEvent} from '../../../../models/quotation.models';
+import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-middle-order',
@@ -12,7 +12,6 @@ export class MiddleOrder implements OnDestroy {
   @Input() products: EditableProduct[] = [];
   @Output() productsChanged = new EventEmitter<ProductUpdateEvent>();
 
-  private calculationCache = new Map<number, number>();
   private notesSubject = new Subject<{ index: number; notes: string }>();
   private destroy$ = new Subject<void>();
 
@@ -21,7 +20,7 @@ export class MiddleOrder implements OnDestroy {
       debounceTime(500),
       distinctUntilChanged((prev, curr) => prev.index === curr.index && prev.notes === curr.notes),
       takeUntil(this.destroy$)
-    ).subscribe(({ index, notes }) => {
+    ).subscribe(({index, notes}) => {
       this.updateProductNotes(index, notes);
     });
   }
@@ -37,19 +36,9 @@ export class MiddleOrder implements OnDestroy {
   }
 
   calculateSubtotal(product: EditableProduct): number {
-    const cached = this.calculationCache.get(product.id);
-
-    if (cached !== undefined) {
-      return cached;
-    }
-
     const total = product.quantity * product.price;
     const discount = (total * product.discount) / 100;
-    const subtotal = total - discount;
-
-    this.calculationCache.set(product.id, subtotal);
-
-    return subtotal;
+    return total - discount;
   }
 
   formatCurrency(amount: number): string {
@@ -65,10 +54,11 @@ export class MiddleOrder implements OnDestroy {
     const newQuantity = parseInt(input.value);
 
     if (isNaN(newQuantity) || newQuantity < 1) {
+      input.value = this.products[index].quantity.toString();
       return;
     }
 
-    this.updateProduct(index, { quantity: newQuantity });
+    this.updateProduct(index, {quantity: newQuantity});
   }
 
   onPriceChange(index: number, event: Event): void {
@@ -76,10 +66,11 @@ export class MiddleOrder implements OnDestroy {
     const newPrice = parseFloat(input.value);
 
     if (isNaN(newPrice) || newPrice < 0) {
+      input.value = this.products[index].price.toString();
       return;
     }
 
-    this.updateProduct(index, { price: newPrice });
+    this.updateProduct(index, {price: newPrice});
   }
 
   onDiscountChange(index: number, event: Event): void {
@@ -87,17 +78,18 @@ export class MiddleOrder implements OnDestroy {
     const newDiscount = parseFloat(input.value);
 
     if (isNaN(newDiscount) || newDiscount < 0 || newDiscount > 100) {
+      input.value = this.products[index].discount.toString();
       return;
     }
 
-    this.updateProduct(index, { discount: newDiscount });
+    this.updateProduct(index, {discount: newDiscount});
   }
 
   onNotesInput(index: number, event: Event): void {
     const input = event.target as HTMLInputElement;
     const newNotes = input.value;
 
-    this.notesSubject.next({ index, notes: newNotes });
+    this.notesSubject.next({index, notes: newNotes});
   }
 
   deleteProduct(index: number): void {
@@ -109,14 +101,12 @@ export class MiddleOrder implements OnDestroy {
     }
 
     const updatedProducts = [...this.products];
-    const removedProduct = updatedProducts.splice(index, 1)[0];
-
-    this.calculationCache.delete(removedProduct.id);
+    updatedProducts.splice(index, 1);
 
     this.emitProductsChanged(updatedProducts);
   }
 
-  trackByProductId(index: number, product: EditableProduct): number {
+  trackByProductId(_index: number, product: EditableProduct): number {
     return product.id;
   }
 
@@ -124,21 +114,19 @@ export class MiddleOrder implements OnDestroy {
     const updatedProducts = [...this.products];
     const product = updatedProducts[index];
 
-    updatedProducts[index] = { ...product, ...changes };
-
-    this.calculationCache.delete(product.id);
+    updatedProducts[index] = {...product, ...changes};
 
     this.emitProductsChanged(updatedProducts);
   }
 
   private updateProductNotes(index: number, notes: string): void {
     const updatedProducts = [...this.products];
-    updatedProducts[index] = { ...updatedProducts[index], notes };
+    updatedProducts[index] = {...updatedProducts[index], notes};
 
     this.emitProductsChanged(updatedProducts);
   }
 
   private emitProductsChanged(products: EditableProduct[]): void {
-    this.productsChanged.emit({ products });
+    this.productsChanged.emit({products});
   }
 }

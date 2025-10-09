@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { NotesUpdateEvent, QuotationTotals } from '../../../models/quotation.models';
+import { NotesUpdateEvent, QuotationTotals } from '../../../../models/quotation.models';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 @Component({

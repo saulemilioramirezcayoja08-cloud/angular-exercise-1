@@ -1,13 +1,13 @@
-import { Component, computed, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
-import { EditableProduct, NotesUpdateEvent, ProductUpdateEvent, QuotationTotals } from '../../models/quotation.models';
-import { Subject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
-import { OrderState } from '../../services/order/order-state';
-import { OrderService } from '../../services/order/order-service';
-import { AuthService } from '../../services/auth/auth-service';
-import { NavigationService } from '../../services/navigation-service';
-import { DraftOrderRequest } from '../../services/order/models/draft/draft-request.model';
-import { OrderMetadata } from '../../models/order.models';
+import {Component, computed, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
+import {EditableProduct, NotesUpdateEvent, ProductUpdateEvent, QuotationTotals} from '../../models/quotation.models';
+import {finalize, Subject, takeUntil} from 'rxjs';
+import {Router} from '@angular/router';
+import {OrderState} from '../../services/order/order-state';
+import {OrderService} from '../../services/order/order-service';
+import {AuthService} from '../../services/auth/auth-service';
+import {NavigationService} from '../../services/navigation-service';
+import {DraftOrderRequest} from '../../services/order/models/draft/draft-request.model';
+import {OrderMetadata} from '../../models/order.models';
 
 @Component({
   selector: 'app-orders',
@@ -41,7 +41,8 @@ export class Orders implements OnInit, OnDestroy {
     private orderService: OrderService,
     private navigationService: NavigationService,
     private authService: AuthService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -55,6 +56,11 @@ export class Orders implements OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return;
+    }
+
     if (event.ctrlKey && event.key === 'p') {
       event.preventDefault();
       this.navigateToProducts();
@@ -93,30 +99,33 @@ export class Orders implements OnInit, OnDestroy {
       return;
     }
 
-    const payload = this.buildBackendPayload();
     this.isGenerating.set(true);
 
+    const payload = this.buildBackendPayload();
+
     this.orderService.createDraft(payload)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isGenerating.set(false))
+      )
       .subscribe({
         next: (response) => {
-          this.isGenerating.set(false);
-
           alert(response.message);
 
           if (response.success) {
+            this.products.set([]);
+            this.orderNotes.set('');
+            this.orderState.clearProducts();
           }
         },
         error: (error) => {
-          this.isGenerating.set(false);
+          console.error('Error creating order:', error);
 
           if (error.error?.message) {
             alert(error.error.message);
-          }
-          else if (error.status === 0) {
+          } else if (error.status === 0) {
             alert('No se puede conectar con el servidor');
-          }
-          else {
+          } else {
             alert('Error de conexión con el servidor');
           }
         }
@@ -184,12 +193,18 @@ export class Orders implements OnInit, OnDestroy {
   }
 
   private buildBackendPayload(): DraftOrderRequest {
-    const details = this.products().map(product => ({
-      productId: product.id,
-      quantity: product.quantity,
-      price: product.price,
-      notes: product.notes || ''
-    }));
+    const details = this.products()
+      .filter(p => p.quantity > 0 && p.price >= 0)
+      .map(product => ({
+        productId: product.id,
+        quantity: product.quantity,
+        price: product.price,
+        notes: product.notes || ''
+      }));
+
+    if (details.length === 0) {
+      throw new Error('No hay productos válidos para enviar');
+    }
 
     return {
       customerId: this.metadata.customerId,

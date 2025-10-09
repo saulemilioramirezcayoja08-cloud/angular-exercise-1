@@ -1,12 +1,12 @@
-import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { ProductData } from '../../services/product/models/product-search-response.model';
-import { ProductService } from '../../services/product/product-service';
-import { ProductSearchEvent } from '../../models/product.models';
-import { catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { NavigationService } from '../../services/navigation-service';
-import { QuotationState } from '../../services/quotation/quotation-state';
-import { OrderState } from '../../services/order/order-state';
+import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
+import {Router} from '@angular/router';
+import {ProductData} from '../../services/product/models/product-search-response.model';
+import {ProductService} from '../../services/product/product-service';
+import {ProductSearchEvent} from '../../models/product.models';
+import {catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {NavigationService} from '../../services/navigation-service';
+import {QuotationState} from '../../services/quotation/quotation-state';
+import {OrderState} from '../../services/order/order-state';
 
 @Component({
   selector: 'app-product',
@@ -28,7 +28,8 @@ export class Product implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private quotationState: QuotationState,
     private orderState: OrderState
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.setupSearchPipeline();
@@ -41,6 +42,11 @@ export class Product implements OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return;
+    }
+
     if (event.key === 'Escape') {
       this.goBack();
     }
@@ -63,7 +69,7 @@ export class Product implements OnInit, OnDestroy {
             console.error('Error en la búsqueda:', error);
             const errorMsg = this.getErrorMessage(error);
             this.errorMessage.set(errorMsg);
-            return of({ success: false, data: null, message: errorMsg });
+            return of({success: false, data: null, message: errorMsg});
           })
         )
       ),
@@ -108,8 +114,8 @@ export class Product implements OnInit, OnDestroy {
     };
 
     const returnUrl = this.navigationService.getReturnUrl();
-    let added = false;
-    let context = '';
+    let added: boolean;
+    let context: string;
 
     if (returnUrl === '/order') {
       added = this.orderState.addProduct(selectedProduct);

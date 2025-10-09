@@ -10,7 +10,7 @@ import {
   QuotationTotals
 } from '../../models/quotation.models';
 import {QuotationState} from '../../services/quotation/quotation-state';
-import {Subject, takeUntil} from 'rxjs';
+import {finalize, Subject, takeUntil} from 'rxjs';
 import {NavigationService} from '../../services/navigation-service';
 import {AuthService} from '../../services/auth/auth-service';
 
@@ -59,6 +59,11 @@ export class Quotations implements OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return;
+    }
+
     if (event.ctrlKey && event.key === 'p') {
       event.preventDefault();
       this.navigateToProducts();
@@ -97,30 +102,33 @@ export class Quotations implements OnInit, OnDestroy {
       return;
     }
 
-    const payload = this.buildBackendPayload();
     this.isGenerating.set(true);
 
+    const payload = this.buildBackendPayload();
+
     this.quotationService.createDraft(payload)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isGenerating.set(false))
+      )
       .subscribe({
         next: (response) => {
-          this.isGenerating.set(false);
-
           alert(response.message);
 
           if (response.success) {
+            this.products.set([]);
+            this.quotationNotes.set('');
+            this.quotationState.clearProducts();
           }
         },
         error: (error) => {
-          this.isGenerating.set(false);
+          console.error('Error creating quotation:', error);
 
           if (error.error?.message) {
             alert(error.error.message);
-          }
-          else if (error.status === 0) {
+          } else if (error.status === 0) {
             alert('No se puede conectar con el servidor');
-          }
-          else {
+          } else {
             alert('Error de conexión con el servidor');
           }
         }
@@ -188,12 +196,18 @@ export class Quotations implements OnInit, OnDestroy {
   }
 
   private buildBackendPayload(): DraftQuotationRequest {
-    const details = this.products().map(product => ({
-      productId: product.id,
-      quantity: product.quantity,
-      price: product.price,
-      notes: product.notes || ''
-    }));
+    const details = this.products()
+      .filter(p => p.quantity > 0 && p.price >= 0)
+      .map(product => ({
+        productId: product.id,
+        quantity: product.quantity,
+        price: product.price,
+        notes: product.notes || ''
+      }));
+
+    if (details.length === 0) {
+      throw new Error('No hay productos válidos para enviar');
+    }
 
     return {
       customerId: this.metadata.customerId,

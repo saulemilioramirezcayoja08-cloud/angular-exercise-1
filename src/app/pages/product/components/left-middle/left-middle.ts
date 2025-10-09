@@ -26,7 +26,7 @@ export class LeftMiddle {
     }).format(price);
   }
 
-  trackByProductId(index: number, product: ProductData): number {
+  trackByProductId(_index: number, product: ProductData): number {
     return product.id;
   }
 }
