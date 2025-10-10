@@ -189,3 +189,58 @@
     line-height: 1;
     font-weight: 500;
 }
+
+.wrapper.hidden,
+.group.hidden {
+    display: none;
+}
+
+.date-range {
+    display: none;
+    flex: 1;
+    gap: 12px;
+    align-items: center;
+}
+
+.date-range.show {
+    display: flex;
+}
+
+.date-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.date-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(55, 53, 47, 0.7);
+    white-space: nowrap;
+}
+
+.date-input {
+    flex: 1;
+    height: 34px;
+    padding: 8px 12px;
+    border: 1px solid rgba(55, 53, 47, 0.16);
+    border-radius: 6px;
+    outline: none;
+    font-size: 13px;
+    font-family: inherit;
+    color: grey;
+    background-color: white;
+    transition: all 0.2s ease-in;
+    box-sizing: border-box;
+}
+
+.date-input:hover {
+    border-color: rgba(55, 53, 47, 0.3);
+    background-color: rgba(249, 248, 247, 0.5);
+}
+
+.date-input:focus {
+    border-color: rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+}
