@@ -1,15 +1,29 @@
 <div class="quotation-list">
-    <div class="panel main">
-        <div class="main-row top">
-            <app-list-top></app-list-top>
-        </div>
-
-        <div class="main-row middle">
-            <app-list-middle></app-list-middle>
-        </div>
-
-        <div class="main-row bottom">
-            <app-list-bottom></app-list-bottom>
-        </div>
+  <div class="panel main">
+    <div class="main-row top">
+      <app-list-top
+        (searchRequested)="onSearchRequested($event)">
+      </app-list-top>
     </div>
+
+    <div class="main-row middle">
+      <app-list-middle
+        [quotations]="quotations()"
+        [isLoading]="isLoading()"
+        [hasSearched]="hasSearched()"
+        (quotationSelected)="onQuotationSelected($event)">
+      </app-list-middle>
+    </div>
+
+    <div class="main-row bottom">
+      <app-list-bottom
+        [pagination]="pagination()"
+        [isLoading]="isLoading()"
+        (pageChanged)="onPageChanged($event)"
+        (sizeChanged)="onSizeChanged($event)"
+        (goToFirstPage)="onGoToFirstPage()"
+        (goToLastPage)="onGoToLastPage()">
+      </app-list-bottom>
+    </div>
+  </div>
 </div>
