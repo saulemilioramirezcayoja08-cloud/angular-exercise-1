@@ -1,18 +1,13 @@
 <div class="product">
   <div class="panel left">
     <div class="left-row top">
-      <app-left-top
-        (searchRequested)="onSearchRequested($event)"
-        (searchCleared)="onSearchCleared()">
+      <app-left-top (searchRequested)="onSearchRequested($event)" (searchCleared)="onSearchCleared()">
       </app-left-top>
     </div>
 
     <div class="left-row middle">
-      <app-left-middle
-        [products]="searchResults()"
-        [isLoading]="isSearching()"
-        [errorMessage]="errorMessage()"
-        (productSelected)="onProductSelected($event)">
+      <app-left-middle [products]="searchResults()" [isLoading]="isSearching()" [errorMessage]="errorMessage()"
+        [hasSearched]="hasSearched()" (productSelected)="onProductSelected($event)">
       </app-left-middle>
     </div>
 

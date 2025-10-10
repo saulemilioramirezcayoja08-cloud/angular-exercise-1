@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {PaginationMetadata} from '../../../../services/quotation/models/search/quotation-search-response.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PaginationMetadata } from '../../../../services/quotation/models/search/quotation-search-response.model';
 
 @Component({
   selector: 'app-list-bottom',
@@ -49,7 +49,8 @@ export class ListBottom {
   onSizeChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     const newSize = parseInt(select.value, 10);
-    if (!isNaN(newSize) && newSize > 0) {
+
+    if (!isNaN(newSize) && newSize >= 1 && newSize <= 100) {
       this.sizeChanged.emit(newSize);
     }
   }
@@ -71,7 +72,7 @@ export class ListBottom {
   }
 
   getCurrentPage(): number {
-    return (this.pagination?.currentPage ?? 0) + 1; // +1 para mostrar base 1
+    return (this.pagination?.currentPage ?? 0) + 1;
   }
 
   getTotalPages(): number {

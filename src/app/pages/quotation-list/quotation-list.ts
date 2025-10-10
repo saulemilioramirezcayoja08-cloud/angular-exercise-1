@@ -1,11 +1,11 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   PaginationMetadata,
   QuotationSearchData
 } from '../../services/quotation/models/search/quotation-search-response.model';
-import {SearchCriteria} from '../../models/search.models';
-import {finalize, Subject, takeUntil} from 'rxjs';
-import {QuotationService} from '../../services/quotation/quotation-service';
+import { delay, finalize, Subject, takeUntil } from 'rxjs';
+import { QuotationService } from '../../services/quotation/quotation-service';
+import { SearchEvent } from './components/list-top/list-top';
 
 @Component({
   selector: 'app-quotation-list',
@@ -14,38 +14,45 @@ import {QuotationService} from '../../services/quotation/quotation-service';
   styleUrl: './quotation-list.css'
 })
 export class QuotationList implements OnInit, OnDestroy {
-  // Estado de resultados
   quotations = signal<QuotationSearchData[]>([]);
   pagination = signal<PaginationMetadata | null>(null);
 
-  // Estado de búsqueda actual
-  currentCriteria = signal<SearchCriteria | null>(null);
+  currentSearchEvent = signal<SearchEvent | null>(null);
+  searchType = signal<'number' | 'username' | 'status' | 'dateRange' | null>(null);
   currentPage = signal<number>(0);
-  currentSize = signal<number>(20);
+  currentSize = signal<number>(5);
 
-  // Estado de UI
   isLoading = signal<boolean>(false);
   hasSearched = signal<boolean>(false);
 
+  private searchSubject$ = new Subject<void>();
   private destroy$ = new Subject<void>();
 
-  constructor(private quotationService: QuotationService) {}
+  constructor(private quotationService: QuotationService) { }
 
   ngOnInit(): void {
-    // Puedes ejecutar una búsqueda inicial si lo deseas
-    // this.performInitialSearch();
   }
 
   ngOnDestroy(): void {
+    this.searchSubject$.next();
+    this.searchSubject$.complete();
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  onSearchRequested(criteria: SearchCriteria): void {
-    // Nueva búsqueda, resetear a página 0
-    this.currentCriteria.set(criteria);
+  onSearchRequested(event: SearchEvent): void {
+    this.currentSearchEvent.set(event);
+    this.searchType.set(event.type);
     this.currentPage.set(0);
     this.performSearch();
+  }
+
+  onSearchCleared(): void {
+    this.quotations.set([]);
+    this.pagination.set(null);
+    this.hasSearched.set(false);
+    this.currentSearchEvent.set(null);
+    this.searchType.set(null);
   }
 
   onPageChanged(page: number): void {
@@ -55,7 +62,7 @@ export class QuotationList implements OnInit, OnDestroy {
 
   onSizeChanged(size: number): void {
     this.currentSize.set(size);
-    this.currentPage.set(0); // Reset a primera página
+    this.currentPage.set(0);
     this.performSearch();
   }
 
@@ -73,17 +80,16 @@ export class QuotationList implements OnInit, OnDestroy {
   }
 
   onQuotationSelected(quotationId: number): void {
-    // Aquí puedes navegar a un detalle o abrir un modal
     console.log('Quotation selected:', quotationId);
-    // this.router.navigate(['/quotation', quotationId]);
   }
 
   private performSearch(): void {
-    const criteria = this.currentCriteria();
-
-    if (!criteria) {
+    const searchEvent = this.currentSearchEvent();
+    if (!searchEvent) {
       return;
     }
+
+    this.searchSubject$.next();
 
     const page = this.currentPage();
     const size = this.currentSize();
@@ -91,42 +97,41 @@ export class QuotationList implements OnInit, OnDestroy {
     this.isLoading.set(true);
     this.hasSearched.set(true);
 
-    let search$;
+    let searchObservable;
 
-    switch (criteria.type) {
+    switch (searchEvent.type) {
       case 'number':
-        if (!criteria.query) {
+        if (!searchEvent.query) {
           this.isLoading.set(false);
           return;
         }
-        search$ = this.quotationService.searchByNumber(criteria.query, page, size);
-        break;
-
-      case 'status':
-        if (!criteria.query) {
-          this.isLoading.set(false);
-          return;
-        }
-        search$ = this.quotationService.searchByStatus(criteria.query, page, size);
+        searchObservable = this.quotationService.searchByNumber(searchEvent.query, page, size);
         break;
 
       case 'username':
-        if (!criteria.query) {
+        if (!searchEvent.query) {
           this.isLoading.set(false);
           return;
         }
-        search$ = this.quotationService.searchByUsername(criteria.query, page, size);
+        searchObservable = this.quotationService.searchByUsername(searchEvent.query, page, size);
+        break;
+
+      case 'status':
+        if (!searchEvent.status) {
+          this.isLoading.set(false);
+          return;
+        }
+        searchObservable = this.quotationService.searchByStatus(searchEvent.status, page, size);
         break;
 
       case 'dateRange':
-        if (!criteria.dateFrom || !criteria.dateTo) {
+        if (!searchEvent.dateFrom || !searchEvent.dateTo) {
           this.isLoading.set(false);
           return;
         }
-        // Convertir a ISO-8601
-        const isoDateFrom = this.toISO8601(criteria.dateFrom, false);
-        const isoDateTo = this.toISO8601(criteria.dateTo, true);
-        search$ = this.quotationService.searchByDateRange(isoDateFrom, isoDateTo, page, size);
+        const isoDateFrom = this.toISO8601(searchEvent.dateFrom, false);
+        const isoDateTo = this.toISO8601(searchEvent.dateTo, true);
+        searchObservable = this.quotationService.searchByDateRange(isoDateFrom, isoDateTo, page, size);
         break;
 
       default:
@@ -134,8 +139,10 @@ export class QuotationList implements OnInit, OnDestroy {
         return;
     }
 
-    search$
+    searchObservable
       .pipe(
+        delay(800),
+        takeUntil(this.searchSubject$),
         takeUntil(this.destroy$),
         finalize(() => this.isLoading.set(false))
       )
@@ -145,8 +152,7 @@ export class QuotationList implements OnInit, OnDestroy {
             this.quotations.set(response.data || []);
             this.pagination.set(response.pagination);
           } else {
-            // Mostrar mensaje de error del backend
-            alert(response.message);
+            this.showError(response.message);
             this.quotations.set([]);
             this.pagination.set(null);
           }
@@ -154,25 +160,38 @@ export class QuotationList implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error searching quotations:', error);
 
-          // Mostrar mensaje del backend si existe
-          if (error.error?.message) {
-            alert(error.error.message);
-          } else if (error.status === 0) {
-            alert('No se puede conectar con el servidor');
-          } else {
-            alert('Error al buscar cotizaciones');
-          }
+          const message = error.error?.message
+            || (error.status === 0 ? 'No se puede conectar con el servidor'
+              : error.status === 400 ? 'Parámetros de búsqueda inválidos'
+                : error.status === 404 ? 'No se encontraron resultados'
+                  : error.status === 500 ? 'Error interno del servidor'
+                    : 'Error al buscar cotizaciones');
 
+          this.showError(message);
           this.quotations.set([]);
           this.pagination.set(null);
         }
       });
   }
+
   private toISO8601(dateString: string, isEndOfDay: boolean = false): string {
     if (!dateString) {
       return '';
     }
-    const time = isEndOfDay ? '23:59:59' : '00:00:00';
-    return `${dateString}T${time}Z`;
+
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+
+    if (isEndOfDay) {
+      date.setHours(23, 59, 59, 999);
+    } else {
+      date.setHours(0, 0, 0, 0);
+    }
+
+    return date.toISOString();
+  }
+
+  private showError(message: string): void {
+    alert(message);
   }
 }

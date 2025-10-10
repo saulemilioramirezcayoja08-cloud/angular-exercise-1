@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ProductData} from '../../../../services/product/models/product-search-response.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ProductData } from '../../../../services/product/models/product-search-response.model';
 
 @Component({
   selector: 'app-left-middle',
@@ -11,6 +11,7 @@ export class LeftMiddle {
   @Input() products: ProductData[] = [];
   @Input() isLoading: boolean = false;
   @Input() errorMessage: string = '';
+  @Input() hasSearched: boolean = false;
 
   @Output() productSelected = new EventEmitter<ProductData>();
 

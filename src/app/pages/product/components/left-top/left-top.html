@@ -10,57 +10,32 @@
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </g>
       </svg>
-      <input
-        type="text"
-        class="input"
-        [placeholder]="getPlaceholder()"
-        [value]="searchQuery()"
-        (input)="onQueryChange($any($event.target).value)"
-        (keyup.enter)="onSearchEnter()"
-        autocomplete="off">
-      <button
-        type="button"
-        class="clear"
-        *ngIf="searchQuery()"
-        (click)="clearSearch()"
-        title="Limpiar búsqueda">
+      <input type="text" class="input" [placeholder]="getPlaceholder()" [value]="searchQuery()"
+        (input)="onQueryChange($any($event.target).value)" (keyup.enter)="onSearchEnter()" autocomplete="off">
+      <button type="button" class="clear" *ngIf="searchQuery()" (click)="clearSearch()" title="Limpiar búsqueda">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
           <g id="SVGRepo_iconCarrier">
             <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round"></path>
+              stroke-linejoin="round"></path>
           </g>
         </svg>
       </button>
     </div>
     <div class="filters">
       <div class="group" [class.sku-active]="searchType() === 'sku'">
-        <button
-          type="button"
-          class="button"
-          [class.active]="searchType() === 'name'"
-          (click)="changeSearchType('name')"
-          [disabled]="searchType() === 'all'"
-          title="Buscar por nombre">
+        <button type="button" class="button" [class.active]="searchType() === 'name'" (click)="changeSearchType('name')"
+          [disabled]="searchType() === 'all'" title="Buscar por nombre">
           <span class="label">Nombre</span>
         </button>
-        <button
-          type="button"
-          class="button"
-          [class.active]="searchType() === 'sku'"
-          (click)="changeSearchType('sku')"
-          [disabled]="searchType() === 'all'"
-          title="Buscar por código">
+        <button type="button" class="button" [class.active]="searchType() === 'sku'" (click)="changeSearchType('sku')"
+          [disabled]="searchType() === 'all'" title="Buscar por código">
           <span class="label">Código</span>
         </button>
       </div>
       <div class="group-toggle">
-        <button
-          type="button"
-          class="toggle"
-          [class.active]="searchType() === 'all'"
-          (click)="toggleSearchAll()"
+        <button type="button" class="toggle" [class.active]="searchType() === 'all'" (click)="toggleSearchAll()"
           title="Buscar en todos los campos">
           <svg *ngIf="searchType() === 'all'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

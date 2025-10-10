@@ -1,8 +1,17 @@
-import {Component, EventEmitter, OnDestroy, Output, signal} from '@angular/core';
-import {SearchCriteria, SearchType} from '../../../../models/search.models';
-import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, signal } from '@angular/core';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
-type QuotationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
+type StatusType = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
+type SearchType = 'number' | 'username';
+type ActivePanel = 'search' | 'status' | 'date';
+
+export interface SearchEvent {
+  type: 'number' | 'username' | 'status' | 'dateRange';
+  query?: string;
+  status?: StatusType;
+  dateFrom?: string;
+  dateTo?: string;
+}
 
 @Component({
   selector: 'app-list-top',
@@ -10,28 +19,35 @@ type QuotationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
   templateUrl: './list-top.html',
   styleUrl: './list-top.css'
 })
-export class ListTop implements OnDestroy {
-  @Output() searchRequested = new EventEmitter<SearchCriteria>();
+export class ListTop implements OnInit, OnDestroy {
+  @Output() searchRequested = new EventEmitter<SearchEvent>();
+  @Output() searchCleared = new EventEmitter<void>();
 
-  searchQuery = signal<string>('');
-  searchType = signal<SearchType>('number');
-  selectedStatus = signal<QuotationStatus>('DRAFT');
   dateFrom = signal<string>('');
   dateTo = signal<string>('');
+  selectedStatus = signal<StatusType>('DRAFT');
+  activePanel = signal<ActivePanel>('date');
+  searchQuery = signal<string>('');
+  searchType = signal<SearchType>('number');
 
-  private searchSubject = new Subject<void>();
+  private searchDebounce$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
   constructor() {
-    this.searchSubject
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    this.dateFrom.set(this.formatDateForInput(firstDay));
+    this.dateTo.set(this.formatDateForInput(today));
+  }
+
+  ngOnInit(): void {
+    this.searchDebounce$
       .pipe(
-        debounceTime(500),
+        debounceTime(300),
         distinctUntilChanged(),
         takeUntil(this.destroy$)
       )
-      .subscribe(() => {
-        this.emitTextSearch();
-      });
+      .subscribe(() => this.onSearchEnter());
   }
 
   ngOnDestroy(): void {
@@ -39,126 +55,24 @@ export class ListTop implements OnDestroy {
     this.destroy$.complete();
   }
 
-  isDateRangeMode(): boolean {
-    return this.searchType() === 'dateRange';
-  }
-
-  isStatusMode(): boolean {
-    return this.searchType() === 'status';
-  }
-
-  isTextMode(): boolean {
-    return this.searchType() === 'number' || this.searchType() === 'username';
-  }
-
-  getGroupClass(): string {
-    const type = this.searchType();
-    if (type === 'number') return 'group number-active';
-    if (type === 'status') return 'group status-active';
-    if (type === 'username') return 'group username-active';
-    return 'group';
-  }
-
-  getStatusGroupClass(): string {
-    const status = this.selectedStatus();
-    if (status === 'DRAFT') return 'status-group draft-active';
-    if (status === 'CONFIRMED') return 'status-group confirmed-active';
-    if (status === 'CANCELED') return 'status-group canceled-active';
-    return 'status-group';
-  }
-
-  changeSearchType(type: 'number' | 'status' | 'username'): void {
-    this.searchType.set(type);
-    this.searchQuery.set('');
-    this.dateFrom.set('');
-    this.dateTo.set('');
-    this.searchSubject.next();
-
-    if (type === 'status') {
-      setTimeout(() => this.emitStatusSearch(), 0);
-    }
-  }
-
-  selectStatus(status: QuotationStatus): void {
-    this.selectedStatus.set(status);
-    this.emitStatusSearch();
-  }
-
-  toggleDateRangeMode(): void {
-    if (this.isDateRangeMode()) {
-      this.searchType.set('number');
-      this.searchQuery.set('');
-      this.dateFrom.set('');
-      this.dateTo.set('');
-    } else {
-      this.searchType.set('dateRange');
-      this.searchQuery.set('');
-      const today = new Date();
-      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-      this.dateFrom.set(this.formatDateForInput(firstDay));
-      this.dateTo.set(this.formatDateForInput(today));
-    }
-  }
-
-  onQueryChange(value: string): void {
-    this.searchQuery.set(value);
-    if (value.trim()) {
-      this.searchSubject.next();
-    }
-  }
-
-  onDateFromChange(value: string): void {
-    this.dateFrom.set(value);
-  }
-
-  onDateToChange(value: string): void {
-    this.dateTo.set(value);
-  }
-
-  onSearchByDateClick(): void {
-    const from = this.dateFrom();
-    const to = this.dateTo();
-
-    if (!from || !to) {
-      alert('Por favor selecciona ambas fechas');
+  activatePanel(panel: ActivePanel): void {
+    if (this.activePanel() === panel) {
       return;
     }
 
-    if (from > to) {
-      alert('La fecha inicial debe ser anterior a la fecha final');
-      return;
-    }
+    this.activePanel.set(panel);
+    this.searchCleared.emit();
 
-    this.emitDateSearch();
-  }
-
-  canSearchByDate(): boolean {
-    const from = this.dateFrom();
-    const to = this.dateTo();
-    return !!(from && to && from <= to);
-  }
-
-  getPlaceholder(): string {
-    const type = this.searchType();
-
-    switch (type) {
-      case 'number':
-        return 'Buscar por número de cotización...';
-      case 'username':
-        return 'Buscar por nombre de usuario...';
-      default:
-        return 'Buscar cotizaciones...';
+    if (panel === 'date') {
+      this.performAutoSearch();
     }
   }
 
-  private emitTextSearch(): void {
-    if (!this.isTextMode()) {
-      return;
-    }
-
+  onSearchEnter(): void {
     const query = this.searchQuery().trim();
+    const minLength = this.searchType() === 'number' ? 1 : 2;
 
-    if (!query) {
+    if (!query || query.length < minLength) {
       return;
     }
 
@@ -168,20 +82,63 @@ export class ListTop implements OnDestroy {
     });
   }
 
-  private emitStatusSearch(): void {
-    const status = this.selectedStatus();
+  onQueryChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(value);
+
+    const minLength = this.searchType() === 'number' ? 1 : 2;
+    if (value.trim().length >= minLength) {
+      this.searchDebounce$.next(value);
+    }
+  }
+
+  clearSearch(): void {
+    this.searchQuery.set('');
+    this.searchCleared.emit();
+  }
+
+  changeSearchType(type: SearchType): void {
+    if (this.searchType() === type) {
+      return;
+    }
+
+    this.searchType.set(type);
+    this.searchQuery.set('');
+    this.searchCleared.emit();
+  }
+
+  onDateFromChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.dateFrom.set(value);
+    this.performAutoSearch();
+  }
+
+  onDateToChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.dateTo.set(value);
+    this.performAutoSearch();
+  }
+
+  selectStatus(status: StatusType): void {
+    this.selectedStatus.set(status);
 
     this.searchRequested.emit({
       type: 'status',
-      query: status
+      status: status
     });
   }
 
-  private emitDateSearch(): void {
+  getPlaceholder(): string {
+    return this.searchType() === 'number'
+      ? 'Buscar por número...'
+      : 'Buscar por usuario...';
+  }
+
+  private performAutoSearch(): void {
     const from = this.dateFrom();
     const to = this.dateTo();
 
-    if (!from || !to) {
+    if (!from || !to || from > to) {
       return;
     }
 

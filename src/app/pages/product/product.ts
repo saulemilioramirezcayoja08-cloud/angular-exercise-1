@@ -1,12 +1,12 @@
-import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
-import {Router} from '@angular/router';
-import {ProductData} from '../../services/product/models/product-search-response.model';
-import {ProductService} from '../../services/product/product-service';
-import {ProductSearchEvent} from '../../models/product.models';
-import {catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
-import {NavigationService} from '../../services/navigation-service';
-import {QuotationState} from '../../services/quotation/quotation-state';
-import {OrderState} from '../../services/order/order-state';
+import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProductData } from '../../services/product/models/product-search-response.model';
+import { ProductService } from '../../services/product/product-service';
+import { ProductSearchEvent } from '../../models/product.models';
+import { NavigationService } from '../../services/navigation-service';
+import { QuotationState } from '../../services/quotation/quotation-state';
+import { OrderState } from '../../services/order/order-state';
+import { delay, finalize, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-product',
@@ -18,8 +18,10 @@ export class Product implements OnInit, OnDestroy {
   searchResults = signal<ProductData[]>([]);
   isSearching = signal<boolean>(false);
   errorMessage = signal<string>('');
+  hasSearched = signal<boolean>(false);
 
-  private searchSubject = new Subject<ProductSearchEvent>();
+  private currentSearchEvent = signal<ProductSearchEvent | null>(null);
+  private searchSubject$ = new Subject<void>();
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -28,14 +30,13 @@ export class Product implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private quotationState: QuotationState,
     private orderState: OrderState
-  ) {
-  }
+  ) { }
 
-  ngOnInit(): void {
-    this.setupSearchPipeline();
-  }
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
+    this.searchSubject$.next();
+    this.searchSubject$.complete();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -52,41 +53,6 @@ export class Product implements OnInit, OnDestroy {
     }
   }
 
-  private setupSearchPipeline(): void {
-    this.searchSubject.pipe(
-      tap(() => {
-        this.isSearching.set(true);
-        this.errorMessage.set('');
-      }),
-      debounceTime(300),
-      distinctUntilChanged((prev, curr) =>
-        prev.query.trim() === curr.query.trim() &&
-        prev.searchType === curr.searchType
-      ),
-      switchMap(event =>
-        this.executeSearch(event).pipe(
-          catchError(error => {
-            console.error('Error en la búsqueda:', error);
-            const errorMsg = this.getErrorMessage(error);
-            this.errorMessage.set(errorMsg);
-            return of({success: false, data: null, message: errorMsg});
-          })
-        )
-      ),
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (response) => {
-        this.searchResults.set(response.success && response.data ? response.data : []);
-        this.isSearching.set(false);
-      },
-      error: (error) => {
-        console.error('Error inesperado:', error);
-        this.isSearching.set(false);
-        this.errorMessage.set('Error inesperado en la búsqueda');
-      }
-    });
-  }
-
   onSearchRequested(event: ProductSearchEvent): void {
     const query = event.query.trim();
 
@@ -95,13 +61,16 @@ export class Product implements OnInit, OnDestroy {
       return;
     }
 
-    this.searchSubject.next(event);
+    this.currentSearchEvent.set(event);
+    this.performSearch();
   }
 
   onSearchCleared(): void {
     this.searchResults.set([]);
     this.isSearching.set(false);
     this.errorMessage.set('');
+    this.hasSearched.set(false);
+    this.currentSearchEvent.set(null);
   }
 
   onProductSelected(product: ProductData): void {
@@ -134,6 +103,40 @@ export class Product implements OnInit, OnDestroy {
 
   goBack(): void {
     this.navigationService.navigateBack(this.router);
+  }
+
+  private performSearch(): void {
+    const event = this.currentSearchEvent();
+    if (!event) {
+      return;
+    }
+
+    this.searchSubject$.next();
+
+    this.isSearching.set(true);
+    this.hasSearched.set(true);
+    this.errorMessage.set('');
+
+    this.executeSearch(event).pipe(
+      delay(800),
+      takeUntil(this.searchSubject$),
+      takeUntil(this.destroy$),
+      finalize(() => this.isSearching.set(false))
+    ).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.searchResults.set(response.data);
+        } else {
+          this.searchResults.set([]);
+          this.errorMessage.set(response.message || 'No se encontraron productos');
+        }
+      },
+      error: (error) => {
+        const errorMsg = this.getErrorMessage(error);
+        this.errorMessage.set(errorMsg);
+        this.searchResults.set([]);
+      }
+    });
   }
 
   private executeSearch(event: ProductSearchEvent) {

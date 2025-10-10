@@ -1,7 +1,6 @@
 <div class="list-middle">
   <div *ngIf="isLoading" class="loading-container">
     <div class="spinner"></div>
-    <p class="loading-text">Buscando cotizaciones...</p>
   </div>
 
   <div *ngIf="!isLoading && !hasSearched" class="empty-state">
@@ -11,11 +10,11 @@
       <g id="SVGRepo_iconCarrier">
         <path
           d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </g>
     </svg>
-    <p class="empty-title">No hay cotizaciones para mostrar</p>
-    <p class="empty-subtitle">Realiza una búsqueda para ver resultados</p>
+    <p class="empty-title">{{ getEmptyMessage().title }}</p>
+    <p class="empty-subtitle">{{ getEmptyMessage().subtitle }}</p>
   </div>
 
   <div *ngIf="!isLoading && hasSearched && quotations.length === 0" class="empty-state">
@@ -25,59 +24,58 @@
       <g id="SVGRepo_iconCarrier">
         <path
           d="M9 9L15 15M15 9L9 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </g>
     </svg>
-    <p class="empty-title">No se encontraron cotizaciones</p>
-    <p class="empty-subtitle">Intenta con otros criterios de búsqueda</p>
+    <p class="empty-title">{{ getEmptyMessage().title }}</p>
+    <p class="empty-subtitle">{{ getEmptyMessage().subtitle }}</p>
   </div>
 
   <table class="table" *ngIf="!isLoading && quotations.length > 0">
     <thead>
-    <tr>
-      <th class="header">Número</th>
-      <th class="header">Estado</th>
-      <th class="header">Cliente</th>
-      <th class="header">Almacén</th>
-      <th class="header">Usuario</th>
-      <th class="header">Moneda</th>
-      <th class="header">Total</th>
-      <th class="header">Items</th>
-      <th class="header">Fecha Creación</th>
-    </tr>
+      <tr>
+        <th class="header">Número</th>
+        <th class="header">Estado</th>
+        <th class="header">Cliente</th>
+        <th class="header">Almacén</th>
+        <th class="header">Usuario</th>
+        <th class="header">Moneda</th>
+        <th class="header">Total</th>
+        <th class="header">Items</th>
+        <th class="header">Fecha Creación</th>
+      </tr>
     </thead>
     <tbody>
-    <tr class="row"
-        *ngFor="let quotation of quotations; trackBy: trackByQuotationId"
+      <tr class="row" *ngFor="let quotation of quotations; trackBy: trackByQuotationId"
         (click)="onRowClick(quotation.id)">
-      <td class="cell">
-        <span class="code">{{ quotation.number }}</span>
-      </td>
-      <td class="cell">
-        <span [class]="getBadgeClass(quotation.status)">{{ quotation.status }}</span>
-      </td>
-      <td class="cell">
-        <span class="label" [title]="quotation.customerName">{{ quotation.customerName }}</span>
-      </td>
-      <td class="cell">
-        <span class="label" [title]="quotation.warehouseName">{{ quotation.warehouseName }}</span>
-      </td>
-      <td class="cell">
-        <span class="label">{{ quotation.username || '-' }}</span>
-      </td>
-      <td class="cell">
-        <span class="value">{{ quotation.currency }}</span>
-      </td>
-      <td class="cell">
-        <span class="value amount">{{ formatCurrency(quotation.totalAmount, quotation.currency) }}</span>
-      </td>
-      <td class="cell">
-        <span class="value">{{ quotation.itemCount }}</span>
-      </td>
-      <td class="cell">
-        <span class="value">{{ formatDate(quotation.createdAt) }}</span>
-      </td>
-    </tr>
+        <td class="cell">
+          <span class="code">{{ quotation.number }}</span>
+        </td>
+        <td class="cell">
+          <span [class]="getBadgeClass(quotation.status)">{{ quotation.status }}</span>
+        </td>
+        <td class="cell">
+          <span class="label" [title]="quotation.customerName">{{ quotation.customerName }}</span>
+        </td>
+        <td class="cell">
+          <span class="label" [title]="quotation.warehouseName">{{ quotation.warehouseName }}</span>
+        </td>
+        <td class="cell">
+          <span class="label">{{ quotation.username || '-' }}</span>
+        </td>
+        <td class="cell">
+          <span class="value">{{ quotation.currency }}</span>
+        </td>
+        <td class="cell">
+          <span class="value amount">{{ quotation.totalAmount }}</span>
+        </td>
+        <td class="cell">
+          <span class="value">{{ quotation.itemCount }}</span>
+        </td>
+        <td class="cell">
+          <span class="value datetime">{{ formatDateTime(quotation.createdAt) }}</span>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>

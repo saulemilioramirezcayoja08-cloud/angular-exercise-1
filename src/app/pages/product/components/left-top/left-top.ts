@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Output, signal} from '@angular/core';
-import {ProductSearchEvent} from '../../../../models/product.models';
+import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { ProductSearchEvent } from '../../../../models/product.models';
 
 type SearchType = 'name' | 'sku' | 'all';
 
@@ -62,7 +62,7 @@ export class LeftTop {
     const type = this.searchType();
 
     if (type === 'all') {
-      return 'Buscar por código - nombre (ej: ABC-123 - Producto)';
+      return 'Buscar por código - nombre (ej: ABC-123 - Producto) y presiona Enter';
     }
 
     if (type === 'name') {

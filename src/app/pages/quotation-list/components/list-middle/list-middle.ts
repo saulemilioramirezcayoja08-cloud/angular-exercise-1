@@ -1,5 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {QuotationSearchData} from '../../../../services/quotation/models/search/quotation-search-response.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { QuotationSearchData } from '../../../../services/quotation/models/search/quotation-search-response.model';
+
+type SearchType = 'number' | 'username' | 'status' | 'dateRange' | null;
 
 @Component({
   selector: 'app-list-middle',
@@ -11,11 +13,48 @@ export class ListMiddle {
   @Input() quotations: QuotationSearchData[] = [];
   @Input() isLoading: boolean = false;
   @Input() hasSearched: boolean = false;
-
+  @Input() searchType: SearchType = null;
   @Output() quotationSelected = new EventEmitter<number>();
 
   onRowClick(quotationId: number): void {
     this.quotationSelected.emit(quotationId);
+  }
+
+  getEmptyMessage(): { title: string, subtitle: string } {
+    if (!this.hasSearched) {
+      return {
+        title: 'No hay cotizaciones para mostrar',
+        subtitle: 'Selecciona un criterio de búsqueda y presiona "Buscar"'
+      };
+    }
+
+    switch (this.searchType) {
+      case 'number':
+        return {
+          title: 'No se encontraron cotizaciones',
+          subtitle: 'Intenta con otro número de cotización'
+        };
+      case 'username':
+        return {
+          title: 'No se encontraron cotizaciones',
+          subtitle: 'Intenta con otro nombre de usuario'
+        };
+      case 'status':
+        return {
+          title: 'No se encontraron cotizaciones',
+          subtitle: 'No hay cotizaciones con este estado'
+        };
+      case 'dateRange':
+        return {
+          title: 'No se encontraron cotizaciones',
+          subtitle: 'Intenta con otro rango de fechas'
+        };
+      default:
+        return {
+          title: 'No se encontraron cotizaciones',
+          subtitle: 'Intenta con otros criterios de búsqueda'
+        };
+    }
   }
 
   getBadgeClass(status: string): string {
@@ -32,39 +71,31 @@ export class ListMiddle {
     }
   }
 
-  formatCurrency(amount: number, currency: string): string {
-    const currencySymbol = this.getCurrencySymbol(currency);
-    return new Intl.NumberFormat('es-BO', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(amount).replace(/^/, `${currencySymbol} `);
-  }
-
-  formatDate(isoDate: string): string {
+  formatDateTime(isoDate: string): string {
     if (!isoDate) {
       return '';
     }
-    const date = new Date(isoDate);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+
+    try {
+      const date = new Date(isoDate);
+      const dateTimeString = date.toLocaleString('es-BO', {
+        timeZone: 'America/La_Paz',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+      return dateTimeString;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
   }
 
   trackByQuotationId(_index: number, quotation: QuotationSearchData): number {
     return quotation.id;
-  }
-
-  private getCurrencySymbol(currency: string): string {
-    switch (currency?.toUpperCase()) {
-      case 'BOB':
-        return 'Bs';
-      case 'USD':
-        return '$';
-      case 'EUR':
-        return '€';
-      default:
-        return currency || '';
-    }
   }
 }
