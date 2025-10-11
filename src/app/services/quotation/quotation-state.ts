@@ -1,6 +1,6 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
-import {EditableProduct} from '../../models/quotation.models';
+import {EditableProduct} from '../../models/state.models';
 
 export interface SelectedProduct {
   id: number;

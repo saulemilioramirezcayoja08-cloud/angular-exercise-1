@@ -1,5 +1,9 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
-import { ProductSearchEvent } from '../../../../models/product.models';
+import {Component, EventEmitter, Output, signal} from '@angular/core';
+
+export interface ProductSearchEvent {
+  query: string;
+  searchType: 'name' | 'sku' | 'all';
+}
 
 type SearchType = 'name' | 'sku' | 'all';
 

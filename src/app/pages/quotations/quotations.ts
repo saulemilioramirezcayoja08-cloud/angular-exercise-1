@@ -8,7 +8,7 @@ import {
   ProductUpdateEvent,
   QuotationMetadata,
   QuotationTotals
-} from '../../models/quotation.models';
+} from '../../models/state.models';
 import {QuotationState} from '../../services/quotation/quotation-state';
 import {finalize, Subject, takeUntil} from 'rxjs';
 import {NavigationService} from '../../services/navigation-service';

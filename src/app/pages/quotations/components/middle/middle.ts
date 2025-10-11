@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
-import {EditableProduct, ProductUpdateEvent} from '../../../../models/quotation.models';
+import {EditableProduct, ProductUpdateEvent} from '../../../../models/state.models';
 import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 
 @Component({

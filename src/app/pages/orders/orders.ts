@@ -1,5 +1,5 @@
 import {Component, computed, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
-import {EditableProduct, NotesUpdateEvent, ProductUpdateEvent, QuotationTotals} from '../../models/quotation.models';
+import {EditableProduct, NotesUpdateEvent, ProductUpdateEvent, QuotationTotals} from '../../models/state.models';
 import {finalize, Subject, takeUntil} from 'rxjs';
 import {Router} from '@angular/router';
 import {OrderState} from '../../services/order/order-state';

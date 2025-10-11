@@ -1,12 +1,12 @@
-import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { ProductData } from '../../services/product/models/product-search-response.model';
-import { ProductService } from '../../services/product/product-service';
-import { ProductSearchEvent } from '../../models/product.models';
-import { NavigationService } from '../../services/navigation-service';
-import { QuotationState } from '../../services/quotation/quotation-state';
-import { OrderState } from '../../services/order/order-state';
-import { delay, finalize, Subject, takeUntil } from 'rxjs';
+import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
+import {Router} from '@angular/router';
+import {ProductData} from '../../services/product/models/product-search-response.model';
+import {ProductService} from '../../services/product/product-service';
+import {NavigationService} from '../../services/navigation-service';
+import {QuotationState} from '../../services/quotation/quotation-state';
+import {OrderState} from '../../services/order/order-state';
+import {delay, finalize, Subject, takeUntil} from 'rxjs';
+import {ProductSearchEvent} from './components/left-top/left-top';
 
 @Component({
   selector: 'app-product',
