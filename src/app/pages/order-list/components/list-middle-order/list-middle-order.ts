@@ -6,7 +6,7 @@ type SearchType = 'number' | 'username' | 'status' | 'dateRange' | null;
 export interface OrderAction {
   orderId: number;
   orderNumber: string;
-  action: 'confirm' | 'cancel';
+  action: 'confirm' | 'cancel' | 'advance';
 }
 
 @Component({
@@ -41,6 +41,14 @@ export class ListMiddleOrder {
       orderId: order.id,
       orderNumber: order.number,
       action: 'cancel'
+    });
+  }
+
+  onAdvanceClick(order: OrderSearchData): void {
+    this.orderActionRequested.emit({
+      orderId: order.id,
+      orderNumber: order.number,
+      action: 'advance'
     });
   }
 

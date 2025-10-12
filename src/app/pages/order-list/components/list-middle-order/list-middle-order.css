@@ -124,7 +124,7 @@
 }
 
 .table thead th.header.actions-header {
-  width: 140px;
+  width: 180px;
   text-align: center;
 }
 
@@ -213,7 +213,7 @@
 }
 
 .row td.cell.actions-cell {
-  width: 140px;
+  width: 180px;
   text-align: center;
   padding: 2px 8px;
   cursor: default;
@@ -316,6 +316,17 @@
 
 .action-btn:not(:disabled):active {
   transform: scale(0.95);
+}
+
+.advance-btn {
+  color: rgba(59, 130, 246, 0.8);
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.advance-btn:not(:disabled):hover {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: rgba(59, 130, 246, 1);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
 }
 
 .confirm-btn {

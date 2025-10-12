@@ -8,12 +8,15 @@ import {OrderSearchParams} from './models/search/order-search-request.model';
 import {OrderCancelRequest} from './models/cancel/order-cancel-request.model';
 import {OrderActionResponse} from './models/action/order-action-response.model';
 import {OrderConfirmRequest} from './models/confirm/order-confirm-request.model';
+import {OrderAdvanceCreateRequest} from './models/advance/order-advance-request.model';
+import {OrderAdvanceResponse} from './models/advance/order-advance-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
   private readonly baseUrl = 'http://localhost:8080/api/orders';
+  private readonly advanceUrl = 'http://localhost:8080/api/order-advances';
 
   constructor(private http: HttpClient) {
   }
@@ -82,5 +85,14 @@ export class OrderService {
     }
 
     return this.http.get<OrderSearchResponse>(`${this.baseUrl}/search`, {params});
+  }
+
+  createAdvanceForOrder(orderId: number, amount: number, userId?: number): Observable<OrderAdvanceResponse> {
+    const request: OrderAdvanceCreateRequest = {
+      orderId,
+      amount,
+      userId
+    };
+    return this.http.post<OrderAdvanceResponse>(this.advanceUrl, request);
   }
 }

@@ -80,7 +80,6 @@ export class OrderList implements OnInit, OnDestroy {
     }
   }
 
-
   onOrderSelected(orderId: number): void {
     console.log('Order selected:', orderId);
   }
@@ -90,7 +89,105 @@ export class OrderList implements OnInit, OnDestroy {
       this.handleConfirmOrder(action.orderId, action.orderNumber);
     } else if (action.action === 'cancel') {
       this.handleCancelOrder(action.orderId, action.orderNumber);
+    } else if (action.action === 'advance') {
+      this.handleAdvanceOrder(action.orderId, action.orderNumber);
     }
+  }
+
+  private handleAdvanceOrder(orderId: number, orderNumber: string): void {
+    const order = this.orders().find(o => o.id === orderId);
+
+    if (!order) {
+      this.showError('Orden no encontrada');
+      return;
+    }
+
+    if (order.status !== 'DRAFT') {
+      this.showError('Solo las órdenes en estado DRAFT pueden recibir anticipos');
+      return;
+    }
+
+    const availableAmount = order.totalAmount - order.totalAdvances;
+    if (availableAmount <= 0) {
+      this.showError('Esta orden ya tiene anticipos por el total del monto');
+      return;
+    }
+
+    const infoMessage = `Agregar anticipo a la orden #${orderNumber}\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `Cliente: ${order.customerName}\n` +
+      `Total Orden: ${this.formatCurrency(order.totalAmount)}\n` +
+      `Anticipos Actuales: ${this.formatCurrency(order.totalAdvances)}\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `Disponible: ${this.formatCurrency(availableAmount)}\n\n` +
+      `Ingrese el monto del anticipo:`;
+
+    const amountStr = prompt(infoMessage);
+
+    if (amountStr === null) {
+      return;
+    }
+
+    const amount = parseFloat(amountStr);
+
+    if (isNaN(amount) || amount <= 0) {
+      this.showError('Debe ingresar un monto válido mayor a 0');
+      return;
+    }
+
+    if (amount > availableAmount) {
+      this.showError(
+        `El monto no puede exceder el disponible.\n\n` +
+        `Disponible: ${this.formatCurrency(availableAmount)}\n` +
+        `Ingresado: ${this.formatCurrency(amount)}`
+      );
+      return;
+    }
+
+    const confirmed = confirm(
+      `¿Confirmar anticipo?\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `Orden: #${orderNumber}\n` +
+      `Monto: ${this.formatCurrency(amount)}\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `Esta acción registrará el anticipo y actualizará el saldo de la orden.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.createAdvance(orderId, amount);
+  }
+
+  private createAdvance(orderId: number, amount: number): void {
+    this.setOrderProcessing(orderId, true);
+
+    this.orderService.createAdvanceForOrder(orderId, amount, this.getCurrentUserId())
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.setOrderProcessing(orderId, false))
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.showSuccess(
+              `Anticipo registrado exitosamente\n\n` +
+              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+              `ID Anticipo: #${response.data?.id}\n` +
+              `Monto: ${this.formatCurrency(response.data?.amount || 0)}\n` +
+              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+            );
+            this.performSearch();
+          } else {
+            this.showError(response.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error al crear anticipo:', error);
+          this.handleAdvanceError(error);
+        }
+      });
   }
 
   private handleConfirmOrder(orderId: number, orderNumber: string): void {
@@ -338,6 +435,30 @@ export class OrderList implements OnInit, OnDestroy {
     return date.toISOString();
   }
 
+  private formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('es-BO', {
+      style: 'currency',
+      currency: 'BOB',
+      minimumFractionDigits: 2
+    }).format(amount);
+  }
+
+  private handleAdvanceError(error: any): void {
+    let message = 'Error al crear el anticipo';
+
+    if (error.status === 404) {
+      message = error.error?.message || 'Orden no encontrada';
+    } else if (error.status === 409) {
+      message = error.error?.message || 'El monto excede el total disponible';
+    } else if (error.status === 0) {
+      message = 'No se puede conectar con el servidor';
+    } else if (error.error?.message) {
+      message = error.error.message;
+    }
+
+    this.showError(message);
+  }
+
   private handleApiError(error: any, action: string): void {
     let message = `Error al ${action} la orden`;
 
@@ -366,10 +487,10 @@ export class OrderList implements OnInit, OnDestroy {
   }
 
   private showSuccess(message: string): void {
-    alert(message);
+    alert(`${message}`);
   }
 
   private showError(message: string): void {
-    alert(`✗ ${message}`);
+    alert(`${message}`);
   }
 }
