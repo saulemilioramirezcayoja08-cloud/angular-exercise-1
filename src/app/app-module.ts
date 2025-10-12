@@ -24,6 +24,10 @@ import { QuotationList } from './pages/quotation-list/quotation-list';
 import { ListTop } from './pages/quotation-list/components/list-top/list-top';
 import { ListMiddle } from './pages/quotation-list/components/list-middle/list-middle';
 import { ListBottom } from './pages/quotation-list/components/list-bottom/list-bottom';
+import { OrderList } from './pages/order-list/order-list';
+import { ListBottomOrder } from './pages/order-list/components/list-bottom-order/list-bottom-order';
+import { ListMiddleOrder } from './pages/order-list/components/list-middle-order/list-middle-order';
+import { ListTopOrder } from './pages/order-list/components/list-top-order/list-top-order';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,11 @@ import { ListBottom } from './pages/quotation-list/components/list-bottom/list-b
     QuotationList,
     ListTop,
     ListMiddle,
-    ListBottom
+    ListBottom,
+    OrderList,
+    ListBottomOrder,
+    ListMiddleOrder,
+    ListTopOrder
   ],
   imports: [
     BrowserModule,

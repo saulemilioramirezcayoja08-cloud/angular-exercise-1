@@ -1,0 +1,61 @@
+<div class="list-bottom">
+  <div class="container">
+    <div class="info">
+      <span class="text" *ngIf="pagination">
+        Mostrando <strong>{{ getStartItem() }}-{{ getEndItem() }}</strong>
+        de <strong>{{ getTotalElements() }}</strong> órdenes
+      </span>
+      <span class="text" *ngIf="!pagination">
+        Sin resultados
+      </span>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="button" [disabled]="!canGoToFirstPage()" (click)="onFirstPage()"
+              title="Primera página">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 17L13 12L18 7M11 17L6 12L11 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button type="button" class="button" [disabled]="!canGoToPrevious()" (click)="onPreviousPage()"
+              title="Página anterior">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="page-info">
+        <span class="current">{{ getCurrentPage() }}</span>
+        <span class="separator">/</span>
+        <span class="total">{{ getTotalPages() }}</span>
+      </div>
+
+      <button type="button" class="button" [disabled]="!canGoToNext()" (click)="onNextPage()" title="Página siguiente">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button type="button" class="button" [disabled]="!canGoToLastPage()" (click)="onLastPage()" title="Última página">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 17L11 12L6 7M13 17L18 12L13 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="size-selector">
+      <label class="label">Mostrar:</label>
+      <select class="select" [value]="getPageSize()" (change)="onSizeChange($event)" [disabled]="isLoading">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+  </div>
+</div>

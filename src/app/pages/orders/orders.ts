@@ -29,7 +29,7 @@ export class Orders implements OnInit, OnDestroy {
     warehouseId: 1,
     currency: 'BOB',
     userId: 1,
-    paymentId: undefined,
+    paymentId: 1,
     quotationId: undefined
   };
 

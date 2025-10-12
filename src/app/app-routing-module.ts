@@ -7,6 +7,7 @@ import {Login} from './pages/login/login';
 import {authGuard} from './guards/auth-guard';
 import { Orders } from './pages/orders/orders';
 import { QuotationList } from './pages/quotation-list/quotation-list';
+import {OrderList} from './pages/order-list/order-list';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'quotation', component: Quotations, canActivate: [authGuard] },
   { path: 'quotation-list', component: QuotationList, canActivate: [authGuard] },
   { path: 'order', component: Orders, canActivate: [authGuard] },
+  { path: 'order-list', component: OrderList, canActivate: [authGuard] },
 
   { path: '**', redirectTo: '/login' }
 ];

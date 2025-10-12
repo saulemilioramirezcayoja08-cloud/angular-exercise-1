@@ -1,0 +1,31 @@
+<div class="order-list">
+  <div class="panel main">
+    <div class="main-row top">
+      <app-list-top-order
+        (searchRequested)="onSearchRequested($event)"
+        (searchCleared)="onSearchCleared()">
+      </app-list-top-order>
+    </div>
+
+    <div class="main-row middle">
+      <app-list-middle-order
+        [orders]="orders()"
+        [isLoading]="isLoading()"
+        [hasSearched]="hasSearched()"
+        [searchType]="searchType()"
+        (orderSelected)="onOrderSelected($event)">
+      </app-list-middle-order>
+    </div>
+
+    <div class="main-row bottom">
+      <app-list-bottom-order
+        [pagination]="pagination()"
+        [isLoading]="isLoading()"
+        (pageChanged)="onPageChanged($event)"
+        (sizeChanged)="onSizeChanged($event)"
+        (goToFirstPage)="onGoToFirstPage()"
+        (goToLastPage)="onGoToLastPage()">
+      </app-list-bottom-order>
+    </div>
+  </div>
+</div>

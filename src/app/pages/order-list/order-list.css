@@ -1,0 +1,45 @@
+.order-list {
+  width: 100%;
+  height: calc(100vh - 6vh);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.order-list .panel {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.order-list .panel.main {
+  height: 100%;
+}
+
+.order-list .panel.main .main-row {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.order-list .panel.main .main-row.top {
+  height: 20%;
+}
+
+.order-list .panel.main .main-row.middle {
+  height: 70%;
+  background-color: white;
+}
+
+.order-list .panel.main .main-row.bottom {
+  height: 10%;
+  background-color: white;
+}
