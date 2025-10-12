@@ -1,0 +1,32 @@
+<div class="sale-list">
+  <div class="panel main">
+    <div class="main-row top">
+      <app-list-top-sale
+        (searchRequested)="onSearchRequested($event)"
+        (searchCleared)="onSearchCleared()">
+      </app-list-top-sale>
+    </div>
+
+    <div class="main-row middle">
+      <app-list-middle-sale
+        [sales]="sales()"
+        [isLoading]="isLoading()"
+        [hasSearched]="hasSearched()"
+        [searchType]="searchType()"
+        (saleSelected)="onSaleSelected($event)"
+        (saleActionRequested)="onSaleAction($event)">
+      </app-list-middle-sale>
+    </div>
+
+    <div class="main-row bottom">
+      <app-list-bottom-sale
+        [pagination]="pagination()"
+        [isLoading]="isLoading()"
+        (pageChanged)="onPageChanged($event)"
+        (sizeChanged)="onSizeChanged($event)"
+        (goToFirstPage)="onGoToFirstPage()"
+        (goToLastPage)="onGoToLastPage()">
+      </app-list-bottom-sale>
+    </div>
+  </div>
+</div>

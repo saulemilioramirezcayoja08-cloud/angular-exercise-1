@@ -28,6 +28,10 @@ import { OrderList } from './pages/order-list/order-list';
 import { ListBottomOrder } from './pages/order-list/components/list-bottom-order/list-bottom-order';
 import { ListMiddleOrder } from './pages/order-list/components/list-middle-order/list-middle-order';
 import { ListTopOrder } from './pages/order-list/components/list-top-order/list-top-order';
+import { SaleList } from './pages/sale-list/sale-list';
+import { ListBottomSale } from './pages/sale-list/components/list-bottom-sale/list-bottom-sale';
+import { ListMiddleSale } from './pages/sale-list/components/list-middle-sale/list-middle-sale';
+import { ListTopSale } from './pages/sale-list/components/list-top-sale/list-top-sale';
 
 @NgModule({
   declarations: [
@@ -54,7 +58,11 @@ import { ListTopOrder } from './pages/order-list/components/list-top-order/list-
     OrderList,
     ListBottomOrder,
     ListMiddleOrder,
-    ListTopOrder
+    ListTopOrder,
+    SaleList,
+    ListBottomSale,
+    ListMiddleSale,
+    ListTopSale
   ],
   imports: [
     BrowserModule,

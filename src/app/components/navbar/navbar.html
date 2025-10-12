@@ -73,6 +73,29 @@
       </div>
     </div>
 
+    <div class="navbar-section dropdown"
+         (mouseenter)="toggleDropdown('ventas')"
+         (mouseleave)="closeDropdowns()">
+      <div class="section-items">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'ventas'">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Ventas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'ventas'">
+        <a routerLink="/sale-list" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Listar Ventas</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
   </div>
 
   <div class="navbar-actions">

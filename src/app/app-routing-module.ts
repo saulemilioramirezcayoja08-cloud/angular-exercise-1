@@ -8,6 +8,7 @@ import {authGuard} from './guards/auth-guard';
 import { Orders } from './pages/orders/orders';
 import { QuotationList } from './pages/quotation-list/quotation-list';
 import {OrderList} from './pages/order-list/order-list';
+import {SaleList} from './pages/sale-list/sale-list';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'quotation-list', component: QuotationList, canActivate: [authGuard] },
   { path: 'order', component: Orders, canActivate: [authGuard] },
   { path: 'order-list', component: OrderList, canActivate: [authGuard] },
+  { path: 'sale-list', component: SaleList, canActivate: [authGuard] },
 
   { path: '**', redirectTo: '/login' }
 ];
