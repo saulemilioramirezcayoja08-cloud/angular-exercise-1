@@ -13,7 +13,8 @@
         [isLoading]="isLoading()"
         [hasSearched]="hasSearched()"
         [searchType]="searchType()"
-        (quotationSelected)="onQuotationSelected($event)">
+        (quotationSelected)="onQuotationSelected($event)"
+        (quotationActionRequested)="onQuotationAction($event)">
       </app-list-middle>
     </div>
 

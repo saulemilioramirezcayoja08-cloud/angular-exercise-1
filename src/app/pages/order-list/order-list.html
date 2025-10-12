@@ -13,7 +13,8 @@
         [isLoading]="isLoading()"
         [hasSearched]="hasSearched()"
         [searchType]="searchType()"
-        (orderSelected)="onOrderSelected($event)">
+        (orderSelected)="onOrderSelected($event)"
+        (orderActionRequested)="onOrderAction($event)">
       </app-list-middle-order>
     </div>
 

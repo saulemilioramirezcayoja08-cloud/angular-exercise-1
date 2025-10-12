@@ -3,6 +3,9 @@ import {OrderSearchData, PaginationMetadata} from '../../services/order/models/s
 import {SearchEvent} from './components/list-top-order/list-top-order';
 import {delay, finalize, Subject, takeUntil} from 'rxjs';
 import {OrderService} from '../../services/order/order-service';
+import {OrderAction} from './components/list-middle-order/list-middle-order';
+import {OrderCancelRequest} from '../../services/order/models/cancel/order-cancel-request.model';
+import {OrderConfirmRequest} from '../../services/order/models/confirm/order-confirm-request.model';
 
 @Component({
   selector: 'app-order-list',
@@ -25,7 +28,8 @@ export class OrderList implements OnInit, OnDestroy {
   private searchSubject$ = new Subject<void>();
   private destroy$ = new Subject<void>();
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService) {
+  }
 
   ngOnInit(): void {
   }
@@ -76,8 +80,144 @@ export class OrderList implements OnInit, OnDestroy {
     }
   }
 
+
   onOrderSelected(orderId: number): void {
     console.log('Order selected:', orderId);
+  }
+
+  onOrderAction(action: OrderAction): void {
+    if (action.action === 'confirm') {
+      this.handleConfirmOrder(action.orderId, action.orderNumber);
+    } else if (action.action === 'cancel') {
+      this.handleCancelOrder(action.orderId, action.orderNumber);
+    }
+  }
+
+  private handleConfirmOrder(orderId: number, orderNumber: string): void {
+    const order = this.orders().find(o => o.id === orderId);
+
+    if (!order) {
+      this.showError('Orden no encontrada');
+      return;
+    }
+
+    if (order.status !== 'DRAFT') {
+      this.showError('Solo las órdenes en estado DRAFT pueden ser confirmadas');
+      return;
+    }
+
+    const confirmed = confirm(
+      `¿Confirmar la orden #${orderNumber}?\n\n` +
+      `Esta acción:\n` +
+      `• Creará una venta asociada\n` +
+      `• Cambiará el estado a CONFIRMADO\n` +
+      `• No podrá revertirse\n\n` +
+      `¿Deseas continuar?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const notes = prompt('Notas de confirmación (opcional):');
+
+    if (notes === null) {
+      return;
+    }
+
+    this.confirmOrder(orderId, notes);
+  }
+
+  private confirmOrder(orderId: number, notes: string): void {
+    this.setOrderProcessing(orderId, true);
+
+    const request: OrderConfirmRequest = {
+      confirmNotes: notes || '',
+      userId: this.getCurrentUserId()
+    };
+
+    this.orderService.confirmOrder(orderId, request)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.setOrderProcessing(orderId, false))
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.showSuccess(`Orden #${response.data?.number} confirmada exitosamente`);
+            this.performSearch();
+          } else {
+            this.showError(response.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error al confirmar orden:', error);
+          this.handleApiError(error, 'confirmar');
+        }
+      });
+  }
+
+  private handleCancelOrder(orderId: number, orderNumber: string): void {
+    const order = this.orders().find(o => o.id === orderId);
+
+    if (!order) {
+      this.showError('Orden no encontrada');
+      return;
+    }
+
+    if (order.status !== 'DRAFT') {
+      this.showError('Solo las órdenes en estado DRAFT pueden ser canceladas');
+      return;
+    }
+
+    const notes = prompt(
+      `¿Cancelar la orden #${orderNumber}?\n\n` +
+      `Esta acción:\n` +
+      `• Cancelará las reservaciones asociadas\n` +
+      `• Cambiará el estado a CANCELADO\n` +
+      `• No podrá revertirse\n\n` +
+      `Escribe el motivo de cancelación:`
+    );
+
+    if (notes === null) {
+      return;
+    }
+
+    if (!notes.trim()) {
+      this.showError('Debes especificar un motivo para cancelar la orden');
+      return;
+    }
+
+    this.cancelOrder(orderId, notes);
+  }
+
+  private cancelOrder(orderId: number, notes: string): void {
+    this.setOrderProcessing(orderId, true);
+
+    const request: OrderCancelRequest = {
+      cancelNotes: notes,
+      userId: this.getCurrentUserId()
+    };
+
+    this.orderService.cancelOrder(orderId, request)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.setOrderProcessing(orderId, false))
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.showSuccess(`Orden #${response.data?.number} cancelada exitosamente`);
+            this.performSearch();
+          } else {
+            this.showError(response.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error al cancelar orden:', error);
+          this.handleApiError(error, 'cancelar');
+        }
+      });
   }
 
   private performSearch(): void {
@@ -146,7 +286,11 @@ export class OrderList implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response.success) {
-            this.orders.set(response.data || []);
+            const ordersWithProcessing = (response.data || []).map(order => ({
+              ...order,
+              isProcessing: false
+            }));
+            this.orders.set(ordersWithProcessing);
             this.pagination.set(response.pagination);
           } else {
             this.showError(response.message);
@@ -156,19 +300,25 @@ export class OrderList implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error searching orders:', error);
-
-          const message = error.error?.message
-            || (error.status === 0 ? 'No se puede conectar con el servidor'
-              : error.status === 400 ? 'Parámetros de búsqueda inválidos'
-                : error.status === 404 ? 'No se encontraron resultados'
-                  : error.status === 500 ? 'Error interno del servidor'
-                    : 'Error al buscar órdenes');
-
-          this.showError(message);
+          this.handleSearchError(error);
           this.orders.set([]);
           this.pagination.set(null);
         }
       });
+  }
+
+  private setOrderProcessing(orderId: number, isProcessing: boolean): void {
+    const currentOrders = this.orders();
+    const updatedOrders = currentOrders.map(order =>
+      order.id === orderId
+        ? {...order, isProcessing}
+        : order
+    );
+    this.orders.set(updatedOrders);
+  }
+
+  private getCurrentUserId(): number {
+    return 1;
   }
 
   private toISO8601(dateString: string, isEndOfDay: boolean = false): string {
@@ -188,7 +338,38 @@ export class OrderList implements OnInit, OnDestroy {
     return date.toISOString();
   }
 
-  private showError(message: string): void {
+  private handleApiError(error: any, action: string): void {
+    let message = `Error al ${action} la orden`;
+
+    if (error.status === 404) {
+      message = error.error?.message || 'Orden no encontrada';
+    } else if (error.status === 409) {
+      message = error.error?.message || 'La orden no puede ser modificada en su estado actual';
+    } else if (error.status === 0) {
+      message = 'No se puede conectar con el servidor';
+    } else if (error.error?.message) {
+      message = error.error.message;
+    }
+
+    this.showError(message);
+  }
+
+  private handleSearchError(error: any): void {
+    const message = error.error?.message
+      || (error.status === 0 ? 'No se puede conectar con el servidor'
+        : error.status === 400 ? 'Parámetros de búsqueda inválidos'
+          : error.status === 404 ? 'No se encontraron resultados'
+            : error.status === 500 ? 'Error interno del servidor'
+              : 'Error al buscar órdenes');
+
+    this.showError(message);
+  }
+
+  private showSuccess(message: string): void {
     alert(message);
+  }
+
+  private showError(message: string): void {
+    alert(`✗ ${message}`);
   }
 }

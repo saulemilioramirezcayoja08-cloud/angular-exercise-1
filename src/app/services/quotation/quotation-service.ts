@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
-import { DraftQuotationRequest } from './models/draft/draft-request.model';
-import { Observable } from 'rxjs';
-import { DraftQuotationResponse } from './models/draft/draft-response.model';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { QuotationSearchResponse } from './models/search/quotation-search-response.model';
-import { QuotationSearchParams } from './models/search/quotation-search-request.model';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {QuotationSearchResponse} from './models/search/quotation-search-response.model';
+import {QuotationSearchParams} from './models/search/quotation-search-request.model';
+import {QuotationConfirmRequest} from './models/confirm/quotation-confirm-request.model';
+import {QuotationActionResponse} from './models/action/quotation-action-response.model';
+import {QuotationCancelRequest} from './models/cancel/quotation-cancel-request.model';
+import {DraftQuotationRequest} from './models/draft/draft-request.model';
+import {DraftQuotationResponse} from './models/draft/draft-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,29 +15,38 @@ import { QuotationSearchParams } from './models/search/quotation-search-request.
 export class QuotationService {
   private readonly baseUrl = 'http://localhost:8080/api/quotations';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   createDraft(request: DraftQuotationRequest): Observable<DraftQuotationResponse> {
     return this.http.post<DraftQuotationResponse>(this.baseUrl, request);
   }
 
+  cancelQuotation(quotationId: number, request: QuotationCancelRequest): Observable<QuotationActionResponse> {
+    return this.http.put<QuotationActionResponse>(`${this.baseUrl}/${quotationId}/cancel`, request);
+  }
+
+  confirmQuotation(quotationId: number, request: QuotationConfirmRequest): Observable<QuotationActionResponse> {
+    return this.http.put<QuotationActionResponse>(`${this.baseUrl}/${quotationId}/confirm`, request);
+  }
+
   searchByNumber(number: string, page?: number, size?: number): Observable<QuotationSearchResponse> {
-    const searchParams: QuotationSearchParams = { number, page, size };
+    const searchParams: QuotationSearchParams = {number, page, size};
     return this.executeSearch(searchParams);
   }
 
   searchByStatus(status: string, page?: number, size?: number): Observable<QuotationSearchResponse> {
-    const searchParams: QuotationSearchParams = { status, page, size };
+    const searchParams: QuotationSearchParams = {status, page, size};
     return this.executeSearch(searchParams);
   }
 
   searchByUsername(username: string, page?: number, size?: number): Observable<QuotationSearchResponse> {
-    const searchParams: QuotationSearchParams = { username, page, size };
+    const searchParams: QuotationSearchParams = {username, page, size};
     return this.executeSearch(searchParams);
   }
 
   searchByDateRange(dateFrom: string, dateTo: string, page?: number, size?: number): Observable<QuotationSearchResponse> {
-    const searchParams: QuotationSearchParams = { dateFrom, dateTo, page, size };
+    const searchParams: QuotationSearchParams = {dateFrom, dateTo, page, size};
     return this.executeSearch(searchParams);
   }
 
@@ -69,6 +81,6 @@ export class QuotationService {
       params = params.set('size', searchParams.size.toString());
     }
 
-    return this.http.get<QuotationSearchResponse>(`${this.baseUrl}/search`, { params });
+    return this.http.get<QuotationSearchResponse>(`${this.baseUrl}/search`, {params});
   }
 }

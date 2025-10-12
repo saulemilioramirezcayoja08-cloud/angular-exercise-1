@@ -10,7 +10,7 @@
       <g id="SVGRepo_iconCarrier">
         <path
           d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </g>
     </svg>
     <p class="empty-title">{{ getEmptyMessage().title }}</p>
@@ -24,7 +24,7 @@
       <g id="SVGRepo_iconCarrier">
         <path
           d="M9 9L15 15M15 9L9 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </g>
     </svg>
     <p class="empty-title">{{ getEmptyMessage().title }}</p>
@@ -45,43 +45,101 @@
       <th class="header">Anticipos</th>
       <th class="header">Items</th>
       <th class="header">Fecha Creación</th>
+      <th class="header actions-header">Acciones</th>
     </tr>
     </thead>
     <tbody>
-    <tr class="row" *ngFor="let order of orders; trackBy: trackByOrderId"
-        (click)="onRowClick(order.id)">
-      <td class="cell">
+    <tr class="row" *ngFor="let order of orders; trackBy: trackByOrderId">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="code">{{ order.number }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span [class]="getBadgeClass(order.status)">{{ order.status }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="label" [title]="order.customerName">{{ order.customerName }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="label" [title]="order.warehouseName">{{ order.warehouseName }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="label">{{ order.username || '-' }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="label">{{ order.paymentName || '-' }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="value">{{ order.currency }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="value amount">{{ order.totalAmount }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="value amount">{{ order.totalAdvances }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="value">{{ order.itemCount }}</span>
       </td>
-      <td class="cell">
+      <td class="cell" (click)="onRowClick(order.id)">
         <span class="value datetime">{{ formatDateTime(order.createdAt) }}</span>
+      </td>
+
+      <td class="cell actions-cell">
+        <div class="actions">
+          <ng-container *ngIf="order.status === 'DRAFT'">
+            <button
+              type="button"
+              class="action-btn confirm-btn"
+              (click)="onConfirmClick(order); $event.stopPropagation()"
+              [disabled]="order.isProcessing"
+              title="Confirmar orden - Creará una venta asociada">
+              <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round"/>
+              </svg>
+              <div *ngIf="order.isProcessing" class="mini-spinner"></div>
+            </button>
+
+            <button
+              type="button"
+              class="action-btn cancel-btn"
+              (click)="onCancelClick(order); $event.stopPropagation()"
+              [disabled]="order.isProcessing"
+              title="Cancelar orden - Cancelará las reservaciones">
+              <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round"/>
+              </svg>
+              <div *ngIf="order.isProcessing" class="mini-spinner"></div>
+            </button>
+          </ng-container>
+
+          <span
+            *ngIf="order.status === 'CONFIRMED'"
+            class="no-actions confirmed-label"
+            title="Esta orden ya está confirmada y no puede modificarse">
+            <svg class="lock-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 14.5V16.5M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Confirmada
+          </span>
+
+          <span
+            *ngIf="order.status === 'CANCELED'"
+            class="no-actions canceled-label"
+            title="Esta orden está cancelada y no puede modificarse">
+            <svg class="lock-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 14.5V16.5M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Cancelada
+          </span>
+        </div>
       </td>
     </tr>
     </tbody>

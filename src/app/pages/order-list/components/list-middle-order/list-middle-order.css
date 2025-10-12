@@ -34,7 +34,7 @@
   border-collapse: collapse;
   background-color: white;
   table-layout: fixed;
-  min-width: 1400px;
+  min-width: 1520px;
   font-family: inherit;
 }
 
@@ -118,6 +118,16 @@
   width: 180px;
 }
 
+.table thead th.header:nth-child(12) {
+  width: 140px;
+  text-align: center;
+}
+
+.table thead th.header.actions-header {
+  width: 140px;
+  text-align: center;
+}
+
 .row {
   transition: all 0.2s ease-in;
   cursor: pointer;
@@ -196,6 +206,19 @@
   width: 180px;
 }
 
+.row td.cell:nth-child(12) {
+  width: 140px;
+  text-align: center;
+  padding: 2px 8px;
+}
+
+.row td.cell.actions-cell {
+  width: 140px;
+  text-align: center;
+  padding: 2px 8px;
+  cursor: default;
+}
+
 .code {
   font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
   display: inline-block;
@@ -224,7 +247,7 @@
 
 .value.datetime {
   font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   font-size: 13px;
 }
 
@@ -235,7 +258,7 @@
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   transition: all 0.2s ease-in;
 }
 
@@ -251,6 +274,123 @@
 
 .badge.canceled {
   background-color: rgba(239, 68, 68, 0.1);
+  color: rgba(239, 68, 68, 0.9);
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+  position: relative;
+}
+
+.action-btn .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.action-btn:not(:disabled):hover {
+  transform: scale(1.05);
+}
+
+.action-btn:not(:disabled):active {
+  transform: scale(0.95);
+}
+
+.confirm-btn {
+  color: rgba(34, 197, 94, 0.8);
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.confirm-btn:not(:disabled):hover {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: rgba(34, 197, 94, 1);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+}
+
+.cancel-btn {
+  color: rgba(239, 68, 68, 0.8);
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.cancel-btn:not(:disabled):hover {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: rgba(239, 68, 68, 1);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+.mini-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.no-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: help;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease-in;
+}
+
+.no-actions .lock-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.no-actions.confirmed-label {
+  color: rgba(34, 197, 94, 0.7);
+  background-color: rgba(34, 197, 94, 0.08);
+}
+
+.no-actions.confirmed-label:hover {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: rgba(34, 197, 94, 0.9);
+}
+
+.no-actions.canceled-label {
+  color: rgba(239, 68, 68, 0.7);
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+.no-actions.canceled-label:hover {
+  background-color: rgba(239, 68, 68, 0.15);
   color: rgba(239, 68, 68, 0.9);
 }
 
@@ -290,18 +430,7 @@
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 0.3;

@@ -5,6 +5,9 @@ import {Observable} from 'rxjs';
 import {DraftOrderResponse} from './models/draft/draft-response.model';
 import {OrderSearchResponse} from './models/search/order-search-response.model';
 import {OrderSearchParams} from './models/search/order-search-request.model';
+import {OrderCancelRequest} from './models/cancel/order-cancel-request.model';
+import {OrderActionResponse} from './models/action/order-action-response.model';
+import {OrderConfirmRequest} from './models/confirm/order-confirm-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +20,14 @@ export class OrderService {
 
   createDraft(request: DraftOrderRequest): Observable<DraftOrderResponse> {
     return this.http.post<DraftOrderResponse>(this.baseUrl, request);
+  }
+
+  cancelOrder(orderId: number, request: OrderCancelRequest): Observable<OrderActionResponse> {
+    return this.http.put<OrderActionResponse>(`${this.baseUrl}/${orderId}/cancel`, request);
+  }
+
+  confirmOrder(orderId: number, request: OrderConfirmRequest): Observable<OrderActionResponse> {
+    return this.http.put<OrderActionResponse>(`${this.baseUrl}/${orderId}/confirm`, request);
   }
 
   searchByNumber(number: string, page?: number, size?: number): Observable<OrderSearchResponse> {

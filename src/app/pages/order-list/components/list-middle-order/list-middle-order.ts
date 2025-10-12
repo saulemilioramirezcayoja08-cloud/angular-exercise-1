@@ -3,6 +3,12 @@ import {OrderSearchData} from '../../../../services/order/models/search/order-se
 
 type SearchType = 'number' | 'username' | 'status' | 'dateRange' | null;
 
+export interface OrderAction {
+  orderId: number;
+  orderNumber: string;
+  action: 'confirm' | 'cancel';
+}
+
 @Component({
   selector: 'app-list-middle-order',
   standalone: false,
@@ -14,10 +20,28 @@ export class ListMiddleOrder {
   @Input() isLoading: boolean = false;
   @Input() hasSearched: boolean = false;
   @Input() searchType: SearchType = null;
+
   @Output() orderSelected = new EventEmitter<number>();
+  @Output() orderActionRequested = new EventEmitter<OrderAction>();
 
   onRowClick(orderId: number): void {
     this.orderSelected.emit(orderId);
+  }
+
+  onConfirmClick(order: OrderSearchData): void {
+    this.orderActionRequested.emit({
+      orderId: order.id,
+      orderNumber: order.number,
+      action: 'confirm'
+    });
+  }
+
+  onCancelClick(order: OrderSearchData): void {
+    this.orderActionRequested.emit({
+      orderId: order.id,
+      orderNumber: order.number,
+      action: 'cancel'
+    });
   }
 
   getEmptyMessage(): { title: string, subtitle: string } {
@@ -78,7 +102,7 @@ export class ListMiddleOrder {
 
     try {
       const date = new Date(isoDate);
-      const dateTimeString = date.toLocaleString('es-BO', {
+      return date.toLocaleString('es-BO', {
         timeZone: 'America/La_Paz',
         day: '2-digit',
         month: '2-digit',
@@ -88,7 +112,6 @@ export class ListMiddleOrder {
         second: '2-digit',
         hour12: false
       });
-      return dateTimeString;
     } catch (error) {
       console.error('Error formatting date:', error);
       return '';

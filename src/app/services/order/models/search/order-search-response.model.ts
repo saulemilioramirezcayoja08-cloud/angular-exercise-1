@@ -19,6 +19,7 @@ export interface OrderSearchData {
   totalAdvances: number;
   createdAt: string;
   updatedAt: string;
+  isProcessing?: boolean;
 }
 
 export interface PaginationMetadata {

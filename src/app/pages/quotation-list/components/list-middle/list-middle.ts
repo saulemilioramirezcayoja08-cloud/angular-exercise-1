@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { QuotationSearchData } from '../../../../services/quotation/models/search/quotation-search-response.model';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {QuotationSearchData} from '../../../../services/quotation/models/search/quotation-search-response.model';
 
 type SearchType = 'number' | 'username' | 'status' | 'dateRange' | null;
+
+export interface QuotationAction {
+  quotationId: number;
+  quotationNumber: string;
+  action: 'confirm' | 'cancel';
+}
 
 @Component({
   selector: 'app-list-middle',
@@ -14,10 +20,28 @@ export class ListMiddle {
   @Input() isLoading: boolean = false;
   @Input() hasSearched: boolean = false;
   @Input() searchType: SearchType = null;
+
   @Output() quotationSelected = new EventEmitter<number>();
+  @Output() quotationActionRequested = new EventEmitter<QuotationAction>();
 
   onRowClick(quotationId: number): void {
     this.quotationSelected.emit(quotationId);
+  }
+
+  onConfirmClick(quotation: QuotationSearchData): void {
+    this.quotationActionRequested.emit({
+      quotationId: quotation.id,
+      quotationNumber: quotation.number,
+      action: 'confirm'
+    });
+  }
+
+  onCancelClick(quotation: QuotationSearchData): void {
+    this.quotationActionRequested.emit({
+      quotationId: quotation.id,
+      quotationNumber: quotation.number,
+      action: 'cancel'
+    });
   }
 
   getEmptyMessage(): { title: string, subtitle: string } {
@@ -78,7 +102,7 @@ export class ListMiddle {
 
     try {
       const date = new Date(isoDate);
-      const dateTimeString = date.toLocaleString('es-BO', {
+      return date.toLocaleString('es-BO', {
         timeZone: 'America/La_Paz',
         day: '2-digit',
         month: '2-digit',
@@ -88,7 +112,6 @@ export class ListMiddle {
         second: '2-digit',
         hour12: false
       });
-      return dateTimeString;
     } catch (error) {
       console.error('Error formatting date:', error);
       return '';
