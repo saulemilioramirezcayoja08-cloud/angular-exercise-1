@@ -1,15 +1,8 @@
 <div class="bottom">
 
   <div class="left-section">
-    <textarea
-      id="notes"
-      class="textarea"
-      [value]="notes"
-      (input)="onNotesInput($event)"
-      placeholder="Observaciones..."
-      maxlength="1000"
-      rows="3"
-      [disabled]="isGenerating"></textarea>
+    <textarea id="notes" class="textarea" [value]="notes" (input)="onNotesInput($event)" placeholder="Observaciones..."
+      maxlength="1000" rows="3" [disabled]="isGenerating"></textarea>
   </div>
 
   <div class="center-section">
@@ -24,21 +17,14 @@
   </div>
 
   <div class="right-section">
-    <button
-      type="button"
-      class="button primary"
-      (click)="onGenerateClick()"
-      [disabled]="isGenerating"
+    <button type="button" class="button primary" (click)="onGenerateClick()" [disabled]="isGenerating"
       title="Generar cotización (Ctrl + G)">
       <span *ngIf="!isGenerating">GENERAR COTIZACIÓN</span>
       <span *ngIf="isGenerating">GENERANDO...</span>
     </button>
 
-    <button
-      type="button"
-      class="button secondary"
-      [disabled]="isGenerating"
-      title="Vista previa">
+    <button type="button" class="button secondary" [disabled]="isGenerating" title="Vista previa (Ctrl + V)"
+      (click)="onPreviewClick()">
       VISTA PREVIA
     </button>
   </div>

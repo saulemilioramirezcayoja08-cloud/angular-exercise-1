@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
-import {NotesUpdateEvent, QuotationTotals} from '../../../../models/state.models';
-import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { NotesUpdateEvent, QuotationTotals } from '../../../../models/state.models';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-bottom',
@@ -15,6 +15,7 @@ export class Bottom implements OnDestroy {
 
   @Output() notesChanged = new EventEmitter<NotesUpdateEvent>();
   @Output() generateQuotation = new EventEmitter<void>();
+  @Output() previewQuotation = new EventEmitter<void>();
 
   private notesSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -25,7 +26,7 @@ export class Bottom implements OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroy$)
     ).subscribe(notes => {
-      this.notesChanged.emit({notes});
+      this.notesChanged.emit({ notes });
     });
   }
 
@@ -47,6 +48,14 @@ export class Bottom implements OnDestroy {
     }
 
     this.generateQuotation.emit();
+  }
+
+  onPreviewClick(): void {
+    if (this.isGenerating) {
+      return;
+    }
+
+    this.previewQuotation.emit();
   }
 
   formatCurrency(amount: number): string {

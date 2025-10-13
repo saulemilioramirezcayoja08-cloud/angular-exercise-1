@@ -9,19 +9,14 @@
   </div>
 
   <div class="panel middle">
-    <app-middle
-      [products]="products()"
-      (productsChanged)="onProductsChanged($event)">
+    <app-middle [products]="products()" (productsChanged)="onProductsChanged($event)">
     </app-middle>
   </div>
 
   <div class="panel bottom">
-    <app-bottom
-      [totals]="totals()"
-      [notes]="quotationNotes()"
-      [isGenerating]="isGenerating()"
-      (notesChanged)="onNotesChanged($event)"
-      (generateQuotation)="onGenerateQuotation()">
+    <app-bottom [totals]="totals()" [notes]="quotationNotes()" [isGenerating]="isGenerating()"
+      (notesChanged)="onNotesChanged($event)" (generateQuotation)="onGenerateQuotation()"
+      (previewQuotation)="onPreviewQuotation()">
     </app-bottom>
   </div>
 </div>

@@ -1,0 +1,144 @@
+<div class="print-container">
+    <div class="quotations" *ngIf="quotationData">
+
+        <div class="document-header">
+            <div class="header-row">
+                <div class="header-column contact-info">
+                    <p>Av. Escuadrón Velasco esq. Emilio finot entre</p>
+                    <p>2do y 3er anillo Zona Cancha Royal</p>
+                    <p>Tel. (591) 370-7720</p>
+                    <p>Cel. (591) 773-41419</p>
+                    <p>Email: multicruz2023@gmail.com</p>
+                </div>
+
+                <div class="header-column quotation-info">
+                    <h2>COTIZACIÓN</h2>
+                    <p>Nro.: {{ quotationData.quotationNumber }}</p>
+                    <p>Fecha: {{ quotationData.date }}</p>
+                </div>
+
+                <div class="header-column logo-info">
+                    <div class="logo"></div>
+                    <p class="tagline">ACCESORIOS Y REPUESTOS AUTOMOTRICES ORIGINALES</p>
+                </div>
+            </div>
+
+            <div class="customer-row">
+                <div class="customer-column left">
+                    <div class="customer-field">
+                        <span class="label">Cliente:</span>
+                        <span class="value">{{ quotationData.customer.name }}</span>
+                    </div>
+                    <div class="customer-field">
+                        <span class="label">Dirección:</span>
+                        <span class="value">{{ quotationData.customer.address }}</span>
+                    </div>
+                </div>
+                <div class="customer-column right">
+                    <div class="customer-field">
+                        <span class="label">Teléfono:</span>
+                        <span class="value">{{ quotationData.customer.phone }}</span>
+                    </div>
+                    <div class="customer-field">
+                        <span class="label">Vendedor:</span>
+                        <span class="value">{{ quotationData.seller }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="products-section">
+            <table class="products-table">
+
+                <thead>
+                    <tr>
+                        <th>Artículo</th>
+                        <th>Descripción</th>
+                        <th>Proc.</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>SubTotal</th>
+                        <th>%</th>
+                        <th>Dscto.</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let product of quotationData.products">
+                        <td class="center">{{ product.itemNumber }}</td>
+                        <td class="left">{{ product.name }}</td>
+                        <td class="center">{{ product.origin }}</td>
+                        <td class="right">{{ formatQuantity(product.quantity) }}</td>
+                        <td class="right">{{ formatCurrency(product.price) }}</td>
+                        <td class="right">{{ formatCurrency(product.subtotal) }}</td>
+                        <td class="right">{{ formatQuantity(product.discountPercent) }}</td>
+                        <td class="right">{{ formatCurrency(product.discountAmount) }}</td>
+                        <td class="right">{{ formatCurrency(product.total) }}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="document-footer">
+
+            <div class="totals-section">
+                <table class="totals-table">
+                    <tr>
+                        <td class="totals-label">Total Cantidad:</td>
+                        <td class="totals-value">{{ formatQuantity(quotationData.totals.totalQuantity) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-label">Subtotal:</td>
+                        <td class="totals-value">{{ formatCurrency(quotationData.totals.subtotal) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-label">Descuento:</td>
+                        <td class="totals-value">{{ formatCurrency(quotationData.totals.totalDiscount) }}</td>
+                    </tr>
+                    <tr class="totals-grand">
+                        <td class="totals-label">TOTAL:</td>
+                        <td class="totals-value">{{ formatCurrency(quotationData.totals.grandTotal) }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="amount-section">
+                <span class="label">Son:</span>
+                <span class="value">{{ quotationData.totals.amountInWords }}</span>
+            </div>
+
+            <div class="observations-section">
+                <span class="label">Obs.:</span>
+                <span class="value">{{ quotationData.notes || 'N/A' }}</span>
+            </div>
+
+            <div class="signatures-section">
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Entregue Conforme</div>
+                </div>
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Recibí Conforme</div>
+                </div>
+            </div>
+
+            <div class="metadata-section">
+                <div class="metadata-left"></div>
+                <div class="metadata-right">
+                    <div class="metadata-item">
+                        <span class="metadata-label">Fecha Reg:</span>
+                        <span>{{ quotationData.registrationDateTime }}</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Usuario:</span>
+                        <span>{{ quotationData.username }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

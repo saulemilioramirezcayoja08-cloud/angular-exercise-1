@@ -10,6 +10,7 @@ import { QuotationList } from './pages/quotation-list/quotation-list';
 import { OrderList } from './pages/order-list/order-list';
 import { SaleList } from './pages/sale-list/sale-list';
 import { OrderPrint } from './pages/order-print/order-print';
+import { QuotationPrint } from './pages/quotation-print/quotation-print';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'product', component: Product, canActivate: [authGuard] },
   { path: 'quotation', component: Quotations, canActivate: [authGuard] },
   { path: 'quotation-list', component: QuotationList, canActivate: [authGuard] },
+  { path: 'quotation/print', component: QuotationPrint, canActivate: [authGuard] },
   { path: 'order', component: Orders, canActivate: [authGuard] },
   { path: 'order-list', component: OrderList, canActivate: [authGuard] },
   { path: 'order/print', component: OrderPrint, canActivate: [authGuard] },
