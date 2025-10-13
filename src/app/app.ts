@@ -1,6 +1,6 @@
-import {afterNextRender, Component, OnInit, signal} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {filter} from 'rxjs';
+import { afterNextRender, Component, OnInit, signal } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +30,19 @@ export class App implements OnInit {
   }
 
   private checkIfLoginPage(url: string): void {
-    this.isLoginPage.set(url === '/login' || url === '/');
+    const urlPath = url.split('?')[0].split('#')[0];
+
+    const hideNavbarRoutes = [
+      '/login',
+      '/order/print',
+      '/quotation/print',
+      '/sale/print'
+    ];
+
+    const shouldHideNavbar = urlPath === '/' || hideNavbarRoutes.some(route =>
+      urlPath === route || urlPath.startsWith(route + '/')
+    );
+
+    this.isLoginPage.set(shouldHideNavbar);
   }
 }

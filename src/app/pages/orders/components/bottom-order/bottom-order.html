@@ -23,7 +23,9 @@
             <span *ngIf="isGenerating">GENERANDO...</span>
         </button>
 
-        <button type="button" class="button secondary" [disabled]="isGenerating" title="Vista previa">
+        <button type="button" class="button secondary" [disabled]="isGenerating" 
+            title="Vista previa (Ctrl + V)"
+            (click)="onPreviewClick()">
             VISTA PREVIA
         </button>
     </div>

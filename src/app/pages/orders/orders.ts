@@ -1,13 +1,14 @@
-import {Component, computed, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
-import {EditableProduct, NotesUpdateEvent, ProductUpdateEvent, QuotationTotals} from '../../models/state.models';
-import {finalize, Subject, takeUntil} from 'rxjs';
-import {Router} from '@angular/router';
-import {OrderState} from '../../services/order/order-state';
-import {OrderService} from '../../services/order/order-service';
-import {AuthService} from '../../services/auth/auth-service';
-import {NavigationService} from '../../services/navigation-service';
-import {DraftOrderRequest} from '../../services/order/models/draft/draft-request.model';
-import {OrderMetadata} from '../../models/order.models';
+import { Component, computed, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import { EditableProduct, NotesUpdateEvent, ProductUpdateEvent, QuotationTotals } from '../../models/state.models';
+import { finalize, Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
+import { OrderState } from '../../services/order/order-state';
+import { OrderService } from '../../services/order/order-service';
+import { AuthService } from '../../services/auth/auth-service';
+import { NavigationService } from '../../services/navigation-service';
+import { DraftOrderRequest } from '../../services/order/models/draft/draft-request.model';
+import { OrderMetadata } from '../../models/order.models';
+import { OrderPrintService } from '../../services/order-print/order-print.service';
 
 @Component({
   selector: 'app-orders',
@@ -40,7 +41,8 @@ export class Orders implements OnInit, OnDestroy {
     private orderState: OrderState,
     private orderService: OrderService,
     private navigationService: NavigationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private orderPrintService: OrderPrintService
   ) {
   }
 
@@ -75,6 +77,11 @@ export class Orders implements OnInit, OnDestroy {
       event.preventDefault();
       this.onGenerateOrder();
     }
+
+    if (event.ctrlKey && event.key === 'v') {
+      event.preventDefault();
+      this.onPreviewOrder();
+    }
   }
 
   onProductsChanged(event: ProductUpdateEvent): void {
@@ -95,6 +102,12 @@ export class Orders implements OnInit, OnDestroy {
       return;
     }
 
+    const confirmGenerate = confirm('¿Está seguro que desea generar la orden?');
+
+    if (!confirmGenerate) {
+      return;
+    }
+
     if (this.isGenerating()) {
       return;
     }
@@ -110,12 +123,23 @@ export class Orders implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response) => {
-          alert(response.message);
+          if (response.success && response.data) {
+            const orderNumber = response.data.number;
 
-          if (response.success) {
-            this.products.set([]);
-            this.orderNotes.set('');
-            this.orderState.clearProducts();
+            const printData = this.preparePrintData(orderNumber);
+            this.orderPrintService.setPrintData(printData);
+
+            this.router.navigate(['/order/print'], {
+              queryParams: { mode: 'generate' }
+            });
+
+            setTimeout(() => {
+              this.products.set([]);
+              this.orderNotes.set('');
+              this.orderState.clearProducts();
+            }, 100);
+          } else {
+            alert(response.message || 'Error al crear la orden');
           }
         },
         error: (error) => {
@@ -130,6 +154,23 @@ export class Orders implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  onPreviewOrder(): void {
+    const currentProducts = this.products();
+
+    if (currentProducts.length === 0) {
+      alert('No hay productos en la orden para previsualizar');
+      return;
+    }
+
+    const printData = this.preparePrintData('PREVIEW');
+    this.orderPrintService.setPrintData(printData);
+
+    this.router.navigate(['/order/print'], {
+      queryParams: { mode: 'preview' }
+    });
+
   }
 
   clearOrder(): void {
@@ -215,6 +256,73 @@ export class Orders implements OnInit, OnDestroy {
       quotationId: this.metadata.quotationId,
       notes: this.orderNotes(),
       details: details
+    };
+  }
+
+  private preparePrintData(orderNumber: string): any {
+    const now = new Date();
+    const currentUser = this.authService.getCurrentUser();
+
+    const date = now.toLocaleDateString('es-BO', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+    const time = now.toLocaleTimeString('es-BO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+
+    const registrationDateTime = `${date} ${time}`;
+
+    const printProducts = this.products().map((product, index) => {
+      const subtotal = product.quantity * product.price;
+      const discountAmount = (subtotal * product.discount) / 100;
+      const total = subtotal - discountAmount;
+
+      return {
+        itemNumber: (index + 1).toString(),
+        sku: product.sku,
+        name: product.name,
+        origin: 'OR',
+        quantity: product.quantity,
+        price: product.price,
+        subtotal: subtotal,
+        discountPercent: product.discount,
+        discountAmount: discountAmount,
+        total: total,
+        uom: product.uom
+      };
+    });
+
+    const totalQuantity = this.products().reduce((sum, p) => sum + p.quantity, 0);
+    const totalsData = this.totals();
+    const amountInWords = this.orderPrintService.numberToWords(totalsData.grandTotal);
+
+    return {
+      orderNumber: orderNumber,
+      date: date,
+      time: time,
+      customer: {
+        name: 'Cliente General',
+        address: 'N/A',
+        phone: 'N/A'
+      },
+      seller: currentUser?.username || 'N/A',
+      products: printProducts,
+      totals: {
+        totalQuantity: totalQuantity,
+        subtotal: totalsData.subtotal,
+        totalDiscount: totalsData.totalDiscount,
+        grandTotal: totalsData.grandTotal,
+        amountInWords: amountInWords
+      },
+      notes: this.orderNotes() || 'N/A',
+      registrationDateTime: registrationDateTime,
+      username: currentUser?.username || 'N/A'
     };
   }
 }

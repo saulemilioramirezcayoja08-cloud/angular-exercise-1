@@ -32,6 +32,7 @@ import { SaleList } from './pages/sale-list/sale-list';
 import { ListBottomSale } from './pages/sale-list/components/list-bottom-sale/list-bottom-sale';
 import { ListMiddleSale } from './pages/sale-list/components/list-middle-sale/list-middle-sale';
 import { ListTopSale } from './pages/sale-list/components/list-top-sale/list-top-sale';
+import { OrderPrint } from './pages/order-print/order-print';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { ListTopSale } from './pages/sale-list/components/list-top-sale/list-top
     SaleList,
     ListBottomSale,
     ListMiddleSale,
-    ListTopSale
+    ListTopSale,
+    OrderPrint
   ],
   imports: [
     BrowserModule,

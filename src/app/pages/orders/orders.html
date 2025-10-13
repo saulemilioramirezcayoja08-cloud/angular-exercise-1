@@ -19,7 +19,8 @@
 
     <div class="panel bottom">
         <app-bottom-order [totals]="totals()" [notes]="orderNotes()" [isGenerating]="isGenerating()"
-            (notesChanged)="onNotesChanged($event)" (generateOrder)="onGenerateOrder()">
+            (notesChanged)="onNotesChanged($event)" (generateOrder)="onGenerateOrder()"
+            (previewOrder)="onPreviewOrder()">
         </app-bottom-order>
     </div>
 </div>

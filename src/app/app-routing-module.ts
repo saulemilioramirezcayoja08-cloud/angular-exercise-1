@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {Home} from './pages/home/home';
-import {Quotations} from './pages/quotations/quotations';
-import {Product} from './pages/product/product';
-import {Login} from './pages/login/login';
-import {authGuard} from './guards/auth-guard';
+import { Home } from './pages/home/home';
+import { Quotations } from './pages/quotations/quotations';
+import { Product } from './pages/product/product';
+import { Login } from './pages/login/login';
+import { authGuard } from './guards/auth-guard';
 import { Orders } from './pages/orders/orders';
 import { QuotationList } from './pages/quotation-list/quotation-list';
-import {OrderList} from './pages/order-list/order-list';
-import {SaleList} from './pages/sale-list/sale-list';
+import { OrderList } from './pages/order-list/order-list';
+import { SaleList } from './pages/sale-list/sale-list';
+import { OrderPrint } from './pages/order-print/order-print';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -21,11 +22,11 @@ const routes: Routes = [
   { path: 'quotation-list', component: QuotationList, canActivate: [authGuard] },
   { path: 'order', component: Orders, canActivate: [authGuard] },
   { path: 'order-list', component: OrderList, canActivate: [authGuard] },
+  { path: 'order/print', component: OrderPrint, canActivate: [authGuard] },
   { path: 'sale-list', component: SaleList, canActivate: [authGuard] },
 
   { path: '**', redirectTo: '/login' }
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,0 +1,460 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.print-container {
+  width: 100%;
+  background-color: white;
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+}
+
+.orders {
+  width: 210mm;
+  margin: 0 auto;
+  background-color: white;
+  padding: 10mm;
+  font-family: 'Roboto', sans-serif;
+  color: #6B7280;
+  font-size: 12px;
+  height: auto;
+  min-height: auto;
+  max-height: none;
+}
+
+.document-header {
+  width: 100%;
+  margin-bottom: 8mm;
+  page-break-after: avoid;
+  page-break-inside: avoid;
+}
+
+.header-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4mm;
+  margin-bottom: 6mm;
+  min-height: 30mm;
+}
+
+.header-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-column.contact-info {
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.header-column.contact-info p {
+  margin: 1px 0;
+}
+
+.header-column.order-info {
+  align-items: center;
+  text-align: center;
+}
+
+.header-column.order-info h2 {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  color: #1F2937;
+  margin: 0 0 6px 0;
+}
+
+.header-column.order-info p {
+  font-size: 10px;
+  margin: 2px 0;
+  font-weight: 600;
+  font-family: 'Roboto Mono', monospace;
+  color: #4B5563;
+}
+
+.header-column.logo-info {
+  align-items: center;
+  text-align: center;
+}
+
+.logo {
+  width: 80px;
+  height: 80px;
+  background-image: url('/assets/logo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 auto 4px auto;
+}
+
+.tagline {
+  font-size: 7px;
+  letter-spacing: 1.2px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+}
+
+.customer-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4mm;
+  padding: 4mm 0;
+  border-top: 1px dashed #E5E7EB;
+  border-bottom: 1px dashed #E5E7EB;
+  page-break-inside: avoid;
+}
+
+.customer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+}
+
+.customer-column.right {
+  align-items: flex-end;
+}
+
+.customer-field {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.customer-field .label {
+  font-weight: 700;
+  font-size: 12px;
+  min-width: 70px;
+  font-family: 'Inter', sans-serif;
+  color: #374151;
+}
+
+.customer-field .value {
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.products-section {
+  width: 100%;
+  margin: 6mm 0;
+  height: auto;
+  overflow: visible;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  font-family: 'Roboto', sans-serif;
+  height: auto;
+  max-height: none;
+}
+
+.products-table thead {
+  display: table-header-group;
+}
+
+.products-table thead th {
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 6px;
+  border-bottom: 2px dashed #D1D5DB;
+  font-size: 10px;
+  font-family: 'Inter', sans-serif;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.products-table tbody tr {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.products-table tbody td {
+  padding: 8px 6px;
+  border-bottom: 1px dashed #F3F4F6;
+  vertical-align: middle;
+}
+
+.products-table td.left,
+.products-table th.left {
+  text-align: left;
+}
+
+.products-table td.center,
+.products-table th.center {
+  text-align: center;
+}
+
+.products-table td.right,
+.products-table th.right {
+  text-align: right;
+}
+
+.document-footer {
+  width: 100%;
+  margin-top: 6mm;
+  page-break-inside: avoid;
+}
+
+.totals-section {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4mm 0;
+  border-top: 2px solid #374151;
+  border-bottom: 1px dashed #E5E7EB;
+  margin-bottom: 3mm;
+}
+
+.totals-table {
+  width: auto;
+  border-collapse: collapse;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.totals-table tr {
+  height: 24px;
+}
+
+.totals-table td {
+  padding: 4px 12px;
+  font-size: 11px;
+}
+
+.totals-table td.totals-label {
+  text-align: right;
+  font-weight: 500;
+  color: #374151;
+  padding-right: 16px;
+}
+
+.totals-table td.totals-value {
+  text-align: right;
+  font-weight: 600;
+  color: #1F2937;
+  min-width: 120px;
+}
+
+.totals-table tr.totals-grand {
+  border-top: 2px solid #374151;
+}
+
+.totals-table tr.totals-grand td {
+  font-size: 13px;
+  font-weight: 700;
+  padding-top: 6px;
+}
+
+.amount-section {
+  display: flex;
+  gap: 10px;
+  padding: 3mm 0;
+  border-bottom: 1px dashed #E5E7EB;
+}
+
+.amount-section .label {
+  font-weight: 700;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  color: #374151;
+}
+
+.amount-section .value {
+  font-size: 12px;
+  font-style: italic;
+  font-family: 'Roboto', sans-serif;
+}
+
+.observations-section {
+  display: flex;
+  gap: 10px;
+  padding: 3mm 0;
+  border-bottom: 1px dashed #E5E7EB;
+}
+
+.observations-section .label {
+  font-weight: 700;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  color: #374151;
+}
+
+.observations-section .value {
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.signatures-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 12mm 8mm 6mm 8mm;
+  gap: 15mm;
+}
+
+.signature-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3mm;
+}
+
+.signature-line {
+  width: 100%;
+  border-top: 1.5px dashed #9CA3AF;
+}
+
+.signature-label {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  color: #374151;
+}
+
+.metadata-section {
+  display: flex;
+  justify-content: flex-end;
+  padding: 3mm 0 0 0;
+  gap: 6mm;
+}
+
+.metadata-right {
+  display: flex;
+  gap: 6mm;
+}
+
+.metadata-item {
+  display: flex;
+  gap: 5px;
+  font-size: 9px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.metadata-label {
+  font-weight: 700;
+  color: #374151;
+}
+
+@media print {
+
+  html,
+  body {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0mm !important;
+  }
+
+  .print-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: white;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .orders {
+    width: 100% !important;
+    max-width: 210mm;
+    margin: 0 !important;
+    padding: 5mm 8mm !important;
+    box-sizing: border-box;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .document-header {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+
+  .products-section {
+    page-break-inside: auto;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .products-table {
+    page-break-inside: auto;
+    width: 100%;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .products-table thead {
+    display: table-header-group;
+  }
+
+  .products-table tbody {
+    page-break-inside: auto;
+    overflow: visible !important;
+  }
+
+  .products-table tbody tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .document-footer {
+    page-break-inside: avoid;
+    page-break-before: auto;
+  }
+
+  body>*:not(.print-container) {
+    display: none !important;
+  }
+
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .customer-row {
+    page-break-inside: avoid;
+    page-break-after: avoid;
+  }
+
+  .signatures-section {
+    page-break-inside: avoid;
+  }
+
+  .metadata-section {
+    page-break-inside: avoid;
+  }
+
+  .totals-section {
+    page-break-inside: avoid;
+  }
+}
+
+@media screen {
+  .print-container {
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+
+  .orders {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}

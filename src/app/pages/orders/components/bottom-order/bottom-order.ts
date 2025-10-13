@@ -15,6 +15,7 @@ export class BottomOrder implements OnDestroy {
 
   @Output() notesChanged = new EventEmitter<NotesUpdateEvent>();
   @Output() generateOrder = new EventEmitter<void>();
+  @Output() previewOrder = new EventEmitter<void>();
 
   private notesSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -47,6 +48,14 @@ export class BottomOrder implements OnDestroy {
     }
 
     this.generateOrder.emit();
+  }
+
+  onPreviewClick(): void {
+    if (this.isGenerating) {
+      return;
+    }
+    
+    this.previewOrder.emit();
   }
 
   formatCurrency(amount: number): string {
