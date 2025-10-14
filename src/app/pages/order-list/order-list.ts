@@ -114,11 +114,10 @@ export class OrderList implements OnInit, OnDestroy {
     }
 
     const infoMessage = `Agregar anticipo a la orden #${orderNumber}\n\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `Cliente: ${order.customerName}\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `Total Orden: ${this.formatCurrency(order.totalAmount)}\n` +
       `Anticipos Actuales: ${this.formatCurrency(order.totalAdvances)}\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `Disponible: ${this.formatCurrency(availableAmount)}\n\n` +
       `Ingrese el monto del anticipo:`;
 
@@ -146,10 +145,10 @@ export class OrderList implements OnInit, OnDestroy {
 
     const confirmed = confirm(
       `¿Confirmar anticipo?\n\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `Orden: #${orderNumber}\n` +
       `Monto: ${this.formatCurrency(amount)}\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
       `Esta acción registrará el anticipo y actualizará el saldo de la orden.`
     );
 
@@ -173,10 +172,10 @@ export class OrderList implements OnInit, OnDestroy {
           if (response.success) {
             this.showSuccess(
               `Anticipo registrado exitosamente\n\n` +
-              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
               `ID Anticipo: #${response.data?.id}\n` +
               `Monto: ${this.formatCurrency(response.data?.amount || 0)}\n` +
-              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
             );
             this.performSearch();
           } else {

@@ -36,11 +36,7 @@
     <tr>
       <th class="header">Número</th>
       <th class="header">Estado</th>
-      <th class="header">Cliente</th>
-      <th class="header">Almacén</th>
       <th class="header">Usuario</th>
-      <th class="header">Pago</th>
-      <th class="header">Moneda</th>
       <th class="header">Total</th>
       <th class="header">Anticipos</th>
       <th class="header">Items</th>
@@ -57,19 +53,7 @@
         <span [class]="getBadgeClass(order.status)">{{ order.status }}</span>
       </td>
       <td class="cell" (click)="onRowClick(order.id)">
-        <span class="label" [title]="order.customerName">{{ order.customerName }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="label" [title]="order.warehouseName">{{ order.warehouseName }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
         <span class="label">{{ order.username || '-' }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="label">{{ order.paymentName || '-' }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="value">{{ order.currency }}</span>
       </td>
       <td class="cell" (click)="onRowClick(order.id)">
         <span class="value amount">{{ order.totalAmount }}</span>

@@ -9,16 +9,11 @@ export interface OrderSearchData {
   id: number;
   number: string;
   status: string;
-  customerName: string;
-  warehouseName: string;
   username: string | null;
-  currency: string;
   totalAmount: number;
   itemCount: number;
-  paymentName: string | null;
   totalAdvances: number;
   createdAt: string;
-  updatedAt: string;
   isProcessing?: boolean;
 }
 
