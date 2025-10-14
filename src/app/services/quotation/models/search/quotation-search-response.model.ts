@@ -9,14 +9,10 @@ export interface QuotationSearchData {
   id: number;
   number: string;
   status: string;
-  customerName: string;
-  warehouseName: string;
   username: string | null;
-  currency: string;
   totalAmount: number;
   itemCount: number;
   createdAt: string;
-  updatedAt: string;
   isProcessing?: boolean;
 }
 
