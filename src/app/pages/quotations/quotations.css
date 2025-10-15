@@ -3,8 +3,7 @@
   height: calc(100vh - 6vh);
   display: flex;
   flex-direction: column;
-  padding: 8px;
-  gap: 4px;
+  gap: 2px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -19,7 +18,7 @@
 .quotations .panel.top {
   height: 20%;
   flex-direction: row;
-  gap: 4px;
+  gap: 2px;
 }
 
 .quotations .panel.top .top-col {

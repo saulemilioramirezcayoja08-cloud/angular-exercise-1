@@ -5,7 +5,7 @@
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  background: white;
+  background: rgba(128, 128, 128, 0.2);
 }
 
 .layout-main {

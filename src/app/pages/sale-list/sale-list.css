@@ -3,7 +3,6 @@
   height: calc(100vh - 6vh);
   display: flex;
   flex-direction: column;
-  padding: 8px;
   gap: 4px;
   box-sizing: border-box;
   overflow: hidden;
