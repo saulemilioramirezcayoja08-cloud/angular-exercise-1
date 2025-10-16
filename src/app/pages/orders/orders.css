@@ -6,6 +6,7 @@
     gap: 2px;
     box-sizing: border-box;
     overflow: hidden;
+    background: rgba(128, 128, 128, 0.2);
 }
 
 .orders .panel {
@@ -31,7 +32,7 @@
 .orders .panel.top .top-col.left {
     width: 60%;
     flex-direction: row;
-    gap: 4px;
+    gap: 2px;
 }
 
 .orders .panel.top .top-col.left .left-col {

@@ -6,6 +6,7 @@
   gap: 2px;
   box-sizing: border-box;
   overflow: hidden;
+  background: rgba(128, 128, 128, 0.2);
 }
 
 .quotations .panel {

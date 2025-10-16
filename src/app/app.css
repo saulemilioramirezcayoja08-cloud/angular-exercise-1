@@ -1,11 +1,9 @@
 .app-container {
-  height: 100vh;
-  max-height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  background: rgba(128, 128, 128, 0.2);
 }
 
 .layout-main {
