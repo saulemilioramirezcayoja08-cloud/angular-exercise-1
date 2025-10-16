@@ -6,6 +6,7 @@ import {OrderService} from '../../services/order/order-service';
 import {OrderAction} from './components/list-middle-order/list-middle-order';
 import {OrderCancelRequest} from '../../services/order/models/cancel/order-cancel-request.model';
 import {OrderConfirmRequest} from '../../services/order/models/confirm/order-confirm-request.model';
+import {AuthService} from '../../services/auth/auth-service';
 
 @Component({
   selector: 'app-order-list',
@@ -28,7 +29,10 @@ export class OrderList implements OnInit, OnDestroy {
   private searchSubject$ = new Subject<void>();
   private destroy$ = new Subject<void>();
 
-  constructor(private orderService: OrderService) {
+  constructor(
+    private orderService: OrderService,
+    private authService: AuthService
+  ) {
   }
 
   ngOnInit(): void {
@@ -103,7 +107,12 @@ export class OrderList implements OnInit, OnDestroy {
     }
 
     if (order.status !== 'DRAFT') {
-      this.showError('Solo las órdenes en estado DRAFT pueden recibir anticipos');
+      this.showError(
+        `No se pueden agregar anticipos a órdenes ${order.status}\n\n` +
+        `Estado actual: ${order.status}\n` +
+        `Estado requerido: DRAFT\n\n` +
+        `Solo las órdenes en estado BORRADOR pueden recibir anticipos.`
+      );
       return;
     }
 
@@ -114,12 +123,13 @@ export class OrderList implements OnInit, OnDestroy {
     }
 
     const infoMessage = `Agregar anticipo a la orden #${orderNumber}\n\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `Total Orden: ${this.formatCurrency(order.totalAmount)}\n` +
-      `Anticipos Actuales: ${this.formatCurrency(order.totalAdvances)}\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `Disponible: ${this.formatCurrency(availableAmount)}\n\n` +
-      `Ingrese el monto del anticipo:`;
+      `───────────────────────────────\n` +
+      `Total Orden:    ${this.formatCurrency(order.totalAmount)}\n` +
+      `Ya Pagado:      ${this.formatCurrency(order.totalAdvances)}\n` +
+      `───────────────────────────────\n` +
+      `Falta Pagar:    ${this.formatCurrency(availableAmount)}\n\n` +
+      `Sugerencia: Pagar el total restante\n\n` +
+      `Ingrese el monto del anticipo (máx ${this.formatCurrency(availableAmount)}):`;
 
     const amountStr = prompt(infoMessage);
 
@@ -145,10 +155,10 @@ export class OrderList implements OnInit, OnDestroy {
 
     const confirmed = confirm(
       `¿Confirmar anticipo?\n\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `───────────────────────────────\n` +
       `Orden: #${orderNumber}\n` +
       `Monto: ${this.formatCurrency(amount)}\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `───────────────────────────────\n\n` +
       `Esta acción registrará el anticipo y actualizará el saldo de la orden.`
     );
 
@@ -172,10 +182,10 @@ export class OrderList implements OnInit, OnDestroy {
           if (response.success) {
             this.showSuccess(
               `Anticipo registrado exitosamente\n\n` +
-              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+              `───────────────────────────────\n` +
               `ID Anticipo: #${response.data?.id}\n` +
               `Monto: ${this.formatCurrency(response.data?.amount || 0)}\n` +
-              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+              `───────────────────────────────`
             );
             this.performSearch();
           } else {
@@ -198,12 +208,44 @@ export class OrderList implements OnInit, OnDestroy {
     }
 
     if (order.status !== 'DRAFT') {
-      this.showError('Solo las órdenes en estado DRAFT pueden ser confirmadas');
+      this.showError(
+        `No se puede confirmar la orden #${orderNumber}\n\n` +
+        `Estado actual: ${order.status}\n` +
+        `Estado requerido: DRAFT\n\n` +
+        `Las órdenes solo pueden confirmarse cuando están en estado BORRADOR.`
+      );
+      return;
+    }
+
+    if (order.totalAdvances !== order.totalAmount) {
+      const pending = order.totalAmount - order.totalAdvances;
+      const comparison = order.totalAdvances < order.totalAmount ? 'menor' : 'mayor';
+
+      this.showError(
+        `No se puede confirmar la orden #${orderNumber}\n\n` +
+        `RESUMEN DE PAGO:\n` +
+        `───────────────────────────────\n` +
+        `Total Orden:    ${this.formatCurrency(order.totalAmount)}\n` +
+        `Anticipos:      ${this.formatCurrency(order.totalAdvances)}\n` +
+        `───────────────────────────────\n` +
+        `Pendiente:      ${this.formatCurrency(Math.abs(pending))}\n\n` +
+        `VALIDACIÓN:\n` +
+        `Los anticipos deben ser exactamente iguales al total de la orden.\n\n` +
+        `El total de anticipos es ${comparison} que el total de la orden.\n\n` +
+        `Por favor, agregue los anticipos faltantes antes de confirmar.`
+      );
       return;
     }
 
     const confirmed = confirm(
       `¿Confirmar la orden #${orderNumber}?\n\n` +
+      `RESUMEN DE PAGO:\n` +
+      `───────────────────────────────\n` +
+      `Total Orden:    ${this.formatCurrency(order.totalAmount)}\n` +
+      `Anticipos:      ${this.formatCurrency(order.totalAdvances)}\n` +
+      `Pendiente:      ${this.formatCurrency(0.00)}\n` +
+      `───────────────────────────────\n\n` +
+      `Pago completo verificado\n\n` +
       `Esta acción:\n` +
       `• Creará una venta asociada\n` +
       `• Cambiará el estado a CONFIRMADO\n` +
@@ -262,12 +304,17 @@ export class OrderList implements OnInit, OnDestroy {
     }
 
     if (order.status !== 'DRAFT') {
-      this.showError('Solo las órdenes en estado DRAFT pueden ser canceladas');
+      this.showError(
+        `No se puede cancelar la orden #${orderNumber}\n\n` +
+        `Estado actual: ${order.status}\n` +
+        `Estado requerido: DRAFT\n\n` +
+        `Las órdenes solo pueden cancelarse cuando están en estado BORRADOR.`
+      );
       return;
     }
 
     const notes = prompt(
-      `¿Cancelar la orden #${orderNumber}?\n\n` +
+      `Cancelar la orden #${orderNumber}\n\n` +
       `Esta acción:\n` +
       `• Cancelará las reservaciones asociadas\n` +
       `• Cambiará el estado a CANCELADO\n` +
@@ -281,6 +328,21 @@ export class OrderList implements OnInit, OnDestroy {
 
     if (!notes.trim()) {
       this.showError('Debes especificar un motivo para cancelar la orden');
+      return;
+    }
+
+    const confirmed = confirm(
+      `¿CONFIRMAR CANCELACIÓN?\n\n` +
+      `Orden: #${orderNumber}\n` +
+      `Motivo: "${notes}"\n\n` +
+      `ADVERTENCIA:\n` +
+      `• Las reservaciones se cancelarán\n` +
+      `• Esta acción NO puede revertirse\n` +
+      `• Los anticipos registrados permanecerán\n\n` +
+      `¿Proceder con la cancelación?`
+    );
+
+    if (!confirmed) {
       return;
     }
 
@@ -414,6 +476,11 @@ export class OrderList implements OnInit, OnDestroy {
   }
 
   private getCurrentUserId(): number {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.userId) {
+      return currentUser.userId;
+    }
+    console.warn('No se pudo obtener el userId del usuario actual, usando fallback');
     return 1;
   }
 
@@ -446,13 +513,16 @@ export class OrderList implements OnInit, OnDestroy {
     let message = 'Error al crear el anticipo';
 
     if (error.status === 404) {
-      message = error.error?.message || 'Orden no encontrada';
+      message = `${error.error?.message || 'Orden no encontrada'}\n\n` +
+        `La orden solicitada no existe en el sistema.`;
     } else if (error.status === 409) {
-      message = error.error?.message || 'El monto excede el total disponible';
+      message = `${error.error?.message || 'El monto excede el total disponible'}\n\n` +
+        `Verifique el monto ingresado e intente nuevamente.`;
     } else if (error.status === 0) {
-      message = 'No se puede conectar con el servidor';
+      message = 'No se puede conectar con el servidor\n\n' +
+        'Por favor, verifique su conexión a internet e intente nuevamente.';
     } else if (error.error?.message) {
-      message = error.error.message;
+      message = `${error.error.message}`;
     }
 
     this.showError(message);
@@ -462,34 +532,58 @@ export class OrderList implements OnInit, OnDestroy {
     let message = `Error al ${action} la orden`;
 
     if (error.status === 404) {
-      message = error.error?.message || 'Orden no encontrada';
+      message = `${error.error?.message || 'Orden no encontrada'}\n\n` +
+        `La orden solicitada no existe en el sistema.`;
     } else if (error.status === 409) {
-      message = error.error?.message || 'La orden no puede ser modificada en su estado actual';
+      const baseMessage = error.error?.message || 'La orden no puede ser modificada en su estado actual';
+      message = `${baseMessage}\n\n`;
+
+      if (action === 'confirmar' && baseMessage.includes('advances')) {
+        message += `Los anticipos no coinciden con el total de la orden.\n` +
+          `Verifique los montos y vuelva a intentar.`;
+      } else {
+        message += `Verifique el estado de la orden e intente nuevamente.`;
+      }
     } else if (error.status === 0) {
-      message = 'No se puede conectar con el servidor';
+      message = 'No se puede conectar con el servidor\n\n' +
+        'Por favor, verifique su conexión a internet e intente nuevamente.';
     } else if (error.error?.message) {
-      message = error.error.message;
+      message = `${error.error.message}`;
     }
 
     this.showError(message);
   }
 
   private handleSearchError(error: any): void {
-    const message = error.error?.message
-      || (error.status === 0 ? 'No se puede conectar con el servidor'
-        : error.status === 400 ? 'Parámetros de búsqueda inválidos'
-          : error.status === 404 ? 'No se encontraron resultados'
-            : error.status === 500 ? 'Error interno del servidor'
-              : 'Error al buscar órdenes');
+    let message: string;
+
+    if (error.status === 0) {
+      message = 'No se puede conectar con el servidor\n\n' +
+        'Por favor, verifique su conexión a internet.';
+    } else if (error.status === 400) {
+      message = 'Parámetros de búsqueda inválidos\n\n' +
+        'Verifique los criterios de búsqueda e intente nuevamente.';
+    } else if (error.status === 404) {
+      message = 'No se encontraron resultados\n\n' +
+        'Intente con otros criterios de búsqueda.';
+    } else if (error.status === 500) {
+      message = 'Error interno del servidor\n\n' +
+        'Por favor, contacte al administrador del sistema.';
+    } else if (error.error?.message) {
+      message = `${error.error.message}`;
+    } else {
+      message = 'Error al buscar órdenes\n\n' +
+        'Intente nuevamente más tarde.';
+    }
 
     this.showError(message);
   }
 
   private showSuccess(message: string): void {
-    alert(`${message}`);
+    alert(message);
   }
 
   private showError(message: string): void {
-    alert(`${message}`);
+    alert(message);
   }
 }

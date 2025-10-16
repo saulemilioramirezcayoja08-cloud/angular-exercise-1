@@ -1,0 +1,226 @@
+<div class="product-create">
+  <div class="panel form-panel">
+    <div class="row form-row">
+      <div class="form-container">
+        <form [formGroup]="productForm" class="product-form">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="label required">SKU (Código Interno)</label>
+              <input
+                type="text"
+                class="input code-input"
+                formControlName="sku"
+                placeholder="Ej: PROD-001"
+                maxlength="80"
+                [disabled]="isSubmitting()">
+              <div class="error-text" *ngIf="sku?.invalid && sku?.touched">
+                <span *ngIf="sku?.errors?.['required']">El SKU es requerido</span>
+                <span *ngIf="sku?.errors?.['maxlength']">Máximo 80 caracteres</span>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="label required">Nombre del Producto</label>
+              <input
+                type="text"
+                class="input"
+                formControlName="name"
+                placeholder="Ej: Laptop Dell XPS 15"
+                maxlength="200"
+                [disabled]="isSubmitting()">
+              <div class="error-text" *ngIf="name?.invalid && name?.touched">
+                <span *ngIf="name?.errors?.['required']">El nombre es requerido</span>
+                <span *ngIf="name?.errors?.['maxlength']">Máximo 200 caracteres</span>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="label">Descripción</label>
+              <textarea
+                class="textarea"
+                formControlName="description"
+                placeholder="Descripción detallada del producto (opcional)"
+                rows="3"
+                maxlength="5000"
+                [disabled]="isSubmitting()"></textarea>
+              <div class="char-counter">{{ description?.value?.length || 0 }} / 5000</div>
+            </div>
+
+            <div class="form-group">
+              <label class="label">ID de Categoría</label>
+              <input
+                type="number"
+                class="input amount-input"
+                formControlName="categoryId"
+                placeholder="Ej: 1"
+                min="1"
+                step="1"
+                [disabled]="isSubmitting()">
+              <div class="error-text" *ngIf="categoryId?.invalid && categoryId?.touched">
+                <span *ngIf="categoryId?.errors?.['min']">El ID debe ser mayor a 0</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label required">Unidad de Medida (UOM)</label>
+              <input
+                type="text"
+                class="input"
+                formControlName="uom"
+                placeholder="Ej: UND, KG, LTS"
+                maxlength="16"
+                [disabled]="isSubmitting()">
+              <div class="error-text" *ngIf="uom?.invalid && uom?.touched">
+                <span *ngIf="uom?.errors?.['required']">La unidad de medida es requerida</span>
+                <span *ngIf="uom?.errors?.['maxlength']">Máximo 16 caracteres</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label required">Precio (Bs.)</label>
+              <input
+                type="number"
+                class="input amount-input"
+                formControlName="price"
+                placeholder="0.00"
+                step="0.01"
+                min="0.01"
+                [disabled]="isSubmitting()">
+              <div class="error-text" *ngIf="price?.invalid && price?.touched">
+                <span *ngIf="price?.errors?.['required']">El precio es requerido</span>
+                <span *ngIf="price?.errors?.['min']">El precio debe ser mayor a 0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="onSubmit()"
+              [disabled]="productForm.invalid || isSubmitting()">
+              <div class="spinner" *ngIf="isSubmitting()"></div>
+              <svg class="icon" *ngIf="!isSubmitting()" viewBox="0 0 24 24" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path
+                    d="M3.02907 13.0776C2.7032 12.3958 2.7032 11.6032 3.02907 10.9214C3.16997 10.6266 3.41023 10.3447 3.89076 9.78084C4.08201 9.55642 4.17764 9.44421 4.25796 9.32437C4.44209 9.04965 4.56988 8.74114 4.63393 8.41669C4.66188 8.27515 4.6736 8.12819 4.69706 7.83426C4.75599 7.09576 4.78546 6.72651 4.89427 6.41844C5.14594 5.70591 5.7064 5.14546 6.41893 4.89378C6.72699 4.78497 7.09625 4.7555 7.83475 4.69657C8.12868 4.67312 8.27564 4.66139 8.41718 4.63344C8.74163 4.56939 9.05014 4.4416 9.32485 4.25747C9.4447 4.17715 9.55691 4.08152 9.78133 3.89027C10.3452 3.40974 10.6271 3.16948 10.9219 3.02859C11.6037 2.70271 12.3963 2.70271 13.0781 3.02859C13.3729 3.16948 13.6548 3.40974 14.2187 3.89027C14.4431 4.08152 14.5553 4.17715 14.6752 4.25747C14.9499 4.4416 15.2584 4.56939 15.5828 4.63344C15.7244 4.66139 15.8713 4.67312 16.1653 4.69657C16.9038 4.7555 17.273 4.78497 17.5811 4.89378M4.89427 17.5806C5.14594 18.2931 5.7064 18.8536 6.41893 19.1053C6.72699 19.2141 7.09625 19.2435 7.83475 19.3025C8.12868 19.3259 8.27564 19.3377 8.41718 19.3656C8.74163 19.4297 9.05014 19.5574 9.32485 19.7416C9.44469 19.8219 9.55691 19.9175 9.78133 20.1088C10.3452 20.5893 10.6271 20.8296 10.9219 20.9705C11.6037 21.2963 12.3963 21.2963 13.0781 20.9705C13.3729 20.8296 13.6548 20.5893 14.2187 20.1088C14.4431 19.9175 14.5553 19.8219 14.6752 19.7416C14.9499 19.5574 15.2584 19.4297 15.5828 19.3656C15.7244 19.3377 15.8713 19.3259 16.1653 19.3025C16.9038 19.2435 17.273 19.2141 17.5811 19.1053C18.2936 18.8536 18.8541 18.2931 19.1058 17.5806C19.2146 17.2725 19.244 16.9033 19.303 16.1648C19.3264 15.8709 19.3381 15.7239 19.3661 15.5824C19.4301 15.2579 19.5579 14.9494 19.7421 14.6747C19.8224 14.5548 19.918 14.4426 20.1093 14.2182C20.5898 13.6543 20.8301 13.3724 20.971 13.0776C21.2968 12.3958 21.2968 11.6032 20.971 10.9214"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                </g>
+              </svg>
+              <span>{{ isSubmitting() ? 'Guardando...' : 'Guardar Producto' }}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel codes-panel">
+    <div class="row codes-row">
+      <div class="codes-container">
+        <div class="codes-header">
+          <h2 class="codes-title">Códigos Alternativos</h2>
+          <p class="codes-subtitle">Agrega códigos de barras, EAN u otros identificadores (opcional)</p>
+        </div>
+
+        <form [formGroup]="codeForm" class="code-form">
+          <div class="code-inputs">
+            <div class="code-group">
+              <label class="label-small">Tipo</label>
+              <input
+                type="text"
+                class="input-small"
+                formControlName="type"
+                placeholder="BARCODE, EAN..."
+                maxlength="80"
+                [disabled]="isSubmitting()">
+            </div>
+            <div class="code-group flex-grow">
+              <label class="label-small">Código</label>
+              <input
+                type="text"
+                class="input-small code-input"
+                formControlName="code"
+                placeholder="Ingresa el código"
+                maxlength="120"
+                [disabled]="isSubmitting()">
+            </div>
+            <button
+              type="button"
+              class="btn-add"
+              (click)="onAddCode()"
+              [disabled]="codeForm.invalid || isSubmitting()">
+              <svg class="icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path d="M12 6V18M6 12H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                  <path
+                    d="M3.02907 13.0776C2.7032 12.3958 2.7032 11.6032 3.02907 10.9214C3.16997 10.6266 3.41023 10.3447 3.89076 9.78084C4.08201 9.55642 4.17764 9.44421 4.25796 9.32437C4.44209 9.04965 4.56988 8.74114 4.63393 8.41669C4.66188 8.27515 4.6736 8.12819 4.69706 7.83426C4.75599 7.09576 4.78546 6.72651 4.89427 6.41844C5.14594 5.70591 5.7064 5.14546 6.41893 4.89378C6.72699 4.78497 7.09625 4.7555 7.83475 4.69657C8.12868 4.67312 8.27564 4.66139 8.41718 4.63344C8.74163 4.56939 9.05014 4.4416 9.32485 4.25747C9.4447 4.17715 9.55691 4.08152 9.78133 3.89027C10.3452 3.40974 10.6271 3.16948 10.9219 3.02859C11.6037 2.70271 12.3963 2.70271 13.0781 3.02859C13.3729 3.16948 13.6548 3.40974 14.2187 3.89027C14.4431 4.08152 14.5553 4.17715 14.6752 4.25747C14.9499 4.4416 15.2584 4.56939 15.5828 4.63344C15.7244 4.66139 15.8713 4.67312 16.1653 4.69657C16.9038 4.7555 17.273 4.78497 17.5811 4.89378M4.89427 17.5806C5.14594 18.2931 5.7064 18.8536 6.41893 19.1053C6.72699 19.2141 7.09625 19.2435 7.83475 19.3025C8.12868 19.3259 8.27564 19.3377 8.41718 19.3656C8.74163 19.4297 9.05014 19.5574 9.32485 19.7416C9.44469 19.8219 9.55691 19.9175 9.78133 20.1088C10.3452 20.5893 10.6271 20.8296 10.9219 20.9705C11.6037 21.2963 12.3963 21.2963 13.0781 20.9705C13.3729 20.8296 13.6548 20.5893 14.2187 20.1088C14.4431 19.9175 14.5553 19.8219 14.6752 19.7416C14.9499 19.5574 15.2584 19.4297 15.5828 19.3656C15.7244 19.3377 15.8713 19.3259 16.1653 19.3025C16.9038 19.2435 17.273 19.2141 17.5811 19.1053C18.2936 18.8536 18.8541 18.2931 19.1058 17.5806C19.2146 17.2725 19.244 16.9033 19.303 16.1648C19.3264 15.8709 19.3381 15.7239 19.3661 15.5824C19.4301 15.2579 19.5579 14.9494 19.7421 14.6747C19.8224 14.5548 19.918 14.4426 20.1093 14.2182C20.5898 13.6543 20.8301 13.3724 20.971 13.0776C21.2968 12.3958 21.2968 11.6032 20.971 10.9214"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                </g>
+              </svg>
+              <span>Agregar</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="codes-list" *ngIf="codes().length > 0">
+          <table class="codes-table">
+            <thead>
+            <tr>
+              <th class="th">Tipo</th>
+              <th class="th">Código</th>
+              <th class="th actions-th"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="tr" *ngFor="let code of codes(); let i = index">
+              <td class="td">
+                <span class="type-badge">{{ code.type }}</span>
+              </td>
+              <td class="td">
+                <span class="code-text">{{ code.code }}</span>
+              </td>
+              <td class="td actions-td">
+                <button
+                  type="button"
+                  class="btn-remove"
+                  (click)="onRemoveCode(i)"
+                  [disabled]="isSubmitting()"
+                  title="Eliminar código">
+                  <svg class="icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round"></path>
+                      <path
+                        d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
+                        stroke="currentColor" stroke-width="1.5"></path>
+                      <path
+                        d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                    </g>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-codes" *ngIf="codes().length === 0">
+          <p class="empty-text">No hay códigos agregados</p>
+          <p class="empty-subtext">Los códigos alternativos son opcionales</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

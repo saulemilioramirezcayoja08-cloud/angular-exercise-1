@@ -10,6 +10,7 @@ import {OrderActionResponse} from './models/action/order-action-response.model';
 import {OrderConfirmRequest} from './models/confirm/order-confirm-request.model';
 import {OrderAdvanceCreateRequest} from './models/advance/order-advance-request.model';
 import {OrderAdvanceResponse} from './models/advance/order-advance-response.model';
+import {OrderDetailResponse} from './models/detail/order-detail-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,10 @@ export class OrderService {
     return this.http.put<OrderActionResponse>(`${this.baseUrl}/${orderId}/confirm`, request);
   }
 
+  getOrderById(orderId: number): Observable<OrderDetailResponse> {
+    return this.http.get<OrderDetailResponse>(`${this.baseUrl}/${orderId}`);
+  }
+
   searchByNumber(number: string, page?: number, size?: number): Observable<OrderSearchResponse> {
     const searchParams: OrderSearchParams = {number, page, size};
     return this.executeSearch(searchParams);
@@ -51,6 +56,15 @@ export class OrderService {
   searchByDateRange(dateFrom: string, dateTo: string, page?: number, size?: number): Observable<OrderSearchResponse> {
     const searchParams: OrderSearchParams = {dateFrom, dateTo, page, size};
     return this.executeSearch(searchParams);
+  }
+
+  createAdvanceForOrder(orderId: number, amount: number, userId?: number): Observable<OrderAdvanceResponse> {
+    const request: OrderAdvanceCreateRequest = {
+      orderId,
+      amount,
+      userId
+    };
+    return this.http.post<OrderAdvanceResponse>(this.advanceUrl, request);
   }
 
   private executeSearch(searchParams: OrderSearchParams): Observable<OrderSearchResponse> {
@@ -85,14 +99,5 @@ export class OrderService {
     }
 
     return this.http.get<OrderSearchResponse>(`${this.baseUrl}/search`, {params});
-  }
-
-  createAdvanceForOrder(orderId: number, amount: number, userId?: number): Observable<OrderAdvanceResponse> {
-    const request: OrderAdvanceCreateRequest = {
-      orderId,
-      amount,
-      userId
-    };
-    return this.http.post<OrderAdvanceResponse>(this.advanceUrl, request);
   }
 }

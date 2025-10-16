@@ -34,6 +34,10 @@ import { ListMiddleSale } from './pages/sale-list/components/list-middle-sale/li
 import { ListTopSale } from './pages/sale-list/components/list-top-sale/list-top-sale';
 import { OrderPrint } from './pages/order-print/order-print';
 import { QuotationPrint } from './pages/quotation-print/quotation-print';
+import { ProductCreate } from './pages/product-create/product-create';
+import { Purchases } from './pages/purchases/purchases';
+import { MiddlePurchase } from './pages/purchases/components/middle-purchase/middle-purchase';
+import { BottomPurchase } from './pages/purchases/components/bottom-purchase/bottom-purchase';
 
 @NgModule({
   declarations: [
@@ -66,7 +70,11 @@ import { QuotationPrint } from './pages/quotation-print/quotation-print';
     ListMiddleSale,
     ListTopSale,
     OrderPrint,
-    QuotationPrint
+    QuotationPrint,
+    ProductCreate,
+    Purchases,
+    MiddlePurchase,
+    BottomPurchase
   ],
   imports: [
     BrowserModule,

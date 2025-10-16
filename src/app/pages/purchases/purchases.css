@@ -1,0 +1,70 @@
+.purchases {
+  width: 100%;
+  height: calc(100vh - 6vh);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.purchases .panel {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.purchases .panel.top {
+  height: 20%;
+  flex-direction: row;
+  gap: 2px;
+}
+
+.purchases .panel.top .top-col {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  overflow: hidden;
+}
+
+.purchases .panel.top .top-col.left {
+  width: 60%;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.purchases .panel.top .top-col.left .left-col {
+  width: 50%;
+  height: 100%;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+}
+
+.purchases .panel.top .top-col.left .left-col.left {
+  background-color: white;
+}
+
+.purchases .panel.top .top-col.left .left-col.right {
+  background-color: white;
+}
+
+.purchases .panel.top .top-col.right {
+  width: 40%;
+  display: block;
+  overflow: hidden;
+}
+
+.purchases .panel.middle {
+  height: 60%;
+  display: block;
+  overflow: hidden;
+  background-color: white;
+}
+
+.purchases .panel.bottom {
+  height: 20%;
+  display: block;
+  overflow: hidden;
+}

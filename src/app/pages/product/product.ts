@@ -7,6 +7,7 @@ import {QuotationState} from '../../services/quotation/quotation-state';
 import {OrderState} from '../../services/order/order-state';
 import {delay, finalize, Subject, takeUntil} from 'rxjs';
 import {ProductSearchEvent} from './components/left-top/left-top';
+import {PurchaseState} from '../../services/purchase/purchase-state';
 
 @Component({
   selector: 'app-product',
@@ -29,10 +30,13 @@ export class Product implements OnInit, OnDestroy {
     private productService: ProductService,
     private navigationService: NavigationService,
     private quotationState: QuotationState,
-    private orderState: OrderState
-  ) { }
+    private orderState: OrderState,
+    private purchaseState: PurchaseState
+  ) {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnDestroy(): void {
     this.searchSubject$.next();
@@ -89,6 +93,9 @@ export class Product implements OnInit, OnDestroy {
     if (returnUrl === '/order') {
       added = this.orderState.addProduct(selectedProduct);
       context = 'orden';
+    } else if (returnUrl === '/purchase') {
+      added = this.purchaseState.addProduct(selectedProduct);
+      context = 'compra';
     } else {
       added = this.quotationState.addProduct(selectedProduct);
       context = 'cotización';

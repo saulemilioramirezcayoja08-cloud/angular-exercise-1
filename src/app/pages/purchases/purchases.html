@@ -1,0 +1,29 @@
+<div class="purchases">
+  <div class="panel top">
+    <div class="top-col left">
+      <div class="left-col left">
+      </div>
+      <div class="left-col right">
+      </div>
+    </div>
+    <div class="top-col right">
+    </div>
+  </div>
+
+  <div class="panel middle">
+    <app-middle-purchase
+      [products]="products()"
+      (productsChanged)="onProductsChanged($event)">
+    </app-middle-purchase>
+  </div>
+
+  <div class="panel bottom">
+    <app-bottom-purchase
+      [totals]="totals()"
+      [notes]="purchaseNotes()"
+      [isGenerating]="isGenerating()"
+      (notesChanged)="onNotesChanged($event)"
+      (generatePurchase)="onGeneratePurchase()">
+    </app-bottom-purchase>
+  </div>
+</div>
