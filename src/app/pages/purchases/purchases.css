@@ -55,6 +55,7 @@
   width: 40%;
   display: block;
   overflow: hidden;
+  background-color: white;
 }
 
 .purchases .panel.middle {
