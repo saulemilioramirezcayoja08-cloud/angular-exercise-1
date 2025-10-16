@@ -1,0 +1,32 @@
+<div class="purchase-list">
+  <div class="panel main">
+    <div class="main-row top">
+      <app-list-top-purchase
+        (searchRequested)="onSearchRequested($event)"
+        (searchCleared)="onSearchCleared()">
+      </app-list-top-purchase>
+    </div>
+
+    <div class="main-row middle">
+      <app-list-middle-purchase
+        [purchases]="purchases()"
+        [isLoading]="isLoading()"
+        [hasSearched]="hasSearched()"
+        [searchType]="searchType()"
+        (purchaseSelected)="onPurchaseSelected($event)"
+        (purchaseActionRequested)="onPurchaseAction($event)">
+      </app-list-middle-purchase>
+    </div>
+
+    <div class="main-row bottom">
+      <app-list-bottom-purchase
+        [pagination]="pagination()"
+        [isLoading]="isLoading()"
+        (pageChanged)="onPageChanged($event)"
+        (sizeChanged)="onSizeChanged($event)"
+        (goToFirstPage)="onGoToFirstPage()"
+        (goToLastPage)="onGoToLastPage()">
+      </app-list-bottom-purchase>
+    </div>
+  </div>
+</div>

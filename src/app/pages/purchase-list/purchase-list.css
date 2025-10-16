@@ -1,0 +1,44 @@
+.purchase-list {
+  width: 100%;
+  height: calc(100vh - 6vh);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.purchase-list .panel {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.purchase-list .panel.main {
+  height: 100%;
+}
+
+.purchase-list .panel.main .main-row {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.purchase-list .panel.main .main-row.top {
+  height: 20%;
+}
+
+.purchase-list .panel.main .main-row.middle {
+  height: 70%;
+  background-color: white;
+}
+
+.purchase-list .panel.main .main-row.bottom {
+  height: 10%;
+  background-color: white;
+}

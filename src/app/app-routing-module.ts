@@ -13,6 +13,7 @@ import {OrderPrint} from './pages/order-print/order-print';
 import {QuotationPrint} from './pages/quotation-print/quotation-print';
 import {ProductCreate} from './pages/product-create/product-create';
 import {Purchases} from './pages/purchases/purchases';
+import {PurchaseList} from './pages/purchase-list/purchase-list';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -33,6 +34,7 @@ const routes: Routes = [
   {path: 'order/print', component: OrderPrint, canActivate: [authGuard]},
 
   {path: 'purchase', component: Purchases, canActivate: [authGuard]},
+  {path: 'purchase-list', component: PurchaseList, canActivate: [authGuard]},
 
   {path: 'sale-list', component: SaleList, canActivate: [authGuard]},
 
