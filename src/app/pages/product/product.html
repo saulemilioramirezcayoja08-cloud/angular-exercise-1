@@ -7,14 +7,17 @@
 
     <div class="left-row middle">
       <app-left-middle [products]="searchResults()" [isLoading]="isSearching()" [errorMessage]="errorMessage()"
-        [hasSearched]="hasSearched()" (productSelected)="onProductSelected($event)">
+        [hasSearched]="hasSearched()" [selectedProductId]="selectedProductId()"
+        (productClicked)="onProductClicked($event)" (productSelected)="onProductSelected($event)">
       </app-left-middle>
     </div>
 
     <div class="left-row bottom">
       <div class="bottom-col left-col">
+        <app-purchase-history [productId]="selectedProductId()"></app-purchase-history>
       </div>
       <div class="bottom-col right-col">
+        <app-sale-history [productId]="selectedProductId()"></app-sale-history>
       </div>
     </div>
   </div>

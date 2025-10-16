@@ -1,13 +1,13 @@
-import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
-import {Router} from '@angular/router';
-import {ProductData} from '../../services/product/models/product-search-response.model';
-import {ProductService} from '../../services/product/product-service';
-import {NavigationService} from '../../services/navigation-service';
-import {QuotationState} from '../../services/quotation/quotation-state';
-import {OrderState} from '../../services/order/order-state';
-import {delay, finalize, Subject, takeUntil} from 'rxjs';
-import {ProductSearchEvent} from './components/left-top/left-top';
-import {PurchaseState} from '../../services/purchase/purchase-state';
+import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProductData } from '../../services/product/models/product-search-response.model';
+import { ProductService } from '../../services/product/product-service';
+import { NavigationService } from '../../services/navigation-service';
+import { QuotationState } from '../../services/quotation/quotation-state';
+import { OrderState } from '../../services/order/order-state';
+import { delay, finalize, Subject, takeUntil } from 'rxjs';
+import { ProductSearchEvent } from './components/left-top/left-top';
+import { PurchaseState } from '../../services/purchase/purchase-state';
 
 @Component({
   selector: 'app-product',
@@ -20,6 +20,7 @@ export class Product implements OnInit, OnDestroy {
   isSearching = signal<boolean>(false);
   errorMessage = signal<string>('');
   hasSearched = signal<boolean>(false);
+  selectedProductId = signal<number | null>(null);
 
   private currentSearchEvent = signal<ProductSearchEvent | null>(null);
   private searchSubject$ = new Subject<void>();
@@ -75,6 +76,11 @@ export class Product implements OnInit, OnDestroy {
     this.errorMessage.set('');
     this.hasSearched.set(false);
     this.currentSearchEvent.set(null);
+    this.selectedProductId.set(null);
+  }
+
+  onProductClicked(product: ProductData): void {
+    this.selectedProductId.set(product.id);
   }
 
   onProductSelected(product: ProductData): void {
@@ -123,6 +129,7 @@ export class Product implements OnInit, OnDestroy {
     this.isSearching.set(true);
     this.hasSearched.set(true);
     this.errorMessage.set('');
+    this.selectedProductId.set(null);
 
     this.executeSearch(event).pipe(
       delay(800),

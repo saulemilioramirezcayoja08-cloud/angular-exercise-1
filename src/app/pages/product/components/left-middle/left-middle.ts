@@ -12,11 +12,22 @@ export class LeftMiddle {
   @Input() isLoading: boolean = false;
   @Input() errorMessage: string = '';
   @Input() hasSearched: boolean = false;
+  @Input() selectedProductId: number | null = null;
 
   @Output() productSelected = new EventEmitter<ProductData>();
+  @Output() productClicked = new EventEmitter<ProductData>();
 
-  selectProduct(product: ProductData): void {
+  selectProduct(event: Event, product: ProductData): void {
+    event.stopPropagation();
     this.productSelected.emit(product);
+  }
+
+  onRowClick(product: ProductData): void {
+    this.productClicked.emit(product);
+  }
+
+  isProductSelected(product: ProductData): boolean {
+    return this.selectedProductId === product.id;
   }
 
   formatPrice(price: number): string {

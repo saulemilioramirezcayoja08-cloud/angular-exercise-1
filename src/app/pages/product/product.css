@@ -6,6 +6,7 @@
   gap: 2px;
   box-sizing: border-box;
   overflow: hidden;
+  background: rgba(128, 128, 128, 0.2);
 }
 
 .product .panel {
@@ -45,7 +46,7 @@
   height: 40%;
   display: flex;
   flex-direction: row;
-  gap: 4px;
+  gap: 2px;
 }
 
 .product .panel.left .left-row.bottom .bottom-col {
@@ -57,12 +58,12 @@
 
 .product .panel.left .left-row.bottom .bottom-col.left-col {
   width: 50%;
-  background-color: white;
+
 }
 
 .product .panel.left .left-row.bottom .bottom-col.right-col {
   width: 50%;
-  background-color: white;
+
 }
 
 .product .panel.right .right-row {
@@ -75,10 +76,10 @@
 
 .product .panel.right .right-row.top {
   height: 50%;
-  background-color: white;
+
 }
 
 .product .panel.right .right-row.bottom {
   height: 50%;
-  background-color: white;
+
 }

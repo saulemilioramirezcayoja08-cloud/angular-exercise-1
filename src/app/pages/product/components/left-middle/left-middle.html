@@ -56,7 +56,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="row" *ngFor="let product of products; trackBy: trackByProductId">
+      <tr class="row" [class.selected]="isProductSelected(product)"
+        *ngFor="let product of products; trackBy: trackByProductId" (click)="onRowClick(product)"
+        title="Click para ver historial">
         <td class="cell">
           <span class="code">{{ product.sku }}</span>
         </td>
@@ -70,7 +72,8 @@
           <span class="value amount">{{ formatPrice(product.price) }}</span>
         </td>
         <td class="cell">
-          <button type="button" class="button primary" (click)="selectProduct(product)" title="Seleccionar producto">
+          <button type="button" class="button primary" (click)="selectProduct($event, product)"
+            title="Agregar producto">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
