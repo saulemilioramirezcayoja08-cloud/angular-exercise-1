@@ -5,13 +5,11 @@ export interface EditableProduct {
   uom: string;
   quantity: number;
   price: number;
-  discount: number;
   notes: string;
 }
 
 export interface QuotationTotals {
   subtotal: number;
-  totalDiscount: number;
   grandTotal: number;
 }
 

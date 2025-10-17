@@ -217,20 +217,14 @@ export class Quotations implements OnInit, OnDestroy {
 
   private calculateTotals(products: EditableProduct[]): QuotationTotals {
     let subtotal = 0;
-    let totalDiscount = 0;
 
     for (const product of products) {
       const productTotal = product.quantity * product.price;
-      const productDiscount = (productTotal * product.discount) / 100;
-      const productSubtotal = productTotal - productDiscount;
-
-      subtotal += productSubtotal;
-      totalDiscount += productDiscount;
+      subtotal += productTotal;
     }
 
     return {
       subtotal: subtotal,
-      totalDiscount: totalDiscount,
       grandTotal: subtotal
     };
   }
@@ -279,9 +273,7 @@ export class Quotations implements OnInit, OnDestroy {
     const registrationDateTime = `${date} ${time}`;
 
     const printProducts = this.products().map((product, index) => {
-      const subtotal = product.quantity * product.price;
-      const discountAmount = (subtotal * product.discount) / 100;
-      const total = subtotal - discountAmount;
+      const total = product.quantity * product.price;
 
       return {
         itemNumber: (index + 1).toString(),
@@ -290,9 +282,6 @@ export class Quotations implements OnInit, OnDestroy {
         origin: 'OR',
         quantity: product.quantity,
         price: product.price,
-        subtotal: subtotal,
-        discountPercent: product.discount,
-        discountAmount: discountAmount,
         total: total,
         uom: product.uom
       };
@@ -316,7 +305,6 @@ export class Quotations implements OnInit, OnDestroy {
       totals: {
         totalQuantity: totalQuantity,
         subtotal: totalsData.subtotal,
-        totalDiscount: totalsData.totalDiscount,
         grandTotal: totalsData.grandTotal,
         amountInWords: amountInWords
       },

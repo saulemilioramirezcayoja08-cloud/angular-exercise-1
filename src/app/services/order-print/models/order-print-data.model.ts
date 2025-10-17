@@ -24,9 +24,6 @@ export interface PrintProduct {
   origin: string;
   quantity: number;
   price: number;
-  subtotal: number;
-  discountPercent: number;
-  discountAmount: number;
   total: number;
   uom: string;
 }
@@ -34,7 +31,6 @@ export interface PrintProduct {
 export interface PrintTotals {
   totalQuantity: number;
   subtotal: number;
-  totalDiscount: number;
   grandTotal: number;
   amountInWords: string;
 }

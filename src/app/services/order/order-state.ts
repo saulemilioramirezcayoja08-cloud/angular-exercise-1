@@ -77,7 +77,6 @@ export class OrderState {
       uom: product.uom,
       quantity: 1,
       price: product.price,
-      discount: 0,
       notes: ''
     };
 

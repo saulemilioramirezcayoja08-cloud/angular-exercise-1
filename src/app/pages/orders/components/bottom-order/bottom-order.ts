@@ -69,7 +69,6 @@ export class BottomOrder implements OnDestroy {
   private getEmptyTotals(): QuotationTotals {
     return {
       subtotal: 0,
-      totalDiscount: 0,
       grandTotal: 0
     };
   }

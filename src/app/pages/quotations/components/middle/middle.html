@@ -13,7 +13,6 @@
         <th class="header">Producto</th>
         <th class="header">Cant</th>
         <th class="header">Precio</th>
-        <th class="header">Desc</th>
         <th class="header">Subtotal</th>
         <th class="header">Notas</th>
         <th class="header">Acción</th>
@@ -37,10 +36,6 @@
         <td class="cell">
           <input type="number" class="input price" [value]="product.price" min="0" step="0.01"
             (change)="onPriceChange(i, $event)">
-        </td>
-        <td class="cell">
-          <input type="number" class="input discount" [value]="product.discount" min="0" max="100" step="0.1"
-            (change)="onDiscountChange(i, $event)">
         </td>
         <td class="cell">
           <span class="value amount">{{ formatCurrency(calculateSubtotal(product)) }}</span>

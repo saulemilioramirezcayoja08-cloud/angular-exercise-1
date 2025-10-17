@@ -36,9 +36,7 @@ export class MiddleOrder implements OnDestroy {
   }
 
   calculateSubtotal(product: EditableProduct): number {
-    const total = product.quantity * product.price;
-    const discount = (total * product.discount) / 100;
-    return total - discount;
+    return product.quantity * product.price;
   }
 
   formatCurrency(amount: number): string {
@@ -71,18 +69,6 @@ export class MiddleOrder implements OnDestroy {
     }
 
     this.updateProduct(index, {price: newPrice});
-  }
-
-  onDiscountChange(index: number, event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const newDiscount = parseFloat(input.value);
-
-    if (isNaN(newDiscount) || newDiscount < 0 || newDiscount > 100) {
-      input.value = this.products[index].discount.toString();
-      return;
-    }
-
-    this.updateProduct(index, {discount: newDiscount});
   }
 
   onNotesInput(index: number, event: Event): void {
