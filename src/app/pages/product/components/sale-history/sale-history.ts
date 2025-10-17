@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { SaleHistoryData } from '../../../../services/sale/models/history/sale-history-response.model';
 import { SaleService } from '../../../../services/sale/sale-service';
-import { finalize } from 'rxjs';
+import { delay, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-sale-history',
@@ -33,7 +33,10 @@ export class SaleHistory implements OnChanges {
     this.errorMessage.set('');
 
     this.saleService.getSalesHistory({ productId: this.productId, limit: 5 })
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .pipe(
+        delay(800),
+        finalize(() => this.isLoading.set(false))
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

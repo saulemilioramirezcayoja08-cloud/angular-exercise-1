@@ -6,6 +6,7 @@
   background-color: white;
   box-sizing: border-box;
   overflow: hidden;
+  color: grey;
 }
 
 .header {
@@ -30,6 +31,7 @@
 
 .content::-webkit-scrollbar {
   width: 4px;
+  height: 4px;
 }
 
 .content::-webkit-scrollbar-track {
@@ -39,10 +41,129 @@
 .content::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 2px;
+  transition: all 0.2s ease-in;
 }
 
 .content::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  table-layout: fixed;
+  font-family: inherit;
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+}
+
+.table tbody {
+  background-color: white;
+  contain: layout style paint;
+}
+
+.table thead th.header {
+  height: 36px;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 14px;
+  border-bottom: 2px solid rgb(249, 248, 247);
+  border-right: 2px solid rgb(249, 248, 247);
+  white-space: nowrap;
+  background-color: white;
+  transition: all 0.2s ease-in;
+}
+
+.table thead th.header:last-child {
+  border-right: none;
+}
+
+.table thead th.header:hover {
+  background-color: rgba(249, 248, 247, 0.5);
+}
+
+.table thead th.header:nth-child(1) {
+  width: 140px;
+}
+
+.table thead th.header:nth-child(2) {
+  width: 100px;
+  text-align: center;
+}
+
+.table thead th.header:nth-child(3) {
+  width: auto;
+  text-align: right;
+}
+
+.row {
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+  will-change: auto;
+}
+
+.row:hover {
+  background-color: rgba(59, 130, 246, 0.04);
+}
+
+.row:active {
+  background-color: rgba(59, 130, 246, 0.08);
+}
+
+.row td.cell {
+  height: 40px;
+  padding: 2px 12px;
+  font-size: 14px;
+  border-bottom: 2px solid rgb(249, 248, 247);
+  border-right: 2px solid rgb(249, 248, 247);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.row td.cell:last-child {
+  border-right: none;
+}
+
+.row td.cell:nth-child(1) {
+  width: 140px;
+}
+
+.row td.cell:nth-child(2) {
+  width: 100px;
+  text-align: center;
+}
+
+.row td.cell:nth-child(3) {
+  width: auto;
+  text-align: right;
+}
+
+.code {
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.2s ease-in;
+}
+
+.value {
+  transition: all 0.2s ease-in;
+}
+
+.value.amount {
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+  letter-spacing: 1px;
 }
 
 .loading-container {
@@ -50,29 +171,27 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
   padding: 40px 20px;
-  gap: 12px;
 }
 
 .spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid rgba(59, 130, 246, 0.1);
-  border-top-color: rgba(59, 130, 246, 0.7);
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e3f2fd;
+  border-top: 5px solid #42a5f5;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
 }
 
 @keyframes spin {
-  to {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
     transform: rotate(360deg);
   }
-}
-
-.loading-text {
-  font-size: 12px;
-  color: rgba(55, 53, 47, 0.5);
-  margin: 0;
 }
 
 .empty-state {
@@ -83,24 +202,18 @@
   padding: 40px 20px;
   text-align: center;
   color: rgba(55, 53, 47, 0.5);
-}
-
-.empty-icon {
-  width: 48px;
-  height: 48px;
-  color: rgba(55, 53, 47, 0.3);
-  margin-bottom: 12px;
+  min-height: 200px;
 }
 
 .empty-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   margin: 0;
   color: rgba(55, 53, 47, 0.7);
 }
 
 .empty-subtitle {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   margin-top: 4px;
   margin-bottom: 0;
@@ -117,130 +230,18 @@
   color: rgba(220, 38, 38, 0.7);
 }
 
-.error-icon {
-  width: 48px;
-  height: 48px;
-  color: rgba(220, 38, 38, 0.6);
-  margin-bottom: 12px;
-}
-
 .error-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: rgba(220, 38, 38, 0.8);
   margin: 0;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  table-layout: fixed;
-  font-family: inherit;
-}
-
-.table thead {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: white;
-}
-
-.table thead th.header {
-  height: 32px;
-  padding: 6px 12px;
-  text-align: left;
-  font-weight: 500;
+.error-subtitle {
   font-size: 12px;
-  border-bottom: 2px solid rgb(249, 248, 247);
-  border-right: 2px solid rgb(249, 248, 247);
-  white-space: nowrap;
-  background-color: white;
-  color: rgba(55, 53, 47, 0.7);
-}
-
-.table thead th.header:last-child {
-  border-right: none;
-}
-
-.table thead th.header:nth-child(1) {
-  width: 40px;
-  text-align: center;
-}
-
-.table thead th.header:nth-child(2) {
-  width: 100px;
-}
-
-.table thead th.header:nth-child(3) {
-  width: 80px;
-  text-align: center;
-}
-
-.table thead th.header:nth-child(4) {
-  width: auto;
-  text-align: right;
-}
-
-.row {
-  transition: all 0.2s ease-in;
-}
-
-.row:hover {
-  background-color: rgba(59, 130, 246, 0.04);
-}
-
-.row td.cell {
-  height: 36px;
-  padding: 4px 12px;
-  border-bottom: 1px solid rgb(249, 248, 247);
-  border-right: 1px solid rgb(249, 248, 247);
-  vertical-align: middle;
-  font-size: 13px;
-  color: grey;
-}
-
-.row td.cell:last-child {
-  border-right: none;
-}
-
-.row td.cell:nth-child(1) {
-  text-align: center;
-}
-
-.row td.cell:nth-child(2) {
-  text-align: left;
-}
-
-.row td.cell:nth-child(3) {
-  text-align: center;
-}
-
-.row td.cell:nth-child(4) {
-  text-align: right;
-}
-
-.number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  font-size: 11px;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-}
-
-.code {
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  font-size: 12px;
-}
-
-.value {
-  font-size: 13px;
-}
-
-.value.amount {
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  letter-spacing: 0.5px;
-  font-weight: 500;
+  font-weight: 400;
+  color: rgba(55, 53, 47, 0.5);
+  margin-top: 4px;
+  margin-bottom: 0;
+  max-width: 400px;
 }

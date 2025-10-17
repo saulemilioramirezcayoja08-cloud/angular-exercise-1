@@ -6,7 +6,6 @@
   <div class="content">
     <div *ngIf="isLoading()" class="loading-container">
       <div class="spinner"></div>
-      <p class="loading-text">Cargando historial...</p>
     </div>
 
     <div *ngIf="!isLoading() && !productId" class="empty-state">
@@ -15,28 +14,11 @@
     </div>
 
     <div *ngIf="!isLoading() && productId && errorMessage()" class="error-state">
-      <svg class="error-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M12 16H12.01M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-        </g>
-      </svg>
       <p class="error-title">{{ errorMessage() }}</p>
+      <p class="error-subtitle">Verifica tu conexión o intenta nuevamente</p>
     </div>
 
     <div *ngIf="!isLoading() && productId && !errorMessage() && historyData().length === 0" class="empty-state">
-      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M9 11V17L11 15M9 17L7 15M13 12H16M13 15H16M13 18H16M9 5C9 6.10457 8.10457 7 7 7C5.89543 7 5 6.10457 5 5C5 3.89543 5.89543 3 7 3C8.10457 3 9 3.89543 9 5ZM9 5C9 5.55228 9.44772 6 10 6H18C18.5523 6 19 6.44772 19 7V19C19 19.5523 18.5523 20 18 20H6C5.44772 20 5 19.5523 5 19V7C5 6.44772 5.44772 6 6 6H7C7.55228 6 8 5.55228 8 5"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-        </g>
-      </svg>
       <p class="empty-title">Sin historial</p>
       <p class="empty-subtitle">Este producto no tiene compras registradas</p>
     </div>
@@ -44,17 +26,13 @@
     <table class="table" *ngIf="!isLoading() && !errorMessage() && historyData().length > 0">
       <thead>
         <tr>
-          <th class="header">#</th>
           <th class="header">Número</th>
           <th class="header">Cantidad</th>
           <th class="header">Precio</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="row" *ngFor="let item of historyData(); let i = index; trackBy: trackByIndex">
-          <td class="cell">
-            <span class="number">{{ i + 1 }}</span>
-          </td>
+        <tr class="row" *ngFor="let item of historyData(); trackBy: trackByIndex">
           <td class="cell">
             <span class="code">{{ item.number }}</span>
           </td>

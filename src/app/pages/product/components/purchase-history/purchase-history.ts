@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { PurchaseHistoryData } from '../../../../services/purchase/models/history/purchase-history-response.model';
 import { PurchaseService } from '../../../../services/purchase/purchase-service';
-import { finalize } from 'rxjs';
+import { delay, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-purchase-history',
@@ -33,7 +33,10 @@ export class PurchaseHistory implements OnChanges {
     this.errorMessage.set('');
 
     this.purchaseService.getPurchaseHistory(this.productId, 5)
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .pipe(
+        delay(800),
+        finalize(() => this.isLoading.set(false))
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

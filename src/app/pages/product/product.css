@@ -19,11 +19,11 @@
 }
 
 .product .panel.left {
-  width: 70%;
+  width: 60%;
 }
 
 .product .panel.right {
-  width: 30%;
+  width: 40%;
 }
 
 .product .panel.left .left-row {
@@ -81,5 +81,5 @@
 
 .product .panel.right .right-row.bottom {
   height: 50%;
-
+  background-color: white;
 }

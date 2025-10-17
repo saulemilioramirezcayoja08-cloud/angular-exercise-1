@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { WarehouseStock } from '../../../../services/stock/models/stock-availability-response.model';
 import { StockService } from '../../../../services/stock/stock-service';
-import { finalize } from 'rxjs';
+import { delay, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-stock-availability',
@@ -33,7 +33,10 @@ export class StockAvailability implements OnChanges {
     this.errorMessage.set('');
 
     this.stockService.getAvailability(this.productId)
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .pipe(
+        delay(800),
+        finalize(() => this.isLoading.set(false))
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

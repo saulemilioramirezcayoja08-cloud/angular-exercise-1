@@ -1,82 +1,53 @@
 <div class="stock-availability">
-    <div class="header">
-        <h3 class="title">Disponibilidad de Stock</h3>
+  <div class="header">
+    <h3 class="title">Disponibilidad de Stock</h3>
+  </div>
+
+  <div class="content">
+    <div *ngIf="isLoading()" class="loading-container">
+      <div class="spinner"></div>
     </div>
 
-    <div class="content">
-        <div *ngIf="isLoading()" class="loading-container">
-            <div class="spinner"></div>
-            <p class="loading-text">Cargando disponibilidad...</p>
-        </div>
-
-        <div *ngIf="!isLoading() && !productId" class="empty-state">
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                    <path d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-            </svg>
-            <p class="empty-title">Selecciona un producto</p>
-            <p class="empty-subtitle">Haz clic en un producto para ver su disponibilidad en almacenes</p>
-        </div>
-
-        <div *ngIf="!isLoading() && productId && errorMessage()" class="error-state">
-            <svg class="error-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                    <path
-                        d="M12 16H12.01M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-            </svg>
-            <p class="error-title">{{ errorMessage() }}</p>
-        </div>
-
-        <div *ngIf="!isLoading() && productId && !errorMessage() && stockData().length === 0" class="empty-state">
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                    <path d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-            </svg>
-            <p class="empty-title">Sin información de stock</p>
-            <p class="empty-subtitle">No hay datos de disponibilidad para este producto</p>
-        </div>
-
-        <table class="table" *ngIf="!isLoading() && !errorMessage() && stockData().length > 0">
-            <thead>
-                <tr>
-                    <th class="header">Almacén</th>
-                    <th class="header">Existencia</th>
-                    <th class="header">Reservado</th>
-                    <th class="header">Disponible</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="row" *ngFor="let stock of stockData(); trackBy: trackByWarehouseCode"
-                    [class.low-stock]="stock.available < 10" [class.out-of-stock]="stock.available === 0">
-                    <td class="cell">
-                        <span class="warehouse-code">{{ stock.code }}</span>
-                    </td>
-                    <td class="cell">
-                        <span class="value">{{ stock.existence }}</span>
-                    </td>
-                    <td class="cell">
-                        <span class="value reserved">{{ stock.reserved }}</span>
-                    </td>
-                    <td class="cell">
-                        <span class="value available" [class.warning]="stock.available < 10"
-                            [class.danger]="stock.available === 0">
-                            {{ stock.available }}
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div *ngIf="!isLoading() && !productId" class="empty-state">
+      <p class="empty-title">Selecciona un producto</p>
+      <p class="empty-subtitle">Haz clic en un producto para ver su disponibilidad en almacenes</p>
     </div>
+
+    <div *ngIf="!isLoading() && productId && errorMessage()" class="error-state">
+      <p class="error-title">{{ errorMessage() }}</p>
+      <p class="error-subtitle">Verifica tu conexión o intenta nuevamente</p>
+    </div>
+
+    <div *ngIf="!isLoading() && productId && !errorMessage() && stockData().length === 0" class="empty-state">
+      <p class="empty-title">Sin información de stock</p>
+      <p class="empty-subtitle">No hay datos de disponibilidad para este producto</p>
+    </div>
+
+    <table class="table" *ngIf="!isLoading() && !errorMessage() && stockData().length > 0">
+      <thead>
+        <tr>
+          <th class="header">Almacén</th>
+          <th class="header">Existencia</th>
+          <th class="header">Reservado</th>
+          <th class="header">Disponible</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row" *ngFor="let stock of stockData(); trackBy: trackByWarehouseCode">
+          <td class="cell">
+            <span class="code">{{ stock.code }}</span>
+          </td>
+          <td class="cell">
+            <span class="value">{{ stock.existence }}</span>
+          </td>
+          <td class="cell">
+            <span class="value">{{ stock.reserved }}</span>
+          </td>
+          <td class="cell">
+            <span class="value">{{ stock.available }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
