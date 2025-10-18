@@ -45,6 +45,9 @@ import { ListBottomPurchase } from './pages/purchase-list/components/list-bottom
 import { PurchaseHistory } from './pages/product/components/purchase-history/purchase-history';
 import { SaleHistory } from './pages/product/components/sale-history/sale-history';
 import { StockAvailability } from './pages/product/components/stock-availability/stock-availability';
+import { TopLeftPurchase } from './pages/purchases/components/top-left-purchase/top-left-purchase';
+import { TopRightPurchase } from './pages/purchases/components/top-right-purchase/top-right-purchase';
+import { TopColRight } from './pages/orders/components/top-col-right/top-col-right';
 
 @NgModule({
   declarations: [
@@ -88,7 +91,10 @@ import { StockAvailability } from './pages/product/components/stock-availability
     ListBottomPurchase,
     PurchaseHistory,
     SaleHistory,
-    StockAvailability
+    StockAvailability,
+    TopLeftPurchase,
+    TopRightPurchase,
+    TopColRight
   ],
   imports: [
     BrowserModule,

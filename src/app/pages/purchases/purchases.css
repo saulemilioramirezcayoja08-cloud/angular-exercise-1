@@ -25,37 +25,19 @@
 .purchases .panel.top .top-col {
   height: 100%;
   box-sizing: border-box;
-  display: flex;
+  display: block;
   overflow: hidden;
 }
 
 .purchases .panel.top .top-col.left {
   width: 60%;
-  flex-direction: row;
-  gap: 2px;
-}
-
-.purchases .panel.top .top-col.left .left-col {
-  width: 50%;
-  height: 100%;
-  box-sizing: border-box;
-  display: block;
   overflow: hidden;
 }
 
-.purchases .panel.top .top-col.left .left-col.left {
-  background-color: white;
-}
-
-.purchases .panel.top .top-col.left .left-col.right {
-  background-color: white;
-}
 
 .purchases .panel.top .top-col.right {
   width: 40%;
-  display: block;
   overflow: hidden;
-  background-color: white;
 }
 
 .purchases .panel.middle {

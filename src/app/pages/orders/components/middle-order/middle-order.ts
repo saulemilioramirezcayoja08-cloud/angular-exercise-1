@@ -39,14 +39,6 @@ export class MiddleOrder implements OnDestroy {
     return product.quantity * product.price;
   }
 
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('es-BO', {
-      style: 'currency',
-      currency: 'BOB',
-      minimumFractionDigits: 2
-    }).format(amount);
-  }
-
   onQuantityChange(index: number, event: Event): void {
     const input = event.target as HTMLInputElement;
     const newQuantity = parseInt(input.value);

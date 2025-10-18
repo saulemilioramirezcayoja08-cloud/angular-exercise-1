@@ -31,24 +31,8 @@
 
 .orders .panel.top .top-col.left {
     width: 60%;
-    flex-direction: row;
-    gap: 2px;
-}
-
-.orders .panel.top .top-col.left .left-col {
-    width: 50%;
-    height: 100%;
-    box-sizing: border-box;
     display: block;
     overflow: hidden;
-}
-
-.orders .panel.top .top-col.left .left-col.left {
-    background-color: white;
-}
-
-.orders .panel.top .top-col.left .left-col.right {
-    background-color: white;
 }
 
 .orders .panel.top .top-col.right {

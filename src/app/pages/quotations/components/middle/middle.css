@@ -1,329 +1,313 @@
 .middle {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  color: grey;
-  font-size: 16px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    color: grey;
+    font-size: 16px;
 }
 
 .table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  table-layout: fixed;
-  min-width: 1200px;
-  font-family: inherit;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    table-layout: fixed;
+    min-width: 1200px;
+    font-family: inherit;
 }
 
 .table thead {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
 }
 
 .table tbody {
-  background-color: white;
+    background-color: white;
 }
 
 .table thead th.header {
-  height: 36px;
-  padding: 8px 12px;
-  text-align: left;
-  font-weight: 500;
-  border-bottom: 2px solid rgb(249, 248, 247);
-  border-right: 2px solid rgb(249, 248, 247);
-  white-space: nowrap;
-  background-color: white;
-  transition: all 0.2s ease-in;
+    height: 36px;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 500;
+    border-bottom: 2px solid rgb(249, 248, 247);
+    border-right: 2px solid rgb(249, 248, 247);
+    white-space: nowrap;
+    background-color: white;
+    transition: all 0.2s ease-in;
 }
 
 .table thead th.header:last-child {
-  border-right: none;
+    border-right: none;
 }
 
 .table thead th.header:hover {
-  background-color: rgba(249, 248, 247, 0.5);
+    background-color: rgba(249, 248, 247, 0.5);
 }
 
 .table thead th.header:nth-child(1) {
-  width: 60px;
-  text-align: center;
+    width: 60px;
+    text-align: center;
 }
 
 .table thead th.header:nth-child(2) {
-  width: 140px;
+    width: 140px;
 }
 
 .table thead th.header:nth-child(3) {
-  width: 280px;
+    width: 280px;
 }
 
 .table thead th.header:nth-child(4) {
-  width: 80px;
-  text-align: center;
+    width: 80px;
+    text-align: center;
 }
 
 .table thead th.header:nth-child(5) {
-  width: 140px;
-  text-align: right;
+    width: 140px;
+    text-align: right;
 }
 
 .table thead th.header:nth-child(6) {
-  width: 80px;
-  text-align: center;
+    width: 140px;
+    text-align: right;
 }
 
 .table thead th.header:nth-child(7) {
-  width: 140px;
-  text-align: right;
+    width: 260px;
 }
 
 .table thead th.header:nth-child(8) {
-  width: 180px;
-}
-
-.table thead th.header:nth-child(9) {
-  width: 80px;
-  text-align: center;
+    width: 80px;
+    text-align: center;
 }
 
 .row {
-  transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
 }
 
 .row:hover {
-  background-color: rgba(0, 191, 255, 0.04);
+    background-color: rgba(0, 191, 255, 0.04);
 }
 
 .row td.cell {
-  height: 40px;
-  padding: 2px 12px;
-  border-bottom: 2px solid rgb(249, 248, 247);
-  border-right: 2px solid rgb(249, 248, 247);
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: inherit;
+    height: 40px;
+    padding: 2px 12px;
+    border-bottom: 2px solid rgb(249, 248, 247);
+    border-right: 2px solid rgb(249, 248, 247);
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: inherit;
 }
 
 .row td.cell:last-child {
-  border-right: none;
+    border-right: none;
 }
 
 .row td.cell:nth-child(1) {
-  width: 60px;
-  text-align: center;
+    width: 60px;
+    text-align: center;
 }
 
 .row td.cell:nth-child(2) {
-  width: 140px;
+    width: 140px;
 }
 
 .row td.cell:nth-child(3) {
-  width: 280px;
+    width: 280px;
 }
 
 .row td.cell:nth-child(4) {
-  width: 80px;
-  text-align: center;
+    width: 80px;
+    text-align: center;
 }
 
 .row td.cell:nth-child(5) {
-  width: 140px;
-  text-align: right;
+    width: 140px;
+    text-align: right;
 }
 
 .row td.cell:nth-child(6) {
-  width: 80px;
-  text-align: center;
+    width: 140px;
+    text-align: right;
 }
 
 .row td.cell:nth-child(7) {
-  width: 140px;
-  text-align: right;
+    width: 260px;
 }
 
 .row td.cell:nth-child(8) {
-  width: 120px;
-  text-align: right;
-}
-
-.row td.cell:nth-child(9) {
-  width: 180px;
-}
-
-.row td.cell:nth-child(10) {
-  width: 80px;
-  text-align: center;
+    width: 80px;
+    text-align: center;
 }
 
 .number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  font-size: 12px;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  letter-spacing: 1px;
-  transition: all 0.2s ease-in;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+    letter-spacing: 1px;
+    transition: all 0.2s ease-in;
 }
 
 .code {
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: all 0.2s ease-in;
+    font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease-in;
 }
 
 .value {
-  transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
 }
 
 .value.amount {
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  letter-spacing: 1px;
+    font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+    letter-spacing: 1px;
 }
 
 .label {
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: all 0.2s ease-in;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease-in;
 }
 
 .input {
-  width: 100%;
-  height: 28px;
-  padding: 4px 8px;
-  border: none;
-  background-color: transparent;
-  font-family: inherit;
-  font-size: 16px;
-  color: inherit;
-  outline: none;
-  transition: all 0.2s ease-in;
-  box-sizing: border-box;
+    width: 100%;
+    height: 28px;
+    padding: 4px 8px;
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: 16px;
+    color: inherit;
+    outline: none;
+    transition: all 0.2s ease-in;
+    box-sizing: border-box;
 }
 
-.input.quantity,
-.input.discount {
-  text-align: center;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  letter-spacing: 1px;
+.input.quantity {
+    text-align: center;
+    font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+    letter-spacing: 1px;
 }
 
 .input.price {
-  text-align: right;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  letter-spacing: 1px;
+    text-align: right;
+    font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+    letter-spacing: 1px;
 }
 
 .input.notes {
-  text-align: left;
+    text-align: left;
 }
 
 .input:hover {
-  background-color: rgba(249, 248, 247, 0.7);
-  border-radius: 4px;
+    background-color: rgba(249, 248, 247, 0.7);
+    border-radius: 4px;
 }
 
 .input:focus {
-  background-color: rgba(249, 248, 247, 1);
-  border-radius: 4px;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    background-color: rgba(249, 248, 247, 1);
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .input::placeholder {
-  color: rgba(55, 53, 47, 0.4);
-  font-style: italic;
+    color: rgba(55, 53, 47, 0.4);
+    font-style: italic;
 }
 
 .button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin: 0 auto;
-  padding: 0;
-  border: none;
-  border-radius: 16px;
-  outline: none;
-  overflow: hidden;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s ease-in;
-  font-family: inherit;
-  background-color: transparent;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto;
+    padding: 0;
+    border: none;
+    border-radius: 16px;
+    outline: none;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease-in;
+    font-family: inherit;
+    background-color: transparent;
 }
 
 .button.danger {
-  color: rgba(220, 38, 38, 0.7);
+    color: rgba(220, 38, 38, 0.7);
 }
 
 .button.danger:hover {
-  background-color: rgba(220, 38, 38, 0.1);
-  color: rgba(220, 38, 38, 0.9);
-  transform: translateY(-1px);
+    background-color: rgba(220, 38, 38, 0.1);
+    color: rgba(220, 38, 38, 0.9);
+    transform: translateY(-1px);
 }
 
 .button:active {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 
 .button svg {
-  width: 16px;
-  height: 16px;
-  transition: all 0.2s ease-in;
+    width: 16px;
+    height: 16px;
+    transition: all 0.2s ease-in;
 }
 
 .button:hover svg {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 .middle-left::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+    width: 4px;
+    height: 4px;
 }
 
 .middle-left::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 
 .middle-left::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-  transition: all 0.2s ease-in;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    transition: all 0.2s ease-in;
 }
 
 .middle-left::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .empty-state {
-  padding: 40px 20px;
-  text-align: center;
-  color: rgba(55, 53, 47, 0.5);
+    padding: 40px 20px;
+    text-align: center;
+    color: rgba(55, 53, 47, 0.5);
 }
 
 .empty-title {
-  font-size: 14px;
-  margin: 0;
+    font-size: 14px;
+    margin: 0;
 }
 
 .empty-subtitle {
-  font-size: 12px;
-  margin-top: 4px;
-  margin-bottom: 0;
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 0;
 }

@@ -38,7 +38,7 @@
                         (change)="onPriceChange(i, $event)">
                 </td>
                 <td class="cell">
-                    <span class="value amount">{{ formatCurrency(calculateSubtotal(product)) }}</span>
+                    <span class="value amount">{{calculateSubtotal(product)}}</span>
                 </td>
                 <td class="cell">
                     <input type="text" class="input notes" [value]="product.notes" placeholder="Observaciones..."
