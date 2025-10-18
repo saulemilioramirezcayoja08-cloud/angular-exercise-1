@@ -63,7 +63,7 @@
 
         <tbody>
           <tr *ngFor="let product of orderData.products">
-            <td class="center">{{ product.itemNumber }}</td>
+            <td class="center">{{ product.sku }}</td>
             <td class="left">{{ product.name }}</td>
             <td class="center">{{ product.origin }}</td>
             <td class="right">{{ formatQuantity(product.quantity) }}</td>
