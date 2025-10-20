@@ -2,13 +2,14 @@ import { Component, computed, HostListener, OnDestroy, OnInit, signal } from '@a
 import { EditableProduct, NotesUpdateEvent, ProductUpdateEvent, QuotationTotals } from '../../models/state.models';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
-import { OrderState } from '../../services/order/order-state';
+import { CustomerData, OrderState } from '../../services/order/order-state';
 import { OrderService } from '../../services/order/order-service';
 import { AuthService } from '../../services/auth/auth-service';
 import { NavigationService } from '../../services/navigation-service';
 import { DraftOrderRequest } from '../../services/order/models/draft/draft-request.model';
 import { OrderMetadata } from '../../models/order.models';
 import { OrderPrintService } from '../../services/order-print/order-print.service';
+import { CustomerService } from '../../services/customer/customer-service';
 
 @Component({
   selector: 'app-orders',
@@ -19,6 +20,7 @@ import { OrderPrintService } from '../../services/order-print/order-print.servic
 export class Orders implements OnInit, OnDestroy {
   products = signal<EditableProduct[]>([]);
   orderNotes = signal<string>('');
+  customer = signal<CustomerData | null>(null);
   isGenerating = signal<boolean>(false);
 
   totals = computed<QuotationTotals>(() => {
@@ -42,12 +44,14 @@ export class Orders implements OnInit, OnDestroy {
     private orderService: OrderService,
     private navigationService: NavigationService,
     private authService: AuthService,
-    private orderPrintService: OrderPrintService
+    private orderPrintService: OrderPrintService,
+    private customerService: CustomerService
   ) {
   }
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadCustomer();
     this.loadUserId();
   }
 
@@ -61,6 +65,11 @@ export class Orders implements OnInit, OnDestroy {
     const target = event.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
       return;
+    }
+
+    if (event.ctrlKey && event.key === 'c') {
+      event.preventDefault();
+      this.addCustomer();
     }
 
     if (event.ctrlKey && event.key === 'p') {
@@ -84,6 +93,50 @@ export class Orders implements OnInit, OnDestroy {
     }
   }
 
+  addCustomer(): void {
+    const customerId = prompt('Ingrese el ID del cliente:');
+
+    if (!customerId || customerId.trim() === '') {
+      return;
+    }
+
+    const id = parseInt(customerId);
+
+    if (isNaN(id) || id <= 0) {
+      alert('ID de cliente inválido');
+      return;
+    }
+
+    this.customerService.getById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            const customerData: CustomerData = {
+              id: response.data.id,
+              taxId: response.data.taxId,
+              name: response.data.name,
+              phone: response.data.phone,
+              email: response.data.email,
+              address: response.data.address
+            };
+
+            this.customer.set(customerData);
+            this.orderState.setCustomer(customerData);
+            this.metadata.customerId = customerData.id;
+
+            alert(`Cliente "${customerData.name}" agregado correctamente`);
+          } else {
+            alert(response.message || 'Cliente no encontrado');
+          }
+        },
+        error: (error) => {
+          console.error('Error loading customer:', error);
+          alert('Error al cargar el cliente');
+        }
+      });
+  }
+
   onProductsChanged(event: ProductUpdateEvent): void {
     this.products.set(event.products);
     this.orderState.updateProducts(event.products);
@@ -99,6 +152,11 @@ export class Orders implements OnInit, OnDestroy {
 
     if (currentProducts.length === 0) {
       alert('No hay productos en la orden');
+      return;
+    }
+
+    if (!this.customer()) {
+      alert('Debe agregar un cliente antes de generar la orden (Ctrl + C)');
       return;
     }
 
@@ -136,6 +194,7 @@ export class Orders implements OnInit, OnDestroy {
             setTimeout(() => {
               this.products.set([]);
               this.orderNotes.set('');
+              this.customer.set(null);
               this.orderState.clearProducts();
             }, 100);
           } else {
@@ -164,17 +223,21 @@ export class Orders implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.customer()) {
+      alert('Debe agregar un cliente antes de previsualizar (Ctrl + C)');
+      return;
+    }
+
     const printData = this.preparePrintData('PREVIEW');
     this.orderPrintService.setPrintData(printData);
 
     this.router.navigate(['/order/print'], {
       queryParams: { mode: 'preview' }
     });
-
   }
 
   clearOrder(): void {
-    if (this.products().length === 0 && !this.orderNotes()) {
+    if (this.products().length === 0 && !this.orderNotes() && !this.customer()) {
       return;
     }
 
@@ -186,6 +249,7 @@ export class Orders implements OnInit, OnDestroy {
 
     this.products.set([]);
     this.orderNotes.set('');
+    this.customer.set(null);
     this.orderState.clearProducts();
   }
 
@@ -200,6 +264,15 @@ export class Orders implements OnInit, OnDestroy {
 
     this.products.set(loadedProducts);
     this.orderNotes.set(loadedNotes);
+  }
+
+  private loadCustomer(): void {
+    const loadedCustomer = this.orderState.getCustomer();
+    
+    if (loadedCustomer) {
+      this.customer.set(loadedCustomer);
+      this.metadata.customerId = loadedCustomer.id;
+    }
   }
 
   private loadUserId(): void {
@@ -256,6 +329,7 @@ export class Orders implements OnInit, OnDestroy {
   private preparePrintData(orderNumber: string): any {
     const now = new Date();
     const currentUser = this.authService.getCurrentUser();
+    const currentCustomer = this.customer();
 
     const date = now.toLocaleDateString('es-BO', {
       day: '2-digit',
@@ -296,9 +370,9 @@ export class Orders implements OnInit, OnDestroy {
       date: date,
       time: time,
       customer: {
-        name: 'Cliente General',
-        address: 'N/A',
-        phone: 'N/A'
+        name: currentCustomer?.name || 'N/A',
+        address: currentCustomer?.address || 'N/A',
+        phone: currentCustomer?.phone || 'N/A'
       },
       seller: currentUser?.username || 'N/A',
       products: printProducts,

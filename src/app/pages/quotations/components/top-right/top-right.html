@@ -1,17 +1,24 @@
 <div class="top-right">
 
-  <div class="content-section">
+  <div class="content-section" *ngIf="!customer">
+    <div class="empty-customer">
+      <p class="empty-title">Sin Cliente</p>
+      <p class="empty-subtitle">Presiona <strong>Ctrl + C</strong> para agregar cliente</p>
+    </div>
+  </div>
+
+  <div class="content-section" *ngIf="customer">
 
     <div class="column">
 
       <div class="row">
         <span class="row-label">Nombre:</span>
-        <span class="row-value">Taller Mecánico El Rápido</span>
+        <span class="row-value">{{ customer.name }}</span>
       </div>
 
       <div class="row">
         <span class="row-label">NIT/CI:</span>
-        <span class="row-value">1234567890</span>
+        <span class="row-value">{{ customer.taxId || 'N/A' }}</span>
       </div>
 
     </div>
@@ -20,12 +27,12 @@
 
       <div class="row">
         <span class="row-label">Teléfono:</span>
-        <span class="row-value">555-1234</span>
+        <span class="row-value">{{ customer.phone || 'N/A' }}</span>
       </div>
 
       <div class="row">
         <span class="row-label">Email:</span>
-        <span class="row-value">contacto.com</span>
+        <span class="row-value">{{ customer.email || 'N/A' }}</span>
       </div>
 
     </div>
@@ -34,7 +41,7 @@
 
       <div class="row">
         <span class="row-label">Dirección:</span>
-        <span class="row-value">Av. Principal 123, Centro</span>
+        <span class="row-value">{{ customer.address || 'N/A' }}</span>
       </div>
 
     </div>

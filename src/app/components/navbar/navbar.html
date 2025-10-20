@@ -13,21 +13,56 @@
       </div>
     </div>
 
-    <div class="navbar-section">
+    <div class="navbar-section dropdown" (mouseenter)="toggleDropdown('productos')" (mouseleave)="closeDropdowns()">
       <div class="section-items">
-        <a routerLink="/product-create" routerLinkActive="active" class="item">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'productos'">
           <div class="content">
             <div class="label-container">
               <div class="label">Productos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'productos'">
+        <a routerLink="/product-create" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Nuevo Producto</div>
             </div>
           </div>
         </a>
       </div>
     </div>
 
-    <div class="navbar-section dropdown"
-         (mouseenter)="toggleDropdown('cotizacion')"
-         (mouseleave)="closeDropdowns()">
+    <div class="navbar-section dropdown" (mouseenter)="toggleDropdown('socios')" (mouseleave)="closeDropdowns()">
+      <div class="section-items">
+        <div class="item dropdown-toggle" [class.active]="activeDropdown === 'socios'">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Socios</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-menu" [class.show]="activeDropdown === 'socios'">
+        <a routerLink="/customer-create" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Nuevo Cliente</div>
+            </div>
+          </div>
+        </a>
+        <a routerLink="/supplier-create" routerLinkActive="active" class="dropdown-item">
+          <div class="content">
+            <div class="label-container">
+              <div class="label">Nuevo Proveedor</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="navbar-section dropdown" (mouseenter)="toggleDropdown('cotizacion')" (mouseleave)="closeDropdowns()">
       <div class="section-items">
         <div class="item dropdown-toggle" [class.active]="activeDropdown === 'cotizacion'">
           <div class="content">
@@ -55,9 +90,7 @@
       </div>
     </div>
 
-    <div class="navbar-section dropdown"
-         (mouseenter)="toggleDropdown('ordenes')"
-         (mouseleave)="closeDropdowns()">
+    <div class="navbar-section dropdown" (mouseenter)="toggleDropdown('ordenes')" (mouseleave)="closeDropdowns()">
       <div class="section-items">
         <div class="item dropdown-toggle" [class.active]="activeDropdown === 'ordenes'">
           <div class="content">
@@ -85,9 +118,7 @@
       </div>
     </div>
 
-    <div class="navbar-section dropdown"
-         (mouseenter)="toggleDropdown('compras')"
-         (mouseleave)="closeDropdowns()">
+    <div class="navbar-section dropdown" (mouseenter)="toggleDropdown('compras')" (mouseleave)="closeDropdowns()">
       <div class="section-items">
         <div class="item dropdown-toggle" [class.active]="activeDropdown === 'compras'">
           <div class="content">
@@ -115,9 +146,7 @@
       </div>
     </div>
 
-    <div class="navbar-section dropdown"
-         (mouseenter)="toggleDropdown('ventas')"
-         (mouseleave)="closeDropdowns()">
+    <div class="navbar-section dropdown" (mouseenter)="toggleDropdown('ventas')" (mouseleave)="closeDropdowns()">
       <div class="section-items">
         <div class="item dropdown-toggle" [class.active]="activeDropdown === 'ventas'">
           <div class="content">

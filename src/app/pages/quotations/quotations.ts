@@ -9,11 +9,12 @@ import {
   QuotationMetadata,
   QuotationTotals
 } from '../../models/state.models';
-import { QuotationState } from '../../services/quotation/quotation-state';
+import { CustomerData, QuotationState } from '../../services/quotation/quotation-state';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { NavigationService } from '../../services/navigation-service';
 import { AuthService } from '../../services/auth/auth-service';
 import { QuotationPrintService } from '../../services/quotation-print/quotation-print-service';
+import { CustomerService } from '../../services/customer/customer-service';
 
 @Component({
   selector: 'app-quotation',
@@ -24,6 +25,7 @@ import { QuotationPrintService } from '../../services/quotation-print/quotation-
 export class Quotations implements OnInit, OnDestroy {
   products = signal<EditableProduct[]>([]);
   quotationNotes = signal<string>('');
+  customer = signal<CustomerData | null>(null);
   isGenerating = signal<boolean>(false);
 
   totals = computed<QuotationTotals>(() => {
@@ -45,12 +47,14 @@ export class Quotations implements OnInit, OnDestroy {
     private quotationService: QuotationService,
     private navigationService: NavigationService,
     private authService: AuthService,
-    private quotationPrintService: QuotationPrintService
+    private quotationPrintService: QuotationPrintService,
+    private customerService: CustomerService
   ) {
   }
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadCustomer();
     this.loadUserId();
   }
 
@@ -64,6 +68,11 @@ export class Quotations implements OnInit, OnDestroy {
     const target = event.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
       return;
+    }
+
+    if (event.ctrlKey && event.key === 'c') {
+      event.preventDefault();
+      this.addCustomer();
     }
 
     if (event.ctrlKey && event.key === 'p') {
@@ -87,6 +96,50 @@ export class Quotations implements OnInit, OnDestroy {
     }
   }
 
+  addCustomer(): void {
+    const customerId = prompt('Ingrese el ID del cliente:');
+
+    if (!customerId || customerId.trim() === '') {
+      return;
+    }
+
+    const id = parseInt(customerId);
+
+    if (isNaN(id) || id <= 0) {
+      alert('ID de cliente inválido');
+      return;
+    }
+
+    this.customerService.getById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            const customerData: CustomerData = {
+              id: response.data.id,
+              taxId: response.data.taxId,
+              name: response.data.name,
+              phone: response.data.phone,
+              email: response.data.email,
+              address: response.data.address
+            };
+
+            this.customer.set(customerData);
+            this.quotationState.setCustomer(customerData);
+            this.metadata.customerId = customerData.id;
+
+            alert(`Cliente "${customerData.name}" agregado correctamente`);
+          } else {
+            alert(response.message || 'Cliente no encontrado');
+          }
+        },
+        error: (error) => {
+          console.error('Error loading customer:', error);
+          alert('Error al cargar el cliente');
+        }
+      });
+  }
+
   onProductsChanged(event: ProductUpdateEvent): void {
     this.products.set(event.products);
     this.quotationState.updateProducts(event.products);
@@ -102,6 +155,11 @@ export class Quotations implements OnInit, OnDestroy {
 
     if (currentProducts.length === 0) {
       alert('No hay productos en la cotización');
+      return;
+    }
+
+    if (!this.customer()) {
+      alert('Debe agregar un cliente antes de generar la cotización (Ctrl + C)');
       return;
     }
 
@@ -139,6 +197,7 @@ export class Quotations implements OnInit, OnDestroy {
             setTimeout(() => {
               this.products.set([]);
               this.quotationNotes.set('');
+              this.customer.set(null);
               this.quotationState.clearProducts();
             }, 100);
           } else {
@@ -167,6 +226,11 @@ export class Quotations implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.customer()) {
+      alert('Debe agregar un cliente antes de previsualizar (Ctrl + C)');
+      return;
+    }
+
     const printData = this.preparePrintData('PREVIEW');
     this.quotationPrintService.setPrintData(printData);
 
@@ -176,7 +240,7 @@ export class Quotations implements OnInit, OnDestroy {
   }
 
   clearQuotation(): void {
-    if (this.products().length === 0 && !this.quotationNotes()) {
+    if (this.products().length === 0 && !this.quotationNotes() && !this.customer()) {
       return;
     }
 
@@ -188,6 +252,7 @@ export class Quotations implements OnInit, OnDestroy {
 
     this.products.set([]);
     this.quotationNotes.set('');
+    this.customer.set(null);
     this.quotationState.clearProducts();
   }
 
@@ -202,6 +267,15 @@ export class Quotations implements OnInit, OnDestroy {
 
     this.products.set(loadedProducts);
     this.quotationNotes.set(loadedNotes);
+  }
+
+  private loadCustomer(): void {
+    const loadedCustomer = this.quotationState.getCustomer();
+    
+    if (loadedCustomer) {
+      this.customer.set(loadedCustomer);
+      this.metadata.customerId = loadedCustomer.id;
+    }
   }
 
   private loadUserId(): void {
@@ -256,6 +330,7 @@ export class Quotations implements OnInit, OnDestroy {
   private preparePrintData(quotationNumber: string): any {
     const now = new Date();
     const currentUser = this.authService.getCurrentUser();
+    const currentCustomer = this.customer();
 
     const date = now.toLocaleDateString('es-BO', {
       day: '2-digit',
@@ -296,9 +371,9 @@ export class Quotations implements OnInit, OnDestroy {
       date: date,
       time: time,
       customer: {
-        name: 'Cliente General',
-        address: 'N/A',
-        phone: 'N/A'
+        name: currentCustomer?.name || 'N/A',
+        address: currentCustomer?.address || 'N/A',
+        phone: currentCustomer?.phone || 'N/A'
       },
       seller: currentUser?.username || 'N/A',
       products: printProducts,

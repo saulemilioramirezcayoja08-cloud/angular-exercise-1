@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import { CustomerData } from '../../../../services/quotation/quotation-state';
 
 @Component({
   selector: 'app-top-right',
@@ -7,4 +8,5 @@ import {Component} from '@angular/core';
   styleUrl: './top-right.css'
 })
 export class TopRight {
+  @Input() customer: CustomerData | null = null;
 }

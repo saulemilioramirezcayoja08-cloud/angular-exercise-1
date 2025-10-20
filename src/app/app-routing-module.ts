@@ -14,6 +14,8 @@ import {QuotationPrint} from './pages/quotation-print/quotation-print';
 import {ProductCreate} from './pages/product-create/product-create';
 import {Purchases} from './pages/purchases/purchases';
 import {PurchaseList} from './pages/purchase-list/purchase-list';
+import { CustomerCreate } from './pages/customer-create/customer-create';
+import { SupplierCreate } from './pages/supplier-create/supplier-create';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -24,6 +26,9 @@ const routes: Routes = [
 
   {path: 'product', component: Product, canActivate: [authGuard]},
   {path: 'product-create', component: ProductCreate, canActivate: [authGuard]},
+
+  {path: 'customer-create', component: CustomerCreate, canActivate: [authGuard]},  // ✅ NUEVO
+  {path: 'supplier-create', component: SupplierCreate, canActivate: [authGuard]},  // ✅ NUEVO
 
   {path: 'quotation', component: Quotations, canActivate: [authGuard]},
   {path: 'quotation-list', component: QuotationList, canActivate: [authGuard]},

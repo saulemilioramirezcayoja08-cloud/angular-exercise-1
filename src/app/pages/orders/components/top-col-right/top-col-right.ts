@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CustomerData } from '../../../../services/order/order-state';
 
 @Component({
   selector: 'app-top-col-right',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './top-col-right.css'
 })
 export class TopColRight {
-
+  @Input() customer: CustomerData | null = null;
 }

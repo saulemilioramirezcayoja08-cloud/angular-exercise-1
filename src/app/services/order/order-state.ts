@@ -10,9 +10,19 @@ export interface SelectedProduct {
   price: number;
 }
 
+export interface CustomerData {
+  id: number;
+  taxId: string | null;
+  name: string;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+}
+
 export interface OrderStateData {
   products: EditableProduct[];
   notes: string;
+  customer: CustomerData | null;
 }
 
 @Injectable({
@@ -22,6 +32,7 @@ export class OrderState {
   private readonly STORAGE_KEY = 'order_state';
   private products: EditableProduct[] = [];
   private notes: string = '';
+  private customer: CustomerData | null = null;
   private readonly isBrowser: boolean;
 
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
@@ -40,10 +51,12 @@ export class OrderState {
         const data: OrderStateData = JSON.parse(stored);
         this.products = data.products || [];
         this.notes = data.notes || '';
+        this.customer = data.customer || null;
       }
     } catch (error) {
       this.products = [];
       this.notes = '';
+      this.customer = null;
     }
   }
 
@@ -55,7 +68,8 @@ export class OrderState {
     try {
       const data: OrderStateData = {
         products: this.products,
-        notes: this.notes
+        notes: this.notes,
+        customer: this.customer
       };
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
@@ -103,9 +117,24 @@ export class OrderState {
     this.saveToStorage();
   }
 
+  getCustomer(): CustomerData | null {
+    return this.customer;
+  }
+
+  setCustomer(customer: CustomerData): void {
+    this.customer = customer;
+    this.saveToStorage();
+  }
+
+  clearCustomer(): void {
+    this.customer = null;
+    this.saveToStorage();
+  }
+
   clearProducts(): void {
     this.products = [];
     this.notes = '';
+    this.customer = null;
     if (this.isBrowser) {
       localStorage.removeItem(this.STORAGE_KEY);
     }

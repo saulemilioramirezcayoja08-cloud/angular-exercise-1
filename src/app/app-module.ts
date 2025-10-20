@@ -48,6 +48,8 @@ import { StockAvailability } from './pages/product/components/stock-availability
 import { TopLeftPurchase } from './pages/purchases/components/top-left-purchase/top-left-purchase';
 import { TopRightPurchase } from './pages/purchases/components/top-right-purchase/top-right-purchase';
 import { TopColRight } from './pages/orders/components/top-col-right/top-col-right';
+import { CustomerCreate } from './pages/customer-create/customer-create';
+import { SupplierCreate } from './pages/supplier-create/supplier-create';
 
 @NgModule({
   declarations: [
@@ -94,7 +96,9 @@ import { TopColRight } from './pages/orders/components/top-col-right/top-col-rig
     StockAvailability,
     TopLeftPurchase,
     TopRightPurchase,
-    TopColRight
+    TopColRight,
+    CustomerCreate,
+    SupplierCreate
   ],
   imports: [
     BrowserModule,
