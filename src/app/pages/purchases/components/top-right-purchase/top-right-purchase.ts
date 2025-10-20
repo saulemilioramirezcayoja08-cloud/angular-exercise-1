@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { SupplierData } from '../../../../services/purchase/purchase-state';
 
 @Component({
   selector: 'app-top-right-purchase',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './top-right-purchase.css'
 })
 export class TopRightPurchase {
-
+  @Input() supplier: SupplierData | null = null;
 }

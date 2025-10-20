@@ -8,11 +8,12 @@ import {
 } from '../../models/purchase.models';
 import {finalize, Subject, takeUntil} from 'rxjs';
 import {Router} from '@angular/router';
-import {PurchaseState} from '../../services/purchase/purchase-state';
+import {PurchaseState, SupplierData} from '../../services/purchase/purchase-state';
 import {PurchaseService} from '../../services/purchase/purchase-service';
 import {NavigationService} from '../../services/navigation-service';
 import {AuthService} from '../../services/auth/auth-service';
 import {PurchaseCreateRequest} from '../../services/purchase/models/create/purchase-create-request.model';
+import { SupplierService } from '../../services/supplier/supplier-service';
 
 @Component({
   selector: 'app-purchases',
@@ -23,6 +24,7 @@ import {PurchaseCreateRequest} from '../../services/purchase/models/create/purch
 export class Purchases implements OnInit, OnDestroy {
   products = signal<EditablePurchaseProduct[]>([]);
   purchaseNotes = signal<string>('');
+  supplier = signal<SupplierData | null>(null);
   isGenerating = signal<boolean>(false);
 
   totals = computed<PurchaseTotals>(() => {
@@ -44,12 +46,14 @@ export class Purchases implements OnInit, OnDestroy {
     private purchaseState: PurchaseState,
     private purchaseService: PurchaseService,
     private navigationService: NavigationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private supplierService: SupplierService
   ) {
   }
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadSupplier();
     this.loadUserId();
   }
 
@@ -63,6 +67,11 @@ export class Purchases implements OnInit, OnDestroy {
     const target = event.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
       return;
+    }
+
+    if (event.ctrlKey && event.key === 's') {
+      event.preventDefault();
+      this.addSupplier();
     }
 
     if (event.ctrlKey && event.key === 'p') {
@@ -79,6 +88,50 @@ export class Purchases implements OnInit, OnDestroy {
       event.preventDefault();
       this.onGeneratePurchase();
     }
+  }
+
+  addSupplier(): void {
+    const supplierId = prompt('Ingrese el ID del proveedor:');
+
+    if (!supplierId || supplierId.trim() === '') {
+      return;
+    }
+
+    const id = parseInt(supplierId);
+
+    if (isNaN(id) || id <= 0) {
+      alert('ID de proveedor inválido');
+      return;
+    }
+
+    this.supplierService.getById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            const supplierData: SupplierData = {
+              id: response.data.id,
+              taxId: response.data.taxId,
+              name: response.data.name,
+              phone: response.data.phone,
+              email: response.data.email,
+              address: response.data.address
+            };
+
+            this.supplier.set(supplierData);
+            this.purchaseState.setSupplier(supplierData);
+            this.metadata.supplierId = supplierData.id;
+
+            alert(`Proveedor "${supplierData.name}" agregado correctamente`);
+          } else {
+            alert(response.message || 'Proveedor no encontrado');
+          }
+        },
+        error: (error) => {
+          console.error('Error loading supplier:', error);
+          alert('Error al cargar el proveedor');
+        }
+      });
   }
 
   onProductsChanged(event: ProductUpdateEvent): void {
@@ -98,6 +151,27 @@ export class Purchases implements OnInit, OnDestroy {
       alert('No hay productos en la compra');
       return;
     }
+
+    if (!this.supplier()) {
+      alert('Debe agregar un proveedor antes de generar la compra (Ctrl + S)');
+      return;
+    }
+
+    const paymentIdStr = prompt('Ingrese el ID del método de pago:');
+
+    if (!paymentIdStr || paymentIdStr.trim() === '') {
+      alert('Debe ingresar un ID de método de pago');
+      return;
+    }
+
+    const paymentId = parseInt(paymentIdStr);
+
+    if (isNaN(paymentId) || paymentId <= 0) {
+      alert('ID de método de pago inválido');
+      return;
+    }
+
+    this.metadata.paymentId = paymentId;
 
     const confirmGenerate = confirm('¿Está seguro que desea generar la compra?');
 
@@ -126,6 +200,7 @@ export class Purchases implements OnInit, OnDestroy {
             setTimeout(() => {
               this.products.set([]);
               this.purchaseNotes.set('');
+              this.supplier.set(null);
               this.purchaseState.clearProducts();
             }, 100);
           } else {
@@ -147,7 +222,7 @@ export class Purchases implements OnInit, OnDestroy {
   }
 
   clearPurchase(): void {
-    if (this.products().length === 0 && !this.purchaseNotes()) {
+    if (this.products().length === 0 && !this.purchaseNotes() && !this.supplier()) {
       return;
     }
 
@@ -159,6 +234,7 @@ export class Purchases implements OnInit, OnDestroy {
 
     this.products.set([]);
     this.purchaseNotes.set('');
+    this.supplier.set(null);
     this.purchaseState.clearProducts();
   }
 
@@ -173,6 +249,15 @@ export class Purchases implements OnInit, OnDestroy {
 
     this.products.set(loadedProducts);
     this.purchaseNotes.set(loadedNotes);
+  }
+
+  private loadSupplier(): void {
+    const loadedSupplier = this.purchaseState.getSupplier();
+    
+    if (loadedSupplier) {
+      this.supplier.set(loadedSupplier);
+      this.metadata.supplierId = loadedSupplier.id;
+    }
   }
 
   private loadUserId(): void {
