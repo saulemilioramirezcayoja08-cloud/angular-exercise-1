@@ -4,11 +4,11 @@
         <div class="document-header">
             <div class="header-row">
                 <div class="header-column contact-info">
-                    <p>Av. Escuadrón Velasco esq. Emilio finot entre</p>
-                    <p>2do y 3er anillo Zona Cancha Royal</p>
-                    <p>Tel. (591) 370-7720</p>
-                    <p>Cel. (591) 773-41419</p>
-                    <p>Email: multicruz2023@gmail.com</p>
+                    <p>Barrio Estacion Argentina</p>
+                    <p>Calle Melchor Mariscal entre Av. 3 pasos al frente y Radial 10. 4to Anillo</p>
+                    <p>Cel. (591) 76052022</p>
+                    <p>Cel. (591) 77388023</p>
+                    <p>E-mail: terra.partes.bolivia@gmail.com</p>
                 </div>
 
                 <div class="header-column quotation-info">
@@ -52,17 +52,19 @@
 
                 <thead>
                     <tr>
+                        <th>Item</th>
                         <th>Artículo</th>
                         <th>Descripción</th>
                         <th>Proc.</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
-                        <th>Total</th>
+                        <th>Subtotal</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr *ngFor="let product of quotationData.products">
+                        <td class="center">{{ product.itemNumber }}</td>
                         <td class="center">{{ product.sku }}</td>
                         <td class="left">{{ product.name }}</td>
                         <td class="center">{{ product.origin }}</td>
@@ -72,27 +74,20 @@
                     </tr>
                 </tbody>
 
+                <tfoot>
+                    <tr class="totals-row">
+                        <td colspan="3"></td>
+                        <td class="center totals-label">TOTALES:</td>
+                        <td class="right total-quantity">{{ formatQuantity(quotationData.totals.totalQuantity) }}</td>
+                        <td></td>
+                        <td class="right total-amount">{{ formatCurrency(quotationData.totals.grandTotal) }}</td>
+                    </tr>
+                </tfoot>
+
             </table>
         </div>
 
         <div class="document-footer">
-
-            <div class="totals-section">
-                <table class="totals-table">
-                    <tr>
-                        <td class="totals-label">Total Cantidad:</td>
-                        <td class="totals-value">{{ formatQuantity(quotationData.totals.totalQuantity) }}</td>
-                    </tr>
-                    <tr>
-                        <td class="totals-label">Subtotal:</td>
-                        <td class="totals-value">{{ formatCurrency(quotationData.totals.subtotal) }}</td>
-                    </tr>
-                    <tr class="totals-grand">
-                        <td class="totals-label">TOTAL:</td>
-                        <td class="totals-value">{{ formatCurrency(quotationData.totals.grandTotal) }}</td>
-                    </tr>
-                </table>
-            </div>
 
             <div class="amount-section">
                 <span class="label">Son:</span>

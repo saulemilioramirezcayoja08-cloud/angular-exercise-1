@@ -18,7 +18,7 @@
     width: 210mm;
     margin: 0 auto;
     background-color: white;
-    padding: 10mm;
+    padding: 8mm;
     font-family: 'Roboto', sans-serif;
     color: #6B7280;
     font-size: 12px;
@@ -29,7 +29,7 @@
 
 .document-header {
     width: 100%;
-    margin-bottom: 8mm;
+    margin-bottom: 5mm;
     page-break-after: avoid;
     page-break-inside: avoid;
 }
@@ -37,9 +37,9 @@
 .header-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 4mm;
-    margin-bottom: 6mm;
-    min-height: 30mm;
+    gap: 3mm;
+    margin-bottom: 4mm;
+    min-height: 25mm;
 }
 
 .header-column {
@@ -50,11 +50,11 @@
 
 .header-column.contact-info {
     font-size: 11px;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .header-column.contact-info p {
-    margin: 1px 0;
+    margin: 0.5px 0;
 }
 
 .header-column.quotation-info {
@@ -68,12 +68,12 @@
     letter-spacing: 2px;
     font-family: 'Inter', sans-serif;
     color: #1F2937;
-    margin: 0 0 6px 0;
+    margin: 0 0 4px 0;
 }
 
 .header-column.quotation-info p {
     font-size: 10px;
-    margin: 2px 0;
+    margin: 1px 0;
     font-weight: 600;
     font-family: 'Roboto Mono', monospace;
     color: #4B5563;
@@ -85,13 +85,13 @@
 }
 
 .logo {
-    width: 80px;
-    height: 80px;
+    width: 75px;
+    height: 75px;
     background-image: url('/assets/logo.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    margin: 0 auto 4px auto;
+    margin: 0 auto 3px auto;
 }
 
 .tagline {
@@ -105,8 +105,8 @@
 .customer-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4mm;
-    padding: 4mm 0;
+    gap: 3mm;
+    padding: 3mm 0;
     border-top: 1px dashed #E5E7EB;
     border-bottom: 1px dashed #E5E7EB;
     page-break-inside: avoid;
@@ -115,7 +115,7 @@
 .customer-column {
     display: flex;
     flex-direction: column;
-    gap: 3mm;
+    gap: 2mm;
 }
 
 .customer-column.right {
@@ -144,7 +144,7 @@
 
 .products-section {
     width: 100%;
-    margin: 6mm 0;
+    margin: 4mm 0;
     height: auto;
     overflow: visible;
 }
@@ -165,7 +165,7 @@
 .products-table thead th {
     font-weight: 700;
     text-align: center;
-    padding: 8px 6px;
+    padding: 6px 4px;
     border-bottom: 2px dashed #D1D5DB;
     font-size: 10px;
     font-family: 'Inter', sans-serif;
@@ -179,7 +179,7 @@
 }
 
 .products-table tbody td {
-    padding: 8px 6px;
+    padding: 6px 4px;
     border-bottom: 1px dashed #F3F4F6;
     vertical-align: middle;
 }
@@ -199,64 +199,47 @@
     text-align: right;
 }
 
-.document-footer {
-    width: 100%;
-    margin-top: 6mm;
-    page-break-inside: avoid;
-}
-
-.totals-section {
-    display: flex;
-    justify-content: flex-end;
-    padding: 4mm 0;
+/* Estilos para el tfoot con totales */
+.products-table tfoot {
     border-top: 2px solid #374151;
-    border-bottom: 1px dashed #E5E7EB;
-    margin-bottom: 3mm;
+    display: table-footer-group;
 }
 
-.totals-table {
-    width: auto;
-    border-collapse: collapse;
+.products-table tfoot tr.totals-row {
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.products-table tfoot td {
+    padding: 8px 4px;
+    border-bottom: 2px solid #374151;
+    vertical-align: middle;
+}
+
+.products-table tfoot .totals-label {
+    font-weight: 700;
+    color: #374151;
+    font-family: 'Inter', sans-serif;
+}
+
+.products-table tfoot .total-quantity,
+.products-table tfoot .total-amount {
+    font-size: 13px;
+    color: #1F2937;
+    font-weight: 700;
     font-family: 'Roboto Mono', monospace;
 }
 
-.totals-table tr {
-    height: 24px;
-}
-
-.totals-table td {
-    padding: 4px 12px;
-    font-size: 11px;
-}
-
-.totals-table td.totals-label {
-    text-align: right;
-    font-weight: 500;
-    color: #374151;
-    padding-right: 16px;
-}
-
-.totals-table td.totals-value {
-    text-align: right;
-    font-weight: 600;
-    color: #1F2937;
-    min-width: 120px;
-}
-
-.totals-table tr.totals-grand {
-    border-top: 2px solid #374151;
-}
-
-.totals-table tr.totals-grand td {
-    font-size: 13px;
-    font-weight: 700;
-    padding-top: 6px;
+.document-footer {
+    width: 100%;
+    margin-top: 4mm;
+    page-break-inside: avoid;
 }
 
 .amount-section {
     display: flex;
     gap: 10px;
-    padding: 3mm 0;
+    padding: 2mm 0;
     border-bottom: 1px dashed #E5E7EB;
 }
 
@@ -276,7 +259,7 @@
 .observations-section {
     display: flex;
     gap: 10px;
-    padding: 3mm 0;
+    padding: 2mm 0;
     border-bottom: 1px dashed #E5E7EB;
 }
 
@@ -295,8 +278,8 @@
 .signatures-section {
     display: flex;
     justify-content: space-around;
-    padding: 12mm 8mm 6mm 8mm;
-    gap: 15mm;
+    padding: 8mm 6mm 4mm 6mm;
+    gap: 12mm;
 }
 
 .signature-block {
@@ -304,7 +287,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3mm;
+    gap: 2mm;
 }
 
 .signature-line {
@@ -322,7 +305,7 @@
 .metadata-section {
     display: flex;
     justify-content: flex-end;
-    padding: 3mm 0 0 0;
+    padding: 2mm 0 0 0;
     gap: 6mm;
 }
 
@@ -374,7 +357,7 @@
         width: 100% !important;
         max-width: 210mm;
         margin: 0 !important;
-        padding: 5mm 8mm !important;
+        padding: 4mm 6mm !important;
         box-sizing: border-box;
         height: auto !important;
         min-height: auto !important;
@@ -404,6 +387,10 @@
 
     .products-table thead {
         display: table-header-group;
+    }
+
+    .products-table tfoot {
+        display: table-footer-group;
     }
 
     .products-table tbody {
@@ -440,10 +427,6 @@
     }
 
     .metadata-section {
-        page-break-inside: avoid;
-    }
-
-    .totals-section {
         page-break-inside: avoid;
     }
 }
