@@ -55,8 +55,8 @@
   padding: 8px 12px;
   text-align: left;
   font-weight: 500;
-  border-bottom: 2px dashed #f0f0f0;
-  border-right: 2px dashed #f0f0f0;
+  border-bottom: 2px solid #f0f0f0;
+  border-right: 2px solid #f0f0f0;
   white-space: nowrap;
   background-color: white;
   transition: all 0.2s ease-in;
@@ -129,8 +129,8 @@
 .row td.cell {
   height: 40px;
   padding: 2px 12px;
-  border-bottom: 2px dashed #f0f0f0;
-  border-right: 2px dashed #f0f0f0;
+  border-bottom: 2px solid #f0f0f0;
+  border-right: 2px solid #f0f0f0;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -308,7 +308,7 @@
 .mini-spinner {
   width: 14px;
   height: 14px;
-  border: 2px dashed rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.1);
   border-top-color: #6b6b6b;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
@@ -370,9 +370,9 @@
 }
 
 .spinner {
-  width: 56px;
-  height: 56px;
-  border: 4px dashed #e8e8e8;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e8e8e8;
   border-top-color: #6b6b6b;
   border-right-color: #8b8b8b;
   border-radius: 50%;
@@ -380,19 +380,6 @@
   margin: 0 auto 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   position: relative;
-}
-
-.spinner::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 32px;
-  height: 32px;
-  border: 3px dashed #e8e8e8;
-  border-radius: 50%;
-  animation: pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse {

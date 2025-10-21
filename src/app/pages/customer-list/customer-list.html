@@ -1,0 +1,144 @@
+<div class="customer-list-container">
+  <div class="header">
+    <div class="header-content">
+      <h1 class="title">Clientes</h1>
+      <p class="subtitle">Gestiona y busca clientes</p>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Buscar por nombre..."
+        [formControl]="searchControl"
+        [disabled]="isLoading()">
+    </div>
+    
+    <div class="page-size-selector">
+      <label class="page-size-label">Mostrar:</label>
+      <select 
+        class="page-size-select" 
+        [value]="pageSize()"
+        (change)="onPageSizeChange(+$any($event.target).value)"
+        [disabled]="isLoading()">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="spinner-overlay" *ngIf="isLoading()">
+      <div class="spinner"></div>
+    </div>
+
+    <table class="customers-table">
+      <thead>
+        <tr>
+          <th class="th sortable" (click)="onSort('id')">
+            <div class="th-content">
+              <span>ID</span>
+              <svg class="sort-icon" *ngIf="sortBy() === 'id'" viewBox="0 0 24 24" fill="none">
+                <path [attr.d]="sortDir() === 'asc' ? 'M12 4L6 10H18L12 4Z' : 'M12 20L18 14H6L12 20Z'" fill="currentColor"/>
+              </svg>
+            </div>
+          </th>
+          <th class="th sortable" (click)="onSort('taxId')">
+            <div class="th-content">
+              <span>NIT/CI</span>
+              <svg class="sort-icon" *ngIf="sortBy() === 'taxId'" viewBox="0 0 24 24" fill="none">
+                <path [attr.d]="sortDir() === 'asc' ? 'M12 4L6 10H18L12 4Z' : 'M12 20L18 14H6L12 20Z'" fill="currentColor"/>
+              </svg>
+            </div>
+          </th>
+          <th class="th sortable" (click)="onSort('name')">
+            <div class="th-content">
+              <span>Nombre</span>
+              <svg class="sort-icon" *ngIf="sortBy() === 'name'" viewBox="0 0 24 24" fill="none">
+                <path [attr.d]="sortDir() === 'asc' ? 'M12 4L6 10H18L12 4Z' : 'M12 20L18 14H6L12 20Z'" fill="currentColor"/>
+              </svg>
+            </div>
+          </th>
+          <th class="th">Email</th>
+          <th class="th">Teléfono</th>
+          <th class="th">Estado</th>
+          <th class="th sortable" (click)="onSort('createdAt')">
+            <div class="th-content">
+              <span>Creado</span>
+              <svg class="sort-icon" *ngIf="sortBy() === 'createdAt'" viewBox="0 0 24 24" fill="none">
+                <path [attr.d]="sortDir() === 'asc' ? 'M12 4L6 10H18L12 4Z' : 'M12 20L18 14H6L12 20Z'" fill="currentColor"/>
+              </svg>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="tr" *ngFor="let customer of customers()">
+          <td class="td">{{ customer.id }}</td>
+          <td class="td">
+            <span class="code-text">{{ customer.taxId || '-' }}</span>
+          </td>
+          <td class="td">
+            <span class="customer-name">{{ customer.name }}</span>
+          </td>
+          <td class="td">{{ customer.email || '-' }}</td>
+          <td class="td">{{ customer.phone || '-' }}</td>
+          <td class="td">
+            <span class="status-badge" [class.active]="customer.active">
+              {{ customer.active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td class="td">{{ formatDate(customer.createdAt) }}</td>
+        </tr>
+        <tr *ngIf="customers().length === 0 && !isLoading()">
+          <td colspan="7" class="empty-message">
+            <div class="empty-state">
+              <p class="empty-text">No se encontraron clientes</p>
+              <p class="empty-subtext">Intenta ajustar los filtros de búsqueda</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" *ngIf="pagination() && pagination()!.totalElements > 0">
+    <div class="pagination-info">
+      Mostrando {{ (pagination()!.currentPage * pagination()!.pageSize) + 1 }} - 
+      {{ Math.min((pagination()!.currentPage + 1) * pagination()!.pageSize, pagination()!.totalElements) }} 
+      de {{ pagination()!.totalElements }} resultados
+    </div>
+    
+    <div class="pagination-controls">
+      <button 
+        class="pagination-btn" 
+        (click)="onPageChange(pagination()!.currentPage - 1)"
+        [disabled]="!pagination()!.hasPrevious || isLoading()">
+        Anterior
+      </button>
+      
+      <button 
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn page-number" 
+        [class.active]="page === pagination()!.currentPage"
+        (click)="onPageChange(page)"
+        [disabled]="isLoading()">
+        {{ page + 1 }}
+      </button>
+      
+      <button 
+        class="pagination-btn" 
+        (click)="onPageChange(pagination()!.currentPage + 1)"
+        [disabled]="!pagination()!.hasNext || isLoading()">
+        Siguiente
+      </button>
+    </div>
+  </div>
+</div>

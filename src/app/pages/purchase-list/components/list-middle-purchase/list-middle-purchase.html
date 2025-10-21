@@ -36,13 +36,9 @@
     <tr>
       <th class="header">Número</th>
       <th class="header">Estado</th>
-      <th class="header">Proveedor</th>
-      <th class="header">Almacén</th>
       <th class="header">Usuario</th>
-      <th class="header">Moneda</th>
       <th class="header">Total</th>
       <th class="header">Items</th>
-      <th class="header">Pago</th>
       <th class="header">Fecha Creación</th>
       <th class="header actions-header"></th>
     </tr>
@@ -56,25 +52,13 @@
         <span [class]="getBadgeClass(purchase.status)">{{ purchase.status }}</span>
       </td>
       <td class="cell" (click)="onRowClick(purchase.id)">
-        <span class="label">{{ purchase.supplierName }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(purchase.id)">
-        <span class="label">{{ purchase.warehouseName }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(purchase.id)">
         <span class="label">{{ purchase.username || '-' }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(purchase.id)">
-        <span class="value currency">{{ purchase.currency || '-' }}</span>
       </td>
       <td class="cell" (click)="onRowClick(purchase.id)">
         <span class="value amount">{{ purchase.totalAmount }}</span>
       </td>
       <td class="cell" (click)="onRowClick(purchase.id)">
         <span class="value">{{ purchase.itemCount }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(purchase.id)">
-        <span class="label">{{ purchase.paymentName || '-' }}</span>
       </td>
       <td class="cell" (click)="onRowClick(purchase.id)">
         <span class="value datetime">{{ formatDateTime(purchase.createdAt) }}</span>

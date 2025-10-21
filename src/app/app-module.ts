@@ -50,6 +50,8 @@ import { TopRightPurchase } from './pages/purchases/components/top-right-purchas
 import { TopColRight } from './pages/orders/components/top-col-right/top-col-right';
 import { CustomerCreate } from './pages/customer-create/customer-create';
 import { SupplierCreate } from './pages/supplier-create/supplier-create';
+import { CustomerList } from './pages/customer-list/customer-list';
+import { SupplierList } from './pages/supplier-list/supplier-list';
 
 @NgModule({
   declarations: [
@@ -98,7 +100,9 @@ import { SupplierCreate } from './pages/supplier-create/supplier-create';
     TopRightPurchase,
     TopColRight,
     CustomerCreate,
-    SupplierCreate
+    SupplierCreate,
+    CustomerList,
+    SupplierList
   ],
   imports: [
     BrowserModule,
