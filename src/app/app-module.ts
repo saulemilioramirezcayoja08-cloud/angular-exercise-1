@@ -52,6 +52,7 @@ import { CustomerCreate } from './pages/customer-create/customer-create';
 import { SupplierCreate } from './pages/supplier-create/supplier-create';
 import { CustomerList } from './pages/customer-list/customer-list';
 import { SupplierList } from './pages/supplier-list/supplier-list';
+import { ProductList } from './pages/product-list/product-list';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { SupplierList } from './pages/supplier-list/supplier-list';
     CustomerCreate,
     SupplierCreate,
     CustomerList,
-    SupplierList
+    SupplierList,
+    ProductList
   ],
   imports: [
     BrowserModule,
