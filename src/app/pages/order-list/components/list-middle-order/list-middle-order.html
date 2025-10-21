@@ -33,104 +33,121 @@
 
   <table class="table" *ngIf="!isLoading && orders.length > 0">
     <thead>
-    <tr>
-      <th class="header">Número</th>
-      <th class="header">Estado</th>
-      <th class="header">Usuario</th>
-      <th class="header">Total</th>
-      <th class="header">Anticipos</th>
-      <th class="header">Items</th>
-      <th class="header">Fecha Creación</th>
-      <th class="header actions-header"></th>
-    </tr>
+      <tr>
+        <th class="header">Número</th>
+        <th class="header">Estado</th>
+        <th class="header">Usuario</th>
+        <th class="header">Total</th>
+        <th class="header">Anticipos</th>
+        <th class="header">Items</th>
+        <th class="header">Fecha Creación</th>
+        <th class="header actions-header"></th>
+      </tr>
     </thead>
     <tbody>
-    <tr class="row" *ngFor="let order of orders; trackBy: trackByOrderId">
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="code">{{ order.number }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span [class]="getBadgeClass(order.status)">{{ order.status }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="label">{{ order.username || '-' }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="value amount">{{ order.totalAmount }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="value amount">{{ order.totalAdvances }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="value">{{ order.itemCount }}</span>
-      </td>
-      <td class="cell" (click)="onRowClick(order.id)">
-        <span class="value datetime">{{ formatDateTime(order.createdAt) }}</span>
-      </td>
+      <tr class="row" *ngFor="let order of orders; trackBy: trackByOrderId">
+        <td class="cell" (click)="onRowClick(order.id)">
+          <span class="code">{{ order.number }}</span>
+        </td>
+        <td class="cell" (click)="onRowClick(order.id)">
+          <span [class]="getBadgeClass(order.status)">{{ order.status }}</span>
+        </td>
+        <td class="cell" (click)="onRowClick(order.id)">
+          <span class="label">{{ order.username || '-' }}</span>
+        </td>
+        <td class="cell" (click)="onRowClick(order.id)">
+          <span class="value amount">{{ order.totalAmount }}</span>
+        </td>
+        <td class="cell" (click)="onRowClick(order.id)">
+          <span class="value amount">{{ order.totalAdvances }}</span>
+        </td>
+        <td class="cell" (click)="onRowClick(order.id)">
+          <span class="value">{{ order.itemCount }}</span>
+        </td>
+        <td class="cell" (click)="onRowClick(order.id)">
+          <span class="value datetime">{{ formatDateTime(order.createdAt) }}</span>
+        </td>
 
-      <td class="cell actions-cell">
-        <div class="actions">
-          <ng-container *ngIf="order.status === 'DRAFT'">
-            <button type="button" class="action-btn advance-btn"
-                    (click)="onAdvanceClick(order); $event.stopPropagation()" [disabled]="order.isProcessing"
-                    title="Agregar anticipo - Registrar adelanto de pago">
+        <td class="cell actions-cell">
+          <div class="actions">
+            <button type="button" class="action-btn print-btn" (click)="onPrintClick(order); $event.stopPropagation()"
+              [disabled]="order.isProcessing" title="Imprimir orden">
               <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
+                xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
-                  <path d="M12 6V18M6 12H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round"></path>
                   <path
-                    d="M3.02907 13.0776C2.7032 12.3958 2.7032 11.6032 3.02907 10.9214C3.16997 10.6266 3.41023 10.3447 3.89076 9.78084C4.08201 9.55642 4.17764 9.44421 4.25796 9.32437C4.44209 9.04965 4.56988 8.74114 4.63393 8.41669C4.66188 8.27515 4.6736 8.12819 4.69706 7.83426C4.75599 7.09576 4.78546 6.72651 4.89427 6.41844C5.14594 5.70591 5.7064 5.14546 6.41893 4.89378C6.72699 4.78497 7.09625 4.7555 7.83475 4.69657C8.12868 4.67312 8.27564 4.66139 8.41718 4.63344C8.74163 4.56939 9.05014 4.4416 9.32485 4.25747C9.4447 4.17715 9.55691 4.08152 9.78133 3.89027C10.3452 3.40974 10.6271 3.16948 10.9219 3.02859C11.6037 2.70271 12.3963 2.70271 13.0781 3.02859C13.3729 3.16948 13.6548 3.40974 14.2187 3.89027C14.4431 4.08152 14.5553 4.17715 14.6752 4.25747C14.9499 4.4416 15.2584 4.56939 15.5828 4.63344C15.7244 4.66139 15.8713 4.67312 16.1653 4.69657C16.9038 4.7555 17.273 4.78497 17.5811 4.89378M4.89427 17.5806C5.14594 18.2931 5.7064 18.8536 6.41893 19.1053C6.72699 19.2141 7.09625 19.2435 7.83475 19.3025C8.12868 19.3259 8.27564 19.3377 8.41718 19.3656C8.74163 19.4297 9.05014 19.5574 9.32485 19.7416C9.44469 19.8219 9.55691 19.9175 9.78133 20.1088C10.3452 20.5893 10.6271 20.8296 10.9219 20.9705C11.6037 21.2963 12.3963 21.2963 13.0781 20.9705C13.3729 20.8296 13.6548 20.5893 14.2187 20.1088C14.4431 19.9175 14.5553 19.8219 14.6752 19.7416C14.9499 19.5574 15.2584 19.4297 15.5828 19.3656C15.7244 19.3377 15.8713 19.3259 16.1653 19.3025C16.9038 19.2435 17.273 19.2141 17.5811 19.1053C18.2936 18.8536 18.8541 18.2931 19.1058 17.5806C19.2146 17.2725 19.244 16.9033 19.303 16.1648C19.3264 15.8709 19.3381 15.7239 19.3661 15.5824C19.4301 15.2579 19.5579 14.9494 19.7421 14.6747C19.8224 14.5548 19.918 14.4426 20.1093 14.2182C20.5898 13.6543 20.8301 13.3724 20.971 13.0776C21.2968 12.3958 21.2968 11.6032 20.971 10.9214"
-                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                    d="M7 14H6C4.89543 14 4 13.1046 4 12V9C4 7.89543 4.89543 7 6 7H18C19.1046 7 20 7.89543 20 9V12C20 13.1046 19.1046 14 18 14H17M7 14V17C7 18.1046 7.89543 19 9 19H15C16.1046 19 17 18.1046 17 17V14M7 14H17"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M7 7V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </g>
               </svg>
-
               <div *ngIf="order.isProcessing" class="mini-spinner"></div>
             </button>
 
-            <button type="button" class="action-btn confirm-btn"
-                    (click)="onConfirmClick(order); $event.stopPropagation()" [disabled]="order.isProcessing"
-                    title="Confirmar orden - Creará una venta asociada">
-              <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path
-                    d="M3.02907 13.0776C2.7032 12.3958 2.7032 11.6032 3.02907 10.9214C3.16997 10.6266 3.41023 10.3447 3.89076 9.78084C4.08201 9.55642 4.17764 9.44421 4.25796 9.32437C4.44209 9.04965 4.56988 8.74114 4.63393 8.41669C4.66188 8.27515 4.6736 8.12819 4.69706 7.83426C4.75599 7.09576 4.78546 6.72651 4.89427 6.41844C5.14594 5.70591 5.7064 5.14546 6.41893 4.89378C6.72699 4.78497 7.09625 4.7555 7.83475 4.69657C8.12868 4.67312 8.27564 4.66139 8.41718 4.63344C8.74163 4.56939 9.05014 4.4416 9.32485 4.25747C9.4447 4.17715 9.55691 4.08152 9.78133 3.89027C10.3452 3.40974 10.6271 3.16948 10.9219 3.02859C11.6037 2.70271 12.3963 2.70271 13.0781 3.02859C13.3729 3.16948 13.6548 3.40974 14.2187 3.89027C14.4431 4.08152 14.5553 4.17715 14.6752 4.25747C14.9499 4.4416 15.2584 4.56939 15.5828 4.63344C15.7244 4.66139 15.8713 4.67312 16.1653 4.69657C16.9038 4.7555 17.273 4.78497 17.5811 4.89378M4.89427 17.5806C5.14594 18.2931 5.7064 18.8536 6.41893 19.1053C6.72699 19.2141 7.09625 19.2435 7.83475 19.3025C8.12868 19.3259 8.27564 19.3377 8.41718 19.3656C8.74163 19.4297 9.05014 19.5574 9.32485 19.7416C9.44469 19.8219 9.55691 19.9175 9.78133 20.1088C10.3452 20.5893 10.6271 20.8296 10.9219 20.9705C11.6037 21.2963 12.3963 21.2963 13.0781 20.9705C13.3729 20.8296 13.6548 20.5893 14.2187 20.1088C14.4431 19.9175 14.5553 19.8219 14.6752 19.7416C14.9499 19.5574 15.2584 19.4297 15.5828 19.3656C15.7244 19.3377 15.8713 19.3259 16.1653 19.3025C16.9038 19.2435 17.273 19.2141 17.5811 19.1053C18.2936 18.8536 18.8541 18.2931 19.1058 17.5806C19.2146 17.2725 19.244 16.9033 19.303 16.1648C19.3264 15.8709 19.3381 15.7239 19.3661 15.5824C19.4301 15.2579 19.5579 14.9494 19.7421 14.6747C19.8224 14.5548 19.918 14.4426 20.1093 14.2182C20.5898 13.6543 20.8301 13.3724 20.971 13.0776C21.2968 12.3958 21.2968 11.6032 20.971 10.9214"
-                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                </g>
-              </svg>
+            <ng-container *ngIf="order.status === 'DRAFT'">
+              <button type="button" class="action-btn advance-btn"
+                (click)="onAdvanceClick(order); $event.stopPropagation()" [disabled]="order.isProcessing"
+                title="Agregar anticipo - Registrar adelanto de pago">
+                <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M12 6V18M6 12H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                    <path
+                      d="M3.02907 13.0776C2.7032 12.3958 2.7032 11.6032 3.02907 10.9214C3.16997 10.6266 3.41023 10.3447 3.89076 9.78084C4.08201 9.55642 4.17764 9.44421 4.25796 9.32437C4.44209 9.04965 4.56988 8.74114 4.63393 8.41669C4.66188 8.27515 4.6736 8.12819 4.69706 7.83426C4.75599 7.09576 4.78546 6.72651 4.89427 6.41844C5.14594 5.70591 5.7064 5.14546 6.41893 4.89378C6.72699 4.78497 7.09625 4.7555 7.83475 4.69657C8.12868 4.67312 8.27564 4.66139 8.41718 4.63344C8.74163 4.56939 9.05014 4.4416 9.32485 4.25747C9.4447 4.17715 9.55691 4.08152 9.78133 3.89027C10.3452 3.40974 10.6271 3.16948 10.9219 3.02859C11.6037 2.70271 12.3963 2.70271 13.0781 3.02859C13.3729 3.16948 13.6548 3.40974 14.2187 3.89027C14.4431 4.08152 14.5553 4.17715 14.6752 4.25747C14.9499 4.4416 15.2584 4.56939 15.5828 4.63344C15.7244 4.66139 15.8713 4.67312 16.1653 4.69657C16.9038 4.7555 17.273 4.78497 17.5811 4.89378M4.89427 17.5806C5.14594 18.2931 5.7064 18.8536 6.41893 19.1053C6.72699 19.2141 7.09625 19.2435 7.83475 19.3025C8.12868 19.3259 8.27564 19.3377 8.41718 19.3656C8.74163 19.4297 9.05014 19.5574 9.32485 19.7416C9.44469 19.8219 9.55691 19.9175 9.78133 20.1088C10.3452 20.5893 10.6271 20.8296 10.9219 20.9705C11.6037 21.2963 12.3963 21.2963 13.0781 20.9705C13.3729 20.8296 13.6548 20.5893 14.2187 20.1088C14.4431 19.9175 14.5553 19.8219 14.6752 19.7416C14.9499 19.5574 15.2584 19.4297 15.5828 19.3656C15.7244 19.3377 15.8713 19.3259 16.1653 19.3025C16.9038 19.2435 17.273 19.2141 17.5811 19.1053C18.2936 18.8536 18.8541 18.2931 19.1058 17.5806C19.2146 17.2725 19.244 16.9033 19.303 16.1648C19.3264 15.8709 19.3381 15.7239 19.3661 15.5824C19.4301 15.2579 19.5579 14.9494 19.7421 14.6747C19.8224 14.5548 19.918 14.4426 20.1093 14.2182C20.5898 13.6543 20.8301 13.3724 20.971 13.0776C21.2968 12.3958 21.2968 11.6032 20.971 10.9214"
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                  </g>
+                </svg>
 
-              <div *ngIf="order.isProcessing" class="mini-spinner"></div>
-            </button>
+                <div *ngIf="order.isProcessing" class="mini-spinner"></div>
+              </button>
 
-            <button type="button" class="action-btn cancel-btn"
-                    (click)="onCancelClick(order); $event.stopPropagation()" [disabled]="order.isProcessing"
-                    title="Cancelar orden - Cancelará las reservaciones">
-              <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round"></path>
-                  <path
-                    d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
-                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                </g>
-              </svg>
+              <button type="button" class="action-btn confirm-btn"
+                (click)="onConfirmClick(order); $event.stopPropagation()" [disabled]="order.isProcessing"
+                title="Confirmar orden - Creará una venta asociada">
+                <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path
+                      d="M3.02907 13.0776C2.7032 12.3958 2.7032 11.6032 3.02907 10.9214C3.16997 10.6266 3.41023 10.3447 3.89076 9.78084C4.08201 9.55642 4.17764 9.44421 4.25796 9.32437C4.44209 9.04965 4.56988 8.74114 4.63393 8.41669C4.66188 8.27515 4.6736 8.12819 4.69706 7.83426C4.75599 7.09576 4.78546 6.72651 4.89427 6.41844C5.14594 5.70591 5.7064 5.14546 6.41893 4.89378C6.72699 4.78497 7.09625 4.7555 7.83475 4.69657C8.12868 4.67312 8.27564 4.66139 8.41718 4.63344C8.74163 4.56939 9.05014 4.4416 9.32485 4.25747C9.4447 4.17715 9.55691 4.08152 9.78133 3.89027C10.3452 3.40974 10.6271 3.16948 10.9219 3.02859C11.6037 2.70271 12.3963 2.70271 13.0781 3.02859C13.3729 3.16948 13.6548 3.40974 14.2187 3.89027C14.4431 4.08152 14.5553 4.17715 14.6752 4.25747C14.9499 4.4416 15.2584 4.56939 15.5828 4.63344C15.7244 4.66139 15.8713 4.67312 16.1653 4.69657C16.9038 4.7555 17.273 4.78497 17.5811 4.89378M4.89427 17.5806C5.14594 18.2931 5.7064 18.8536 6.41893 19.1053C6.72699 19.2141 7.09625 19.2435 7.83475 19.3025C8.12868 19.3259 8.27564 19.3377 8.41718 19.3656C8.74163 19.4297 9.05014 19.5574 9.32485 19.7416C9.44469 19.8219 9.55691 19.9175 9.78133 20.1088C10.3452 20.5893 10.6271 20.8296 10.9219 20.9705C11.6037 21.2963 12.3963 21.2963 13.0781 20.9705C13.3729 20.8296 13.6548 20.5893 14.2187 20.1088C14.4431 19.9175 14.5553 19.8219 14.6752 19.7416C14.9499 19.5574 15.2584 19.4297 15.5828 19.3656C15.7244 19.3377 15.8713 19.3259 16.1653 19.3025C16.9038 19.2435 17.273 19.2141 17.5811 19.1053C18.2936 18.8536 18.8541 18.2931 19.1058 17.5806C19.2146 17.2725 19.244 16.9033 19.303 16.1648C19.3264 15.8709 19.3381 15.7239 19.3661 15.5824C19.4301 15.2579 19.5579 14.9494 19.7421 14.6747C19.8224 14.5548 19.918 14.4426 20.1093 14.2182C20.5898 13.6543 20.8301 13.3724 20.971 13.0776C21.2968 12.3958 21.2968 11.6032 20.971 10.9214"
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                  </g>
+                </svg>
 
-              <div *ngIf="order.isProcessing" class="mini-spinner"></div>
-            </button>
-          </ng-container>
+                <div *ngIf="order.isProcessing" class="mini-spinner"></div>
+              </button>
 
-          <span *ngIf="order.status === 'CONFIRMED'" class="no-actions confirmed-label"
-                title="Esta orden ya está confirmada y no puede modificarse">
+              <button type="button" class="action-btn cancel-btn"
+                (click)="onCancelClick(order); $event.stopPropagation()" [disabled]="order.isProcessing"
+                title="Cancelar orden - Cancelará las reservaciones">
+                <svg *ngIf="!order.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="currentColor" stroke-width="1.5"
+                      stroke-linecap="round"></path>
+                    <path
+                      d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                  </g>
+                </svg>
+
+                <div *ngIf="order.isProcessing" class="mini-spinner"></div>
+              </button>
+            </ng-container>
+
+            <span *ngIf="order.status === 'CONFIRMED'" class="no-actions confirmed-label"
+              title="Esta orden ya está confirmada y no puede modificarse">
               <svg class="lock-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -143,11 +160,10 @@
                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
                 </g>
               </svg>
-
             </span>
 
-          <span *ngIf="order.status === 'CANCELED'" class="no-actions canceled-label"
-                title="Esta orden está cancelada y no puede modificarse">
+            <span *ngIf="order.status === 'CANCELED'" class="no-actions canceled-label"
+              title="Esta orden está cancelada y no puede modificarse">
               <svg class="lock-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -161,9 +177,9 @@
                 </g>
               </svg>
             </span>
-        </div>
-      </td>
-    </tr>
+          </div>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>

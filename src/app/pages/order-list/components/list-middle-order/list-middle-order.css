@@ -386,3 +386,25 @@
   margin-bottom: 0;
   color: #ababab;
 }
+
+
+.action-btn.print-btn {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.action-btn.print-btn:hover:not(:disabled) {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.action-btn.print-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+}
+
+.action-btn.print-btn .icon {
+  color: white;
+}

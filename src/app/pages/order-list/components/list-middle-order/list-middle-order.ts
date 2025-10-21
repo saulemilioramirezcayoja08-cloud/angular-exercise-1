@@ -1,12 +1,12 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {OrderSearchData} from '../../../../services/order/models/search/order-search-response.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { OrderSearchData } from '../../../../services/order/models/search/order-search-response.model';
 
 type SearchType = 'number' | 'username' | 'status' | 'dateRange' | null;
 
 export interface OrderAction {
   orderId: number;
   orderNumber: string;
-  action: 'confirm' | 'cancel' | 'advance';
+  action: 'confirm' | 'cancel' | 'advance' | 'print';
 }
 
 @Component({
@@ -49,6 +49,14 @@ export class ListMiddleOrder {
       orderId: order.id,
       orderNumber: order.number,
       action: 'advance'
+    });
+  }
+
+  onPrintClick(order: OrderSearchData): void {
+    this.orderActionRequested.emit({
+      orderId: order.id,
+      orderNumber: order.number,
+      action: 'print'
     });
   }
 

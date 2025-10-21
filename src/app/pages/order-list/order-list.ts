@@ -1,12 +1,15 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
-import {OrderSearchData, PaginationMetadata} from '../../services/order/models/search/order-search-response.model';
-import {SearchEvent} from './components/list-top-order/list-top-order';
-import {delay, finalize, Subject, takeUntil} from 'rxjs';
-import {OrderService} from '../../services/order/order-service';
-import {OrderAction} from './components/list-middle-order/list-middle-order';
-import {OrderCancelRequest} from '../../services/order/models/cancel/order-cancel-request.model';
-import {OrderConfirmRequest} from '../../services/order/models/confirm/order-confirm-request.model';
-import {AuthService} from '../../services/auth/auth-service';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { OrderSearchData, PaginationMetadata } from '../../services/order/models/search/order-search-response.model';
+import { SearchEvent } from './components/list-top-order/list-top-order';
+import { delay, finalize, Subject, takeUntil } from 'rxjs';
+import { OrderService } from '../../services/order/order-service';
+import { OrderAction } from './components/list-middle-order/list-middle-order';
+import { OrderCancelRequest } from '../../services/order/models/cancel/order-cancel-request.model';
+import { OrderConfirmRequest } from '../../services/order/models/confirm/order-confirm-request.model';
+import { AuthService } from '../../services/auth/auth-service';
+import { Router } from '@angular/router';
+import { OrderPrintService } from '../../services/order-print/order-print.service';
+import { OrderPrintMapper } from '../../services/order/order-print-mapper';
 
 @Component({
   selector: 'app-order-list',
@@ -31,7 +34,10 @@ export class OrderList implements OnInit, OnDestroy {
 
   constructor(
     private orderService: OrderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private orderPrintService: OrderPrintService,
+    private orderPrintMapper: OrderPrintMapper
   ) {
   }
 
@@ -95,7 +101,38 @@ export class OrderList implements OnInit, OnDestroy {
       this.handleCancelOrder(action.orderId, action.orderNumber);
     } else if (action.action === 'advance') {
       this.handleAdvanceOrder(action.orderId, action.orderNumber);
+    } else if (action.action === 'print') {
+      this.handlePrintOrder(action.orderId);
     }
+  }
+
+  private handlePrintOrder(orderId: number): void {
+    this.setOrderProcessing(orderId, true);
+
+    this.orderService.getOrderById(orderId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.setOrderProcessing(orderId, false))
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            const printData = this.orderPrintMapper.transformToPrintData(response.data);
+
+            this.orderPrintService.setPrintData(printData);
+
+            this.router.navigate(['/order/print'], {
+              queryParams: { mode: 'generate' }
+            });
+          } else {
+            this.showError(response.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener orden para imprimir:', error);
+          this.handlePrintError(error);
+        }
+      });
   }
 
   private handleAdvanceOrder(orderId: number, orderNumber: string): void {
@@ -469,7 +506,7 @@ export class OrderList implements OnInit, OnDestroy {
     const currentOrders = this.orders();
     const updatedOrders = currentOrders.map(order =>
       order.id === orderId
-        ? {...order, isProcessing}
+        ? { ...order, isProcessing }
         : order
     );
     this.orders.set(updatedOrders);
@@ -544,6 +581,22 @@ export class OrderList implements OnInit, OnDestroy {
       } else {
         message += `Verifique el estado de la orden e intente nuevamente.`;
       }
+    } else if (error.status === 0) {
+      message = 'No se puede conectar con el servidor\n\n' +
+        'Por favor, verifique su conexión a internet e intente nuevamente.';
+    } else if (error.error?.message) {
+      message = `${error.error.message}`;
+    }
+
+    this.showError(message);
+  }
+
+  private handlePrintError(error: any): void {
+    let message = 'Error al obtener la orden para imprimir';
+
+    if (error.status === 404) {
+      message = `${error.error?.message || 'Orden no encontrada'}\n\n` +
+        `La orden solicitada no existe en el sistema.`;
     } else if (error.status === 0) {
       message = 'No se puede conectar con el servidor\n\n' +
         'Por favor, verifique su conexión a internet e intente nuevamente.';

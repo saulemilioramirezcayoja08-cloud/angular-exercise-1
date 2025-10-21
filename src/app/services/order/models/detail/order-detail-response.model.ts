@@ -27,6 +27,8 @@ export interface OrderDetailData {
 export interface CustomerInfo {
   id: number;
   name: string;
+  address: string | null;
+  phone: string | null;
 }
 
 export interface WarehouseInfo {
@@ -54,6 +56,7 @@ export interface OrderDetailInfo {
   productId: number;
   productName: string;
   productSku: string;
+  uom: string; 
   quantity: number;
   price: number;
   subtotal: number;

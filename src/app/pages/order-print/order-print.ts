@@ -53,7 +53,7 @@ export class OrderPrint implements OnInit, OnDestroy {
     if (this.mode === 'generate') {
       setTimeout(() => {
         this.orderPrintService.clearPrintData();
-        this.router.navigate(['/order']);
+        this.router.navigate(['/order-list']);
       }, 500);
 
     } else if (this.mode === 'preview') {
