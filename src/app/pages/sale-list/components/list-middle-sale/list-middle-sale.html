@@ -128,6 +128,20 @@
               </svg>
               <div *ngIf="sale.isProcessing" class="mini-spinner"></div>
             </button>
+
+            <button type="button" class="action-btn print-btn"
+                    (click)="onPrintClick(sale); $event.stopPropagation()" [disabled]="sale.isProcessing"
+                    title="Imprimir venta">
+              <svg *ngIf="!sale.isProcessing" class="icon" viewBox="0 0 24 24" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path d="M7.00002 18H6.20002C4.31179 18 3.36768 18 2.68385 17.682C2.09579 17.4046 1.59546 16.9043 1.31804 16.3162C1.00002 15.6324 1.00002 14.6883 1.00002 12.8V11.2C1.00002 9.31177 1.00002 8.36766 1.31804 7.68383C1.59546 7.09577 2.09579 6.59544 2.68385 6.31802C3.36768 6 4.31179 6 6.20002 6H17.8C19.6882 6 20.6323 6 21.3162 6.31802C21.9042 6.59544 22.4046 7.09577 22.682 7.68383C23 8.36766 23 9.31177 23 11.2V12.8C23 14.6883 23 15.6324 22.682 16.3162C22.4046 16.9043 21.9042 17.4046 21.3162 17.682C20.6323 18 19.6882 18 17.8 18H17M9.00002 10H6.00002M15 14V22M15 14L12 17M15 14L18 17M9.00002 2V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+              </svg>
+              <div *ngIf="sale.isProcessing" class="mini-spinner"></div>
+            </button>
           </ng-container>
 
           <ng-container *ngIf="sale.status === 'CONFIRMED'">

@@ -1,12 +1,15 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
-import {PaginationMetadata, SaleSearchData} from '../../services/sale/models/search/sale-search-response.model';
-import {SearchEvent} from './components/list-top-sale/list-top-sale';
-import {delay, finalize, Subject, takeUntil} from 'rxjs';
-import {SaleService} from '../../services/sale/sale-service';
-import {SaleAction} from './components/list-middle-sale/list-middle-sale';
-import {SaleConfirmRequest} from '../../services/sale/models/confirm/sale-confirm-request.model';
-import {SaleCancelRequest} from '../../services/sale/models/cancel/sale-cancel-request.model';
-import {OrderService} from '../../services/order/order-service';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { PaginationMetadata, SaleSearchData } from '../../services/sale/models/search/sale-search-response.model';
+import { SearchEvent } from './components/list-top-sale/list-top-sale';
+import { delay, finalize, Subject, takeUntil } from 'rxjs';
+import { SaleService } from '../../services/sale/sale-service';
+import { SaleAction } from './components/list-middle-sale/list-middle-sale';
+import { SaleConfirmRequest } from '../../services/sale/models/confirm/sale-confirm-request.model';
+import { SaleCancelRequest } from '../../services/sale/models/cancel/sale-cancel-request.model';
+import { OrderService } from '../../services/order/order-service';
+import { Router } from '@angular/router';
+import { SalePrintService } from '../../services/sale-print/sale-print.service';
+import { SalePrintMapper } from '../../services/sale-print/sale-print-mapper';
 
 @Component({
   selector: 'app-sale-list',
@@ -31,7 +34,10 @@ export class SaleList implements OnInit, OnDestroy {
 
   constructor(
     private saleService: SaleService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private router: Router,
+    private salePrintService: SalePrintService,
+    private salePrintMapper: SalePrintMapper
   ) {
   }
 
@@ -100,7 +106,38 @@ export class SaleList implements OnInit, OnDestroy {
         action.saleTotalAmount || 0,
         action.orderTotalAdvances || 0
       );
+    } else if (action.action === 'print') {
+      this.handlePrintSale(action.saleId);
     }
+  }
+
+  private handlePrintSale(saleId: number): void {
+    this.setSaleProcessing(saleId, true);
+
+    this.saleService.getSaleById(saleId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.setSaleProcessing(saleId, false))
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            const printData = this.salePrintMapper.transformToPrintData(response.data);
+
+            this.salePrintService.setPrintData(printData);
+
+            this.router.navigate(['/sale/print'], {
+              queryParams: { mode: 'generate' }
+            });
+          } else {
+            this.showError(response.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener venta para imprimir:', error);
+          this.handlePrintError(error);
+        }
+      });
   }
 
   private handleConfirmSale(saleId: number, saleNumber: string): void {
@@ -385,7 +422,7 @@ export class SaleList implements OnInit, OnDestroy {
     const currentSales = this.sales();
     const updatedSales = currentSales.map(sale =>
       sale.id === saleId
-        ? {...sale, isProcessing}
+        ? { ...sale, isProcessing }
         : sale
     );
     this.sales.set(updatedSales);
@@ -393,6 +430,13 @@ export class SaleList implements OnInit, OnDestroy {
 
   private getCurrentUserId(): number {
     return 1;
+  }
+
+  private formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('es-BO', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
   }
 
   private toISO8601(dateString: string, isEndOfDay: boolean = false): string {
@@ -435,6 +479,20 @@ export class SaleList implements OnInit, OnDestroy {
       message = error.error?.message || 'Orden no encontrada';
     } else if (error.status === 409) {
       message = error.error?.message || 'El monto del anticipo excede el total de la orden';
+    } else if (error.status === 0) {
+      message = 'No se puede conectar con el servidor';
+    } else if (error.error?.message) {
+      message = error.error.message;
+    }
+
+    this.showError(message);
+  }
+
+  private handlePrintError(error: any): void {
+    let message = 'Error al obtener los datos para imprimir';
+
+    if (error.status === 404) {
+      message = error.error?.message || 'Venta no encontrada';
     } else if (error.status === 0) {
       message = 'No se puede conectar con el servidor';
     } else if (error.error?.message) {

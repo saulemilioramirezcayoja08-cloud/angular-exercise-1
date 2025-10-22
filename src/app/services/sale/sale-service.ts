@@ -1,13 +1,14 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {SaleHistoryResponse} from './models/history/sale-history-response.model';
-import {SaleCancelRequest} from './models/cancel/sale-cancel-request.model';
-import {SaleActionResponse} from './models/action/sale-action-response.model';
-import {SaleHistoryParams} from './models/history/sale-history-request.model';
-import {SaleConfirmRequest} from './models/confirm/sale-confirm-request.model';
-import {SaleSearchResponse} from './models/search/sale-search-response.model';
-import {SaleSearchParams} from './models/search/sale-search-request.model';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { SaleHistoryResponse } from './models/history/sale-history-response.model';
+import { SaleCancelRequest } from './models/cancel/sale-cancel-request.model';
+import { SaleActionResponse } from './models/action/sale-action-response.model';
+import { SaleHistoryParams } from './models/history/sale-history-request.model';
+import { SaleConfirmRequest } from './models/confirm/sale-confirm-request.model';
+import { SaleSearchResponse } from './models/search/sale-search-response.model';
+import { SaleSearchParams } from './models/search/sale-search-request.model';
+import { SaleDetailResponse } from './models/detail/sale-detail-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,12 @@ export class SaleService {
 
     return this.http.get<SaleHistoryResponse>(
       `${this.baseUrl}/history/${params.productId}`,
-      {params: httpParams}
+      { params: httpParams }
     );
+  }
+
+  getSaleById(saleId: number): Observable<SaleDetailResponse> {
+    return this.http.get<SaleDetailResponse>(`${this.baseUrl}/${saleId}`);
   }
 
   cancelSale(saleId: number, request: SaleCancelRequest): Observable<SaleActionResponse> {
@@ -46,22 +51,22 @@ export class SaleService {
   }
 
   searchByNumber(number: string, page?: number, size?: number): Observable<SaleSearchResponse> {
-    const searchParams: SaleSearchParams = {number, page, size};
+    const searchParams: SaleSearchParams = { number, page, size };
     return this.executeSearch(searchParams);
   }
 
   searchByStatus(status: string, page?: number, size?: number): Observable<SaleSearchResponse> {
-    const searchParams: SaleSearchParams = {status, page, size};
+    const searchParams: SaleSearchParams = { status, page, size };
     return this.executeSearch(searchParams);
   }
 
   searchByUsername(username: string, page?: number, size?: number): Observable<SaleSearchResponse> {
-    const searchParams: SaleSearchParams = {username, page, size};
+    const searchParams: SaleSearchParams = { username, page, size };
     return this.executeSearch(searchParams);
   }
 
   searchByDateRange(dateFrom: string, dateTo: string, page?: number, size?: number): Observable<SaleSearchResponse> {
-    const searchParams: SaleSearchParams = {dateFrom, dateTo, page, size};
+    const searchParams: SaleSearchParams = { dateFrom, dateTo, page, size };
     return this.executeSearch(searchParams);
   }
 
@@ -96,6 +101,6 @@ export class SaleService {
       params = params.set('size', searchParams.size.toString());
     }
 
-    return this.http.get<SaleSearchResponse>(`${this.baseUrl}/search`, {params});
+    return this.http.get<SaleSearchResponse>(`${this.baseUrl}/search`, { params });
   }
 }

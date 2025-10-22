@@ -7,7 +7,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(128, 128, 128, 0.2);
+  background: rgba(0, 128, 0, 0.1);
 }
 
 .navbar .navbar-menu {
@@ -46,7 +46,7 @@
 }
 
 .navbar .navbar-menu .navbar-section .section-items .item.active {
-  background-color: rgba(241, 240, 239);
+  background-color: rgba(128, 255, 0, 0.2);
 }
 
 .navbar .navbar-menu .navbar-section .section-items .item .content {

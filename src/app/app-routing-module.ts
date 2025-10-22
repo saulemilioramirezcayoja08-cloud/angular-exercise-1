@@ -19,6 +19,7 @@ import { SupplierCreate } from './pages/supplier-create/supplier-create';
 import { CustomerList } from './pages/customer-list/customer-list';
 import { SupplierList } from './pages/supplier-list/supplier-list';
 import { ProductList } from './pages/product-list/product-list';
+import { SalePrint } from './pages/sale-print/sale-print/sale-print';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -49,6 +50,7 @@ const routes: Routes = [
   { path: 'purchase-list', component: PurchaseList, canActivate: [authGuard] },
 
   { path: 'sale-list', component: SaleList, canActivate: [authGuard] },
+  { path: 'sale/print', component: SalePrint, canActivate: [authGuard] },
 
   { path: '**', redirectTo: '/login' }
 ];

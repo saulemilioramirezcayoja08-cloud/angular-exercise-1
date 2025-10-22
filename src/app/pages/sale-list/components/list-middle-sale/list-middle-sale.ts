@@ -7,7 +7,7 @@ export interface SaleAction {
   saleId: number;
   saleNumber: string;
   orderId: number;
-  action: 'confirm' | 'cancel' | 'advance';
+  action: 'confirm' | 'cancel' | 'advance' | 'print';
   saleTotalAmount?: number;
   orderTotalAdvances?: number;
 }
@@ -19,7 +19,7 @@ export interface SaleAction {
   styleUrl: './list-middle-sale.css'
 })
 export class ListMiddleSale {
-  @Input() sales: SaleSearchData[] = [];
+   @Input() sales: SaleSearchData[] = [];
   @Input() isLoading: boolean = false;
   @Input() hasSearched: boolean = false;
   @Input() searchType: SearchType = null;
@@ -57,6 +57,15 @@ export class ListMiddleSale {
       action: 'advance',
       saleTotalAmount: sale.saleTotalAmount,
       orderTotalAdvances: sale.orderTotalAdvances
+    });
+  }
+
+  onPrintClick(sale: SaleSearchData): void {
+    this.saleActionRequested.emit({
+      saleId: sale.id,
+      saleNumber: sale.number,
+      orderId: sale.orderId,
+      action: 'print'
     });
   }
 
