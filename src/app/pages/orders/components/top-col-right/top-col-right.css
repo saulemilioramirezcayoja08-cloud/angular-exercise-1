@@ -60,9 +60,8 @@
   padding: 30px 20px;
   text-align: center;
   min-height: 120px;
-  background-color: #F9FAFB;
   border-radius: 8px;
-  border: 2px dashed #E5E7EB;
+  width: 100%;
 }
 
 .empty-title {
