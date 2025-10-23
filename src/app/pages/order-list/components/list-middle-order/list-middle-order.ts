@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { OrderSearchData } from '../../../../services/order/models/search/order-search-response.model';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {OrderSearchData} from '../../../../services/order/models/search/order-search-response.model';
 
 type SearchType = 'number' | 'username' | 'status' | 'dateRange' | null;
 
@@ -23,6 +23,8 @@ export class ListMiddleOrder {
 
   @Output() orderSelected = new EventEmitter<number>();
   @Output() orderActionRequested = new EventEmitter<OrderAction>();
+
+  private openMenuOrderId: number | null = null;
 
   onRowClick(orderId: number): void {
     this.orderSelected.emit(orderId);
@@ -58,6 +60,37 @@ export class ListMiddleOrder {
       orderNumber: order.number,
       action: 'print'
     });
+  }
+
+  toggleMenu(orderId: number, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (this.openMenuOrderId === orderId) {
+      this.openMenuOrderId = null;
+    } else {
+      this.openMenuOrderId = orderId;
+    }
+  }
+
+  isMenuOpen(orderId: number): boolean {
+    return this.openMenuOrderId === orderId;
+  }
+
+  hasOpenMenu(): boolean {
+    return this.openMenuOrderId !== null;
+  }
+
+  closeMenu(): void {
+    this.openMenuOrderId = null;
+  }
+
+  closeMenuOnClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.actions')) {
+      this.closeMenu();
+    }
   }
 
   getEmptyMessage(): { title: string, subtitle: string } {

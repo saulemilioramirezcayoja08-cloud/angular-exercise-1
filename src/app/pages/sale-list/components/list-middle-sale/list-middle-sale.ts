@@ -19,13 +19,15 @@ export interface SaleAction {
   styleUrl: './list-middle-sale.css'
 })
 export class ListMiddleSale {
-   @Input() sales: SaleSearchData[] = [];
+  @Input() sales: SaleSearchData[] = [];
   @Input() isLoading: boolean = false;
   @Input() hasSearched: boolean = false;
   @Input() searchType: SearchType = null;
 
   @Output() saleSelected = new EventEmitter<number>();
   @Output() saleActionRequested = new EventEmitter<SaleAction>();
+
+  private openMenuSaleId: number | null = null;
 
   onRowClick(saleId: number): void {
     this.saleSelected.emit(saleId);
@@ -67,6 +69,37 @@ export class ListMiddleSale {
       orderId: sale.orderId,
       action: 'print'
     });
+  }
+
+  toggleMenu(saleId: number, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (this.openMenuSaleId === saleId) {
+      this.openMenuSaleId = null;
+    } else {
+      this.openMenuSaleId = saleId;
+    }
+  }
+
+  isMenuOpen(saleId: number): boolean {
+    return this.openMenuSaleId === saleId;
+  }
+
+  hasOpenMenu(): boolean {
+    return this.openMenuSaleId !== null;
+  }
+
+  closeMenu(): void {
+    this.openMenuSaleId = null;
+  }
+
+  closeMenuOnClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.actions')) {
+      this.closeMenu();
+    }
   }
 
   getEmptyMessage(): { title: string, subtitle: string } {

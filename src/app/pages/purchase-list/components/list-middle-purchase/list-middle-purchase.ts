@@ -24,6 +24,8 @@ export class ListMiddlePurchase {
   @Output() purchaseSelected = new EventEmitter<number>();
   @Output() purchaseActionRequested = new EventEmitter<PurchaseAction>();
 
+  private openMenuPurchaseId: number | null = null;
+
   onRowClick(purchaseId: number): void {
     this.purchaseSelected.emit(purchaseId);
   }
@@ -42,6 +44,37 @@ export class ListMiddlePurchase {
       purchaseNumber: purchase.number,
       action: 'cancel'
     });
+  }
+
+  toggleMenu(purchaseId: number, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (this.openMenuPurchaseId === purchaseId) {
+      this.openMenuPurchaseId = null;
+    } else {
+      this.openMenuPurchaseId = purchaseId;
+    }
+  }
+
+  isMenuOpen(purchaseId: number): boolean {
+    return this.openMenuPurchaseId === purchaseId;
+  }
+
+  hasOpenMenu(): boolean {
+    return this.openMenuPurchaseId !== null;
+  }
+
+  closeMenu(): void {
+    this.openMenuPurchaseId = null;
+  }
+
+  closeMenuOnClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.actions')) {
+      this.closeMenu();
+    }
   }
 
   getEmptyMessage(): { title: string, subtitle: string } {

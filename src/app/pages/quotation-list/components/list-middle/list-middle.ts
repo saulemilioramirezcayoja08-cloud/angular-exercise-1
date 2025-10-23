@@ -24,6 +24,9 @@ export class ListMiddle {
   @Output() quotationSelected = new EventEmitter<number>();
   @Output() quotationActionRequested = new EventEmitter<QuotationAction>();
 
+  // Estado del menú desplegable
+  private openMenuQuotationId: number | null = null;
+
   onRowClick(quotationId: number): void {
     this.quotationSelected.emit(quotationId);
   }
@@ -42,6 +45,38 @@ export class ListMiddle {
       quotationNumber: quotation.number,
       action: 'cancel'
     });
+  }
+
+  // Métodos para controlar el menú desplegable
+  toggleMenu(quotationId: number, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (this.openMenuQuotationId === quotationId) {
+      this.openMenuQuotationId = null;
+    } else {
+      this.openMenuQuotationId = quotationId;
+    }
+  }
+
+  isMenuOpen(quotationId: number): boolean {
+    return this.openMenuQuotationId === quotationId;
+  }
+
+  hasOpenMenu(): boolean {
+    return this.openMenuQuotationId !== null;
+  }
+
+  closeMenu(): void {
+    this.openMenuQuotationId = null;
+  }
+
+  closeMenuOnClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.actions')) {
+      this.closeMenu();
+    }
   }
 
   getEmptyMessage(): { title: string, subtitle: string } {

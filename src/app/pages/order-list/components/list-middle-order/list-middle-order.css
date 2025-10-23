@@ -181,6 +181,8 @@
   text-align: center;
   padding: 2px 8px;
   cursor: default;
+  position: relative;
+  overflow: visible;
 }
 
 .code {
@@ -242,55 +244,6 @@
   color: #7a7a7a;
 }
 
-.actions {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border: none;
-  border-radius: 15px;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.2s ease-in;
-  position: relative;
-  color: #6b6b6b;
-}
-
-.action-btn .icon {
-  width: 20px;
-  height: 20px;
-}
-
-.action-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.advance-btn:not(:disabled):hover {
-  background-color: #e8e8e8;
-  color: #4a4a4a;
-}
-
-.confirm-btn:not(:disabled):hover {
-  background-color: #e8e8e8;
-  color: #4a4a4a;
-}
-
-.cancel-btn:not(:disabled):hover {
-  background-color: #e8e8e8;
-  color: #4a4a4a;
-}
-
 .mini-spinner {
   width: 14px;
   height: 14px;
@@ -304,31 +257,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.no-actions {
-  display: flex;
-  align-items: center;
-  cursor: help;
-  padding: 6px 6px;
-  border-radius: 100%;
-  color: #8b8b8b;
-  background-color: #f0f0f0;
-}
-
-.no-actions .lock-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.no-actions.confirmed-label {
-  color: #6b6b6b;
-  background-color: #e8e8e8;
-}
-
-.no-actions.canceled-label {
-  color: #8b8b8b;
-  background-color: #f0f0f0;
 }
 
 .loading-container {
@@ -387,24 +315,145 @@
   color: #ababab;
 }
 
-
-.action-btn.print-btn {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  overflow: visible;
 }
 
-.action-btn.print-btn:hover:not(:disabled) {
-  background-color: #2563eb;
-  border-color: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+.action-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border:none;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b6b6b;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.action-btn.print-btn:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+.action-menu-btn:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #d0d0d0;
 }
 
-.action-btn.print-btn .icon {
-  color: white;
+.action-menu-btn:active:not(:disabled) {
+  background-color: #ebebeb;
+  transform: scale(0.95);
+}
+
+.action-menu-btn.active {
+  background-color: #f0f0f0;
+  border-color: #c0c0c0;
+}
+
+.action-menu-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.action-menu-btn .dots {
+  line-height: 1;
+  letter-spacing: -2px;
+  user-select: none;
+}
+
+.action-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+
+  background-color: #ffffff;
+
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+
+  z-index: 9999;
+
+  min-width: 200px;
+  overflow: hidden;
+  animation: menuFadeIn 0.15s ease-out;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+
+  background-color: #ffffff;
+
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover:not(.disabled):not(:disabled) {
+  background: #f8f8f8;
+}
+
+.menu-item:active:not(.disabled):not(:disabled) {
+  background: #f0f0f0;
+}
+
+.menu-item.danger {
+  color: #dc3545;
+}
+
+.menu-item.danger:hover:not(:disabled) {
+  background: #fff5f5;
+}
+
+.menu-item.disabled {
+  color: #999;
+  cursor: not-allowed;
+  font-style: italic;
+  background: #fafafa;
+}
+
+.menu-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu-text {
+  flex: 1;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.menu-divider {
+  height: 1px;
+  background: #e8e8e8;
+  margin: 4px 0;
 }
