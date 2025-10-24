@@ -7,7 +7,7 @@ import { StockAvailabilityResponse } from './models/stock-availability-response.
   providedIn: 'root'
 })
 export class StockService {
-  private readonly baseUrl = 'http://localhost:8080/api/stocks';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/stocks';
 
   constructor(private http: HttpClient) {
   }

@@ -11,18 +11,18 @@
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <input 
-        type="text" 
-        class="search-input" 
+      <input
+        type="text"
+        class="search-input"
         placeholder="Buscar por nombre..."
         [formControl]="searchControl"
         [disabled]="isLoading()">
     </div>
-    
+
     <div class="page-size-selector">
       <label class="page-size-label">Mostrar:</label>
-      <select 
-        class="page-size-select" 
+      <select
+        class="page-size-select"
         [value]="pageSize()"
         (change)="onPageSizeChange(+$any($event.target).value)"
         [disabled]="isLoading()">
@@ -68,7 +68,6 @@
           </th>
           <th class="th">Email</th>
           <th class="th">Teléfono</th>
-          <th class="th">Estado</th>
           <th class="th sortable" (click)="onSort('createdAt')">
             <div class="th-content">
               <span>Creado</span>
@@ -90,11 +89,6 @@
           </td>
           <td class="td">{{ supplier.email || '-' }}</td>
           <td class="td">{{ supplier.phone || '-' }}</td>
-          <td class="td">
-            <span class="status-badge" [class.active]="supplier.active">
-              {{ supplier.active ? 'Activo' : 'Inactivo' }}
-            </span>
-          </td>
           <td class="td">{{ formatDate(supplier.createdAt) }}</td>
         </tr>
         <tr *ngIf="suppliers().length === 0 && !isLoading()">
@@ -111,30 +105,30 @@
 
   <div class="pagination" *ngIf="pagination() && pagination()!.totalElements > 0">
     <div class="pagination-info">
-      Mostrando {{ (pagination()!.currentPage * pagination()!.pageSize) + 1 }} - 
-      {{ Math.min((pagination()!.currentPage + 1) * pagination()!.pageSize, pagination()!.totalElements) }} 
+      Mostrando {{ (pagination()!.currentPage * pagination()!.pageSize) + 1 }} -
+      {{ Math.min((pagination()!.currentPage + 1) * pagination()!.pageSize, pagination()!.totalElements) }}
       de {{ pagination()!.totalElements }} resultados
     </div>
-    
+
     <div class="pagination-controls">
-      <button 
-        class="pagination-btn" 
+      <button
+        class="pagination-btn"
         (click)="onPageChange(pagination()!.currentPage - 1)"
         [disabled]="!pagination()!.hasPrevious || isLoading()">
         Anterior
       </button>
-      
-      <button 
+
+      <button
         *ngFor="let page of getPageNumbers()"
-        class="pagination-btn page-number" 
+        class="pagination-btn page-number"
         [class.active]="page === pagination()!.currentPage"
         (click)="onPageChange(page)"
         [disabled]="isLoading()">
         {{ page + 1 }}
       </button>
-      
-      <button 
-        class="pagination-btn" 
+
+      <button
+        class="pagination-btn"
         (click)="onPageChange(pagination()!.currentPage + 1)"
         [disabled]="!pagination()!.hasNext || isLoading()">
         Siguiente

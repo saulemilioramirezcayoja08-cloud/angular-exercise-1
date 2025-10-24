@@ -10,7 +10,7 @@ import { CustomerPageResponse } from './models/customer-page-response.model';
   providedIn: 'root'
 })
 export class CustomerService {
-  private readonly baseUrl = 'http://localhost:8080/api/customers';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/customers';
 
   constructor(private http: HttpClient) {
   }

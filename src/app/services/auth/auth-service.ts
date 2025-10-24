@@ -9,7 +9,7 @@ import {isPlatformBrowser} from '@angular/common';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:8080/api/auth';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/auth';
   private currentUserSubject = new BehaviorSubject<LoginData | null>(null);
 
   constructor(

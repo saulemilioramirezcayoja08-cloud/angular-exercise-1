@@ -15,7 +15,7 @@ import {PurchaseSearchResponse} from './models/search/purchase-search-response.m
   providedIn: 'root'
 })
 export class PurchaseService {
-  private readonly baseUrl = 'http://localhost:8080/api/purchases';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/purchases';
 
   constructor(private http: HttpClient) {
   }

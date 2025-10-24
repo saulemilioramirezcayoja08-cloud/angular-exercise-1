@@ -11,7 +11,7 @@ import { ProductPageResponse } from './models/product-page-response.model';
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly baseUrl = 'http://localhost:8080/api/products';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/products';
 
   constructor(private http: HttpClient) {
   }

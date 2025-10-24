@@ -14,7 +14,7 @@ import { SaleDetailResponse } from './models/detail/sale-detail-response.model';
   providedIn: 'root'
 })
 export class SaleService {
-  private readonly baseUrl = 'http://localhost:8080/api/sales';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/sales';
 
   constructor(private http: HttpClient) {
   }

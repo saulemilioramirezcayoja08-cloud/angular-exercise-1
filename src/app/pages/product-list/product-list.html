@@ -75,7 +75,6 @@
               </svg>
             </div>
           </th>
-          <th class="th">Estado</th>
           <th class="th sortable" (click)="onSort('createdAt')">
             <div class="th-content">
               <span>Creado</span>
@@ -104,11 +103,6 @@
           </td>
           <td class="td">
             <span class="price-text">{{ formatPrice(product.price) }}</span>
-          </td>
-          <td class="td">
-            <span class="status-badge" [class.active]="product.active">
-              {{ product.active ? 'Activo' : 'Inactivo' }}
-            </span>
           </td>
           <td class="td">{{ formatDate(product.createdAt) }}</td>
         </tr>

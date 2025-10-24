@@ -10,7 +10,7 @@ import { SupplierPageResponse } from './models/supplier-page-response.model';
   providedIn: 'root'
 })
 export class SupplierService {
-  private readonly baseUrl = 'http://localhost:8080/api/suppliers';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/suppliers';
 
   constructor(private http: HttpClient) {
   }

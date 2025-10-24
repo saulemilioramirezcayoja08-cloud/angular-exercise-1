@@ -16,8 +16,8 @@ import {OrderDetailResponse} from './models/detail/order-detail-response.model';
   providedIn: 'root'
 })
 export class OrderService {
-  private readonly baseUrl = 'http://localhost:8080/api/orders';
-  private readonly advanceUrl = 'http://localhost:8080/api/order-advances';
+  private readonly baseUrl = 'http://192.168.0.156:8080/api/orders';
+  private readonly advanceUrl = 'http://192.168.0.156:8080/api/order-advances';
 
   constructor(private http: HttpClient) {
   }

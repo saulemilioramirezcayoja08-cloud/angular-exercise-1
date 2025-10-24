@@ -5,6 +5,8 @@
   flex-direction: column;
   background-color: white;
   overflow: hidden;
+  color: grey;
+  font-size: 14px;
 }
 
 .header {
@@ -21,13 +23,11 @@
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #4a4a4a;
   margin: 0;
 }
 
 .subtitle {
   font-size: 13px;
-  color: #8b8b8b;
   margin: 0;
 }
 
@@ -52,7 +52,6 @@
   transform: translateY(-50%);
   width: 18px;
   height: 18px;
-  color: #ababab;
   pointer-events: none;
 }
 
@@ -62,7 +61,6 @@
   border: none;
   border-radius: 24px;
   font-size: 13px;
-  color: #4a4a4a;
   background-color: rgb(249, 248, 247);
   transition: all 0.2s ease-in;
   box-sizing: border-box;
@@ -91,7 +89,6 @@
 
 .page-size-label {
   font-size: 13px;
-  color: #6b6b6b;
   font-weight: 500;
 }
 
@@ -100,7 +97,6 @@
   border: none;
   border-radius: 16px;
   font-size: 13px;
-  color: #4a4a4a;
   background-color: rgb(249, 248, 247);
   cursor: pointer;
   transition: all 0.2s ease-in;
@@ -144,20 +140,20 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .suppliers-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
 }
 
 .suppliers-table .th {
   padding: 14px 16px;
   text-align: left;
   font-weight: 500;
-  color: #6b6b6b;
   border-bottom: 2px solid #f0f0f0;
   background-color: white;
   position: sticky;
@@ -185,7 +181,6 @@
 .sort-icon {
   width: 14px;
   height: 14px;
-  color: #4a4a4a;
 }
 
 .suppliers-table .tr {
@@ -199,18 +194,16 @@
 .suppliers-table .td {
   padding: 12px 16px;
   border-bottom: 1px solid #f0f0f0;
-  color: #4a4a4a;
 }
 
 .code-text {
   font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   font-size: 12px;
 }
 
 .supplier-name {
   font-weight: 500;
-  color: #4a4a4a;
 }
 
 .status-badge {
@@ -221,13 +214,11 @@
   font-weight: 600;
   text-transform: uppercase;
   background-color: #fecaca;
-  color: #991b1b;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .status-badge.active {
   background-color: #d1fae5;
-  color: #065f46;
 }
 
 .empty-message {
@@ -244,14 +235,12 @@
 
 .empty-text {
   font-size: 14px;
-  color: #8b8b8b;
   margin: 0;
   font-weight: 500;
 }
 
 .empty-subtext {
   font-size: 12px;
-  color: #ababab;
   margin: 0;
 }
 
@@ -265,7 +254,6 @@
 
 .pagination-info {
   font-size: 13px;
-  color: #6b6b6b;
 }
 
 .pagination-controls {
@@ -274,12 +262,12 @@
 }
 
 .pagination-btn {
+  color: grey;
   padding: 8px 16px;
   border: none;
   border-radius: 16px;
   font-size: 12px;
   font-weight: 500;
-  color: #4a4a4a;
   background-color: rgb(249, 248, 247);
   cursor: pointer;
   transition: all 0.2s ease-in;

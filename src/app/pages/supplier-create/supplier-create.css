@@ -3,8 +3,7 @@
   min-height: calc(100vh - 6vh);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 28px;
+  align-items: center;
   box-sizing: border-box;
   background-color: rgba(128, 128, 128, 0.2);
 }
