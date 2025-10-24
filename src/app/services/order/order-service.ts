@@ -11,13 +11,14 @@ import {OrderConfirmRequest} from './models/confirm/order-confirm-request.model'
 import {OrderAdvanceCreateRequest} from './models/advance/order-advance-request.model';
 import {OrderAdvanceResponse} from './models/advance/order-advance-response.model';
 import {OrderDetailResponse} from './models/detail/order-detail-response.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/orders';
-  private readonly advanceUrl = 'http://192.168.0.156:8080/api/order-advances';
+  private readonly baseUrl = `${environment.apiUrl}/orders`;
+  private readonly advanceUrl = `${environment.apiUrl}/order-advances`;
 
   constructor(private http: HttpClient) {
   }

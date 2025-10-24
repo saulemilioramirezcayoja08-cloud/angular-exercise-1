@@ -10,12 +10,13 @@ import {PurchaseDetailResponse} from './models/detail/purchase-detail-response.m
 import {PurchaseHistoryResponse} from './models/history/purchase-history-response.model';
 import {PurchaseSearchParams} from './models/search/purchase-search-request.model';
 import {PurchaseSearchResponse} from './models/search/purchase-search-response.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PurchaseService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/purchases';
+  private readonly baseUrl = `${environment.apiUrl}/purchases`;
 
   constructor(private http: HttpClient) {
   }

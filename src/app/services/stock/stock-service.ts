@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StockAvailabilityResponse } from './models/stock-availability-response.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StockService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/stocks';
+  private readonly baseUrl = `${environment.apiUrl}/stocks`;
 
   constructor(private http: HttpClient) {
   }

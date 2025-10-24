@@ -6,12 +6,13 @@ import { ProductSearchParams } from './models/product-search-request.model';
 import { ProductCreateRequest } from './models/product-create-request.model';
 import { ProductCreateResponse } from './models/product-create-response.model';
 import { ProductPageResponse } from './models/product-page-response.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/products';
+  private readonly baseUrl = `${environment.apiUrl}/products`;
 
   constructor(private http: HttpClient) {
   }

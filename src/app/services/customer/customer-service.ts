@@ -5,12 +5,13 @@ import { Observable } from 'rxjs';
 import { CustomerCreateResponse } from './models/customer-create-response.model';
 import { CustomerDetailResponse } from './models/customer-detail-response.model';
 import { CustomerPageResponse } from './models/customer-page-response.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/customers';
+  private readonly baseUrl = `${environment.apiUrl}/customers`;
 
   constructor(private http: HttpClient) {
   }

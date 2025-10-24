@@ -4,12 +4,13 @@ import {LoginData, LoginResponse} from './models/login-response.model';
 import {HttpClient} from '@angular/common/http';
 import {LoginRequest} from './models/login-request.model';
 import {isPlatformBrowser} from '@angular/common';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/auth';
+  private readonly baseUrl = `${environment.apiUrl}/auth`;
   private currentUserSubject = new BehaviorSubject<LoginData | null>(null);
 
   constructor(

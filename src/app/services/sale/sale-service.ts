@@ -9,12 +9,13 @@ import { SaleConfirmRequest } from './models/confirm/sale-confirm-request.model'
 import { SaleSearchResponse } from './models/search/sale-search-response.model';
 import { SaleSearchParams } from './models/search/sale-search-request.model';
 import { SaleDetailResponse } from './models/detail/sale-detail-response.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaleService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/sales';
+  private readonly baseUrl = `${environment.apiUrl}/sales`;
 
   constructor(private http: HttpClient) {
   }

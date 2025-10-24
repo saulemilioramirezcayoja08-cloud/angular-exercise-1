@@ -8,12 +8,13 @@ import {QuotationActionResponse} from './models/action/quotation-action-response
 import {QuotationCancelRequest} from './models/cancel/quotation-cancel-request.model';
 import {DraftQuotationRequest} from './models/draft/draft-request.model';
 import {DraftQuotationResponse} from './models/draft/draft-response.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuotationService {
-  private readonly baseUrl = 'http://192.168.0.156:8080/api/quotations';
+  private readonly baseUrl = `${environment.apiUrl}/quotations`;
 
   constructor(private http: HttpClient) {
   }
